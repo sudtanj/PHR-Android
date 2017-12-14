@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PHR-Android</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="language_settings">Language</string>
+    <string name="language_description_settings">Currently not all language supported</string>
+    <string name="language_dialog_title_settings">Select Language</string>
+
+    <!-- Global Settings -->
+    <string name="settings_lang">English</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
