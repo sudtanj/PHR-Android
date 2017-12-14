@@ -1,7 +1,11 @@
 package sud_tanj.com.phr_android;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -19,10 +23,17 @@ import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    SharedPreferences settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //init Preference
+        settings=getSharedPreferences(getString(R.string.settings_pref_file_name), Context.MODE_WORLD_WRITEABLE);
+        settings.edit().putString(getString(R.string.application_language),getString(R.string.settings_lang)).commit();
+
+        //Init navigation drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

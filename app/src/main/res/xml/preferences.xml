@@ -19,6 +19,6 @@
         android:defaultValue="1"
         android:entries="@array/listValues"
         android:entryValues="@array/listValues"
-        android:key="app_lang"
+        android:key="@string/application_language"
         android:title="Select Language" />
 </PreferenceScreen>
