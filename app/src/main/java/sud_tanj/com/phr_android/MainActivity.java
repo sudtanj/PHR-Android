@@ -1,5 +1,12 @@
+/*
+ * Copyright (c) 2017.
+ *
+ * Create by Sudono Tanjung
+ */
+
 package sud_tanj.com.phr_android;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -83,8 +90,9 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             //getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new SettingsFragment()).commit();
-            Intent i = new Intent(this, MyPreferencesActivity.class);
-            startActivity(i);
+            Intent i = new Intent(getApplicationContext(), MyPreferencesActivity.class);
+            ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(i,options.toBundle());
             return true;
         }
 

@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="PHR-Android">
+    <module2copyright>
+      <element module="All" copyright="PHR-Android" />
+    </module2copyright>
+  </settings>
+</component>

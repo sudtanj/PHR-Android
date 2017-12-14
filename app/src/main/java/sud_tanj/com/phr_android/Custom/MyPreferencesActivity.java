@@ -1,3 +1,10 @@
+/*
+ * Create by Sudono Tanjung
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last Modified by User on ${TIME}
+ */
+
 package sud_tanj.com.phr_android.Custom;
 
 import android.app.Activity;
@@ -29,7 +36,8 @@ import java.util.Locale;
 import sud_tanj.com.phr_android.R;
 
 /**
- * Created by User on 14/12/2017.
+ * This class is part of PHRAndroid
+ * Created by Sudono Tanjung on 12/12/2017.
  */
 
 public class MyPreferencesActivity extends AppCompatActivity {
@@ -61,6 +69,8 @@ public class MyPreferencesActivity extends AppCompatActivity {
     public void onBackPressed(){
         super.onBackPressed();
         finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment
@@ -80,6 +90,10 @@ public class MyPreferencesActivity extends AppCompatActivity {
             //initialized
             settings = getActivity().getSharedPreferences(getString(R.string.settings_pref_file_name), Context.MODE_WORLD_WRITEABLE);
             String appLangPref=settings.getString(getString(R.string.application_language),"");
+
+            //Gson gson = new Gson();
+            //String json = settings.getString("MyObject", "");
+            //Locale obj = gson.fromJson(json, Locale.class);
 
             //Language Option
             ListPreference langListPreferences = (ListPreference)findPreference(getString(R.string.application_language));
