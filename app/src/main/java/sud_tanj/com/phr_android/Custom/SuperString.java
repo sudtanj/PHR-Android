@@ -1,15 +1,14 @@
 /*
- * Created By Sudono Tanjung
+ * Create by Sudono Tanjung
  * Copyright (c) 2017. All rights reserved.
  *
- * Last Modified by User on 12/12/17 7:00 AM
- *
- *
+ * Last Modified by User on 12/14/17 6:51 PM
  */
 
 package sud_tanj.com.phr_android.Custom;
 
 import android.support.annotation.NonNull;
+
 
 /**
  * This class is part of PHRAndroid
@@ -27,6 +26,7 @@ public class SuperString implements Comparable {
         else
             return this.getTranslatedString();
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -67,6 +67,6 @@ public class SuperString implements Comparable {
 
     @Override
     public int compareTo(@NonNull Object o) {
-        return this.stringData.compareTo(((SuperString)o).toString());
+        return this.stringData.compareTo(o.toString());
     }
 }

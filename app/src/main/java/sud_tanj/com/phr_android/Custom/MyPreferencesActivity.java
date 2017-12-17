@@ -2,28 +2,20 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2017. All rights reserved.
  *
- * Last Modified by User on ${TIME}
+ * Last Modified by User on 12/14/17 6:51 PM
  */
 
 package sud_tanj.com.phr_android.Custom;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toolbar;
 
 import com.google.gson.Gson;
 
@@ -75,7 +67,8 @@ public class MyPreferencesActivity extends AppCompatActivity {
 
     public static class MyPreferenceFragment extends PreferenceFragment
     {
-        private static SharedPreferences  settings;
+        private static ListPreference langListPreferences;
+        private static EditTextPreference fullNamePreferences;
         @Override
         public void onCreate(final Bundle savedInstanceState)
         {
@@ -88,15 +81,15 @@ public class MyPreferencesActivity extends AppCompatActivity {
             super.onActivityCreated(savedInstanceState);
             // run the code making use of getActivity() from here
             //initialized
-            settings = getActivity().getSharedPreferences(getString(R.string.settings_pref_file_name), Context.MODE_WORLD_WRITEABLE);
-            String appLangPref=settings.getString(getString(R.string.application_language),"");
+            String appLangPref=Global.getSettings().getString(getString(R.string.application_language),"");
+            langListPreferences = (ListPreference)findPreference(getString(R.string.application_language));
+
 
             //Gson gson = new Gson();
             //String json = settings.getString("MyObject", "");
             //Locale obj = gson.fromJson(json, Locale.class);
 
             //Language Option
-            ListPreference langListPreferences = (ListPreference)findPreference(getString(R.string.application_language));
             List<String> langList = Arrays.asList(Locale.getISOLanguages());
             ArrayList<SuperString> langListName = new ArrayList<SuperString>();
             int defaultValue=0;
@@ -104,7 +97,7 @@ public class MyPreferencesActivity extends AppCompatActivity {
                 Locale loc = new Locale(langList.get(i));
                 if (loc.getDisplayLanguage().trim().length()>0 && !langListName.contains(loc.getDisplayLanguage())) {
                     if(loc.getDisplayLanguage().matches(appLangPref.toString())) {
-                        settings.edit().putString(getString(R.string.settings_lang_loc),new Gson().toJson(loc)).commit();
+                        Global.getSettings().edit().putString(getString(R.string.settings_lang_loc),new Gson().toJson(loc)).commit();
                         defaultValue=i;
                     }
                     langListName.add(new SuperString(loc.getDisplayLanguage()));

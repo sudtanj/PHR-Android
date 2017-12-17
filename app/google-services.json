@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "342574132457",
+    "firebase_url": "https://fir-phrandroid.firebaseio.com",
+    "project_id": "firebase-phrandroid",
+    "storage_bucket": "firebase-phrandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342574132457:android:ac900a32215f7003",
+        "android_client_info": {
+          "package_name": "com.sud_tanj.PHRAndroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342574132457-0jpl2eg86c5a1kgkoghqdd3mosqbse21.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "342574132457-h0gqq722dbkefijdppqejrd07574iukn.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "342574132457-e8tiq1mpmck19ilq4hr4ep6cc26s47ad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sud_tanj.PHRAndroid",
+            "certificate_hash": "bc24b37c0e624728d43a7d3dfafe324a727b4b9b"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPxWTU3UeRaNmgiqxcCEqp3TghpCp3eek"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342574132457-0jpl2eg86c5a1kgkoghqdd3mosqbse21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342574132457:android:1f15f8c9443dc501",
+        "android_client_info": {
+          "package_name": "sud_tanj.com.phr_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342574132457-0b74dq7nv8begtp641qekupp520lifo7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sud_tanj.com.phr_android",
+            "certificate_hash": "bc24b37c0e624728d43a7d3dfafe324a727b4b9b"
+          }
+        },
+        {
+          "client_id": "342574132457-0jpl2eg86c5a1kgkoghqdd3mosqbse21.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "342574132457-h0gqq722dbkefijdppqejrd07574iukn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPxWTU3UeRaNmgiqxcCEqp3TghpCp3eek"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342574132457-0jpl2eg86c5a1kgkoghqdd3mosqbse21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

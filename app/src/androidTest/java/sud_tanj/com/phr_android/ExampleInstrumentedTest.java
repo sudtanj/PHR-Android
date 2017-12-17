@@ -1,3 +1,10 @@
+/*
+ * Create by Sudono Tanjung
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last Modified by User on 12/14/17 6:51 PM
+ */
+
 package sud_tanj.com.phr_android;
 
 import android.content.Context;
