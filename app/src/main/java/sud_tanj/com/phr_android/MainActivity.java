@@ -19,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 
+import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
 import sud_tanj.com.phr_android.GPlusLogin.Login;
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //Init navigation view
         navView=(NavigationView) findViewById(R.id.nav_view);
+
+        //Init
+        Global.setContext(this);
+        startActivity(new Intent(getApplicationContext(), CardViewActivity.class));
 
         //init Preference
         //Global.setSettings(new SecurePreferences(this, Global.getFireBaseUser().getUid(), getString(R.string.settings_pref_file_name)));

@@ -27,6 +27,11 @@ public class Global {
     private static FirebaseAuth mAuth=null;
     private static FirebaseUser user = null;
     private static SecurePreferences settings=null;
+    private static Context context=null;
+    public static Context getContext() {
+        return context;
+    }
+
 
     public static FirebaseAuth getFireBaseAuth(){
         if(mAuth==null)
@@ -37,6 +42,9 @@ public class Global {
         if(user==null)
             user=getFireBaseAuth().getCurrentUser();
         return user;
+    }
+    public static void setContext(Context conx){
+        context=conx;
     }
     public static SecurePreferences getSettings(){
         return settings;
