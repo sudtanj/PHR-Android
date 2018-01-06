@@ -8,9 +8,11 @@
 package sud_tanj.com.phr_android;
 
 import android.app.ActivityOptions;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -34,6 +36,7 @@ import com.bumptech.glide.Glide;
 import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
+import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.GPlusLogin.Login;
 
 public class MainActivity extends AppCompatActivity
@@ -52,7 +55,11 @@ public class MainActivity extends AppCompatActivity
 
         //Init
         Global.setContext(this);
-        startActivity(new Intent(getApplicationContext(), CardViewActivity.class));
+
+        //Init firebase database
+        Global.getDatabase().setPersistenceEnabled(true);
+
+        new SensorData("wajekfljwklaf","Blood Pressure").syncData();
 
         //init Preference
         //Global.setSettings(new SecurePreferences(this, Global.getFireBaseUser().getUid(), getString(R.string.settings_pref_file_name)));
@@ -90,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         fullName=(TextView) navigationView.getHeaderView(0).findViewById(R.id.fullname);
         fullName.setText(Global.getFireBaseUser().getDisplayName());
 
+
         //Init profile image
         profilePicture=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.profile_picture);
         Glide.with(this)
@@ -125,8 +133,11 @@ public class MainActivity extends AppCompatActivity
         if (id.equals(R.id.action_settings)) {
             //getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new SettingsFragment()).commit();
             Intent i = new Intent(getApplicationContext(), MyPreferencesActivity.class);
-            ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
-            startActivity(i,options.toBundle());
+            ActivityOptions options = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(i,options.toBundle());
+            }
             return true;
         } else if (id.equals(R.id.action_logout)){
             Global.getFireBaseAuth().signOut();

@@ -11,6 +11,8 @@ import android.content.Context;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.securepreferences.SecurePreferences;
 
 /**
@@ -24,10 +26,14 @@ import com.securepreferences.SecurePreferences;
  */
 
 public class Global {
+    public static String DATABASE_USER_CHILD="users";
     private static FirebaseAuth mAuth=null;
     private static FirebaseUser user = null;
     private static SecurePreferences settings=null;
     private static Context context=null;
+    private static FirebaseDatabase database = null;
+    private static DatabaseReference userDatabase = null;
+
     public static Context getContext() {
         return context;
     }
@@ -55,5 +61,21 @@ public class Global {
     public static void changePreferences(String prefId,String value){
         if(getSettings().getString(prefId,"").isEmpty())
             getSettings().edit().putString(prefId,value).commit();
+    }
+
+    public static FirebaseDatabase getDatabase() {
+        if(user==null || mAuth==null)
+            getFireBaseUser();
+        if(database==null)
+            database=FirebaseDatabase.getInstance();
+        return database;
+    }
+
+    public static DatabaseReference getUserDatabase() {
+        if(database==null)
+            getDatabase();
+        if(userDatabase==null)
+            userDatabase=getDatabase().getReference().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
+        return userDatabase;
     }
 }

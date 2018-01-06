@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last Modified by User on 12/30/17 10:40 AM
+  -->
+
+<resources>
+    <integer name="anim_duration_medium">300</integer>
+    <integer name="anim_duration_long">400</integer>
+</resources>

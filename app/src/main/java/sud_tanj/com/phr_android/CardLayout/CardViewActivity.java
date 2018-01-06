@@ -6,12 +6,17 @@
  */
 
 package sud_tanj.com.phr_android.CardLayout;
+
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import java.util.ArrayList;
 
@@ -27,21 +32,29 @@ import sud_tanj.com.phr_android.R;
  * This class last modified by User
  */
 
-public class CardViewActivity extends AppCompatActivity {
+public class CardViewActivity extends Fragment {
 
+    private static String LOG_TAG = "CardViewActivity";
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private static String LOG_TAG = "CardViewActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card_view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        return inflater.inflate(R.layout.activity_card_view, container, false);
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mRecyclerView = (RecyclerView) getView().findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        int resId = R.anim.layout_animation_slide_right;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
+        mRecyclerView.setLayoutAnimation(animation);
+        mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyRecyclerViewAdapter(getDataSet());
         mRecyclerView.setAdapter(mAdapter);
@@ -49,7 +62,7 @@ public class CardViewActivity extends AppCompatActivity {
         // Code to Add an item with default animation
         //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);
 
-        ((MyRecyclerViewAdapter) mAdapter).addItem(new DataObject("aaa","bbb"), 1);
+        //((MyRecyclerViewAdapter) mAdapter).addItem(new DataObject("aaa","bbb"), 1);
 
         // Code to remove an item with default animation
         //((MyRecyclerViewAdapter) mAdapter).deleteItem(index);
@@ -57,7 +70,7 @@ public class CardViewActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter
                 .MyClickListener() {
@@ -66,6 +79,12 @@ public class CardViewActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, " Clicked on Item " + position);
             }
         });
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(mRecyclerView.getContext(), R.anim.layout_animation_slide_right);
+
+        mRecyclerView.setLayoutAnimation(controller);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mRecyclerView.scheduleLayoutAnimation();
     }
 
     private ArrayList<DataObject> getDataSet() {
