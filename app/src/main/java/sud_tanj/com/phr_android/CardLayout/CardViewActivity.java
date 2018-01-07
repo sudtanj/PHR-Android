@@ -8,7 +8,7 @@
 package sud_tanj.com.phr_android.CardLayout;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,9 +52,9 @@ public class CardViewActivity extends Fragment {
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         int resId = R.anim.layout_animation_slide_right;
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity().getApplicationContext(), resId);
         mRecyclerView.setLayoutAnimation(animation);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyRecyclerViewAdapter(getDataSet());
         mRecyclerView.setAdapter(mAdapter);

@@ -8,22 +8,19 @@
 package sud_tanj.com.phr_android;
 
 import android.app.ActivityOptions;
-import android.app.FragmentManager;
-import android.content.Context;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,20 +29,26 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
 import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.GPlusLogin.Login;
+import sud_tanj.com.phr_android.GridLayout.GridViewActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,SharedPreferences.OnSharedPreferenceChangeListener {
 
     private TextView fullName;
+    private TextView age;
     private NavigationView navView;
     private ImageView profilePicture;
+    private Fragment currentFragment;
 
+private SensorData arduino;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,14 +61,14 @@ public class MainActivity extends AppCompatActivity
 
         //Init firebase database
         Global.getDatabase().setPersistenceEnabled(true);
-
-        new SensorData("wajekfljwklaf","Blood Pressure").syncData();
+        arduino=new SensorData("wajekfljwklaf");
 
         //init Preference
         //Global.setSettings(new SecurePreferences(this, Global.getFireBaseUser().getUid(), getString(R.string.settings_pref_file_name)));
         //Global.setSettings(getSharedPreferences(getString(R.string.settings_pref_file_name), Context.MODE_WORLD_WRITEABLE));
-        Global.setSettings(getApplicationContext(),getString(R.string.settings_pref_file_name));
+        Global.setSettings(getApplicationContext());
         Global.changePreferences(getString(R.string.application_language),getString(R.string.settings_lang));
+        System.out.println(Global.getSettings().getString("age_key","0"));
 
         Global.getSettings().registerOnSharedPreferenceChangeListener(this);
 
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        Global.setNavigationView(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
         //init navigation drawer
@@ -103,6 +107,17 @@ public class MainActivity extends AppCompatActivity
         Glide.with(this)
                 .load(Global.getFireBaseUser().getPhotoUrl())
                 .into(profilePicture);
+
+        //init age
+        age=(TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
+        age.setText(Global.getSettings().getString("age_key","")+" Years old");
+
+
+        //first fragment init
+        currentFragment = new CardViewActivity();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, currentFragment);
+        transaction.commit();
     }
 
     @Override
@@ -119,6 +134,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        //System.out.println(arduino.getSensorId());
+        //System.out.println(arduino.getSensorName());
         return true;
     }
 
@@ -155,8 +172,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            currentFragment=new CardViewActivity();
+            transaction.replace(R.id.fragment_container, currentFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         } else if (id == R.id.nav_gallery) {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            currentFragment=new GridViewActivity();
+            transaction.replace(R.id.fragment_container, currentFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -175,6 +202,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
+        age.setText(Global.getSettings().getString("age_key","")+" Years old");
     }
 }

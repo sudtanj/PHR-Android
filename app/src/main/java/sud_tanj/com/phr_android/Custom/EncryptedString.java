@@ -9,9 +9,17 @@ package sud_tanj.com.phr_android.Custom;
 
 import android.support.annotation.NonNull;
 
-import org.encryptor4j.util.TextEncryptor;
+import com.tozny.crypto.android.AesCbcWithIntegrity;
 
+import org.jasypt.util.text.StrongTextEncryptor;
+
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+
+import javax.crypto.SecretKey;
+
+import static com.tozny.crypto.android.AesCbcWithIntegrity.generateSalt;
+import static com.tozny.crypto.android.AesCbcWithIntegrity.saltString;
 
 /**
  * This class is part of PHRAndroid Project
@@ -25,7 +33,8 @@ import java.security.GeneralSecurityException;
 
 public class EncryptedString implements Comparable{
     private String stringData=null;
-    private TextEncryptor te = null;
+    private StrongTextEncryptor textEncryptor=null;
+    private String salt=null;
     @Override
     public String toString() {
         return this.getStringData();
@@ -48,26 +57,31 @@ public class EncryptedString implements Comparable{
         return this.getStringData().hashCode();
     }
 
-    public EncryptedString(String stringData){
-       // te = new TextEncryptor(Global.getFireBaseUser().getUid());
-       // try {
-          //  this.setStringData(te.encrypt(stringData));
-        this.setStringData(stringData);
-        //} catch (GeneralSecurityException e) {
-         //   e.printStackTrace();
-        //}
+    public EncryptedString(String stringData,Boolean encrypted){
+        //textEncryptor = new StrongTextEncryptor();
+        //textEncryptor.setPassword(Global.getFireBaseUser().getUid());
+        //if(encrypted)
+            this.setStringData(stringData);
+        //else
+            //this.setStringData(textEncryptor.encrypt(stringData));
     }
+
 
     public void setStringData(String stringData) {
         this.stringData = stringData;
     }
 
     public String getStringData() {
-        //try {
-            return stringData;
-       // } catch (GeneralSecurityException e) {
-         //   return e.toString();
-        //}
+        return this.stringData;
+    }
+
+    public String getEncryptedText(){
+        return this.stringData;
+    }
+
+    public String getDecryptedText(){
+        //return textEncryptor.decrypt(this.getStringData());
+        return this.getStringData();
     }
 
 

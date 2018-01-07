@@ -8,6 +8,9 @@
 package sud_tanj.com.phr_android.Custom;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,10 +32,11 @@ public class Global {
     public static String DATABASE_USER_CHILD="users";
     private static FirebaseAuth mAuth=null;
     private static FirebaseUser user = null;
-    private static SecurePreferences settings=null;
+    private static SharedPreferences settings=null;
     private static Context context=null;
     private static FirebaseDatabase database = null;
     private static DatabaseReference userDatabase = null;
+    private static NavigationView navigationView = null;
 
     public static Context getContext() {
         return context;
@@ -52,11 +56,11 @@ public class Global {
     public static void setContext(Context conx){
         context=conx;
     }
-    public static SecurePreferences getSettings(){
+    public static SharedPreferences getSettings(){
         return settings;
     }
-    public static void setSettings(final Context mainActivity, final String settingPath){
-        settings=new SecurePreferences(mainActivity, Global.getFireBaseUser().getUid(), settingPath);
+    public static void setSettings(final Context mainActivity){
+        settings= PreferenceManager.getDefaultSharedPreferences(mainActivity);
     }
     public static void changePreferences(String prefId,String value){
         if(getSettings().getString(prefId,"").isEmpty())
@@ -77,5 +81,13 @@ public class Global {
         if(userDatabase==null)
             userDatabase=getDatabase().getReference().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
         return userDatabase;
+    }
+
+    public static NavigationView getNavigationView() {
+        return navigationView;
+    }
+
+    public static void setNavigationView(NavigationView navigationView) {
+        Global.navigationView = navigationView;
     }
 }

@@ -31,5 +31,10 @@
     <string name="settings_lang">English</string>
     <string name="settings_lang_loc"></string>
 
+
+    <string name="action_refresh">Settings</string>
+    <string name="action_new">Settings</string>
+    <string name="logo_desc">App logo</string>
+    <string name="country_name">Nigeria</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

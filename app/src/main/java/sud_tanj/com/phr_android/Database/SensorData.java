@@ -7,8 +7,14 @@
 
 package sud_tanj.com.phr_android.Database;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import sud_tanj.com.phr_android.Custom.EncryptedString;
 import sud_tanj.com.phr_android.Custom.Global;
@@ -27,40 +33,76 @@ public class SensorData {
     public static final String SENSOR_DATA_CHILD_NAME="Sensor_Data";
     private EncryptedString sensorId = null;
     private EncryptedString sensorName = null;
-    private DatabaseReference dataReference = Global.getUserDatabase().child(SENSOR_DATA_CHILD_NAME);
+    private ArrayList<HealthData> sensorData = null;
+    private DatabaseReference dataReference = null;
 
-    public SensorData(String sensorId,String sensorName) {
+    public SensorData(String sensorId) {
         this.setSensorId(sensorId);
-        this.setSensorName(sensorName);
-    }
+        this.setDataReference(Global.getUserDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
+        ValueEventListener dataListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot idReference=dataSnapshot.child("Id"),
+                        nameReference=dataSnapshot.child("Name"),
+                        dataReference=dataSnapshot.child("Data");
+                if(dataSnapshot.exists()) {
+                    setSensorIdEncrypted(idReference.getValue(String.class));
+                    setSensorNameEncrypted(nameReference.getValue(String.class));
+                    setSensorData(dataReference.getValue(ArrayList.class));
+                }
+            }
 
-    public void syncData(){
-        Gson gson = new Gson();
-        getDataReference().child(this.getSensorId()).setValue(gson.toJson(this.getClass()));
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        this.getDataReference().addValueEventListener(dataListener);
     }
 
     //get and set
     public String getSensorName(){
-        return sensorName.toString();
+        return sensorName.getDecryptedText();
     }
 
-    public void setSensorName(String sensorName) {
-        this.sensorName = new EncryptedString(sensorName);
+    protected void setSensorName(String sensorName) {
+        this.sensorName = new EncryptedString(sensorName,false);
+    }
+
+    protected void setSensorNameEncrypted(String sensorNameEncrypted){
+        this.sensorName = new EncryptedString(sensorNameEncrypted,true);
     }
 
     public String getSensorId() {
-        return sensorId.toString();
+        return sensorId.getDecryptedText();
     }
 
-    public void setSensorId(String sensorId) {
-        this.sensorId = new EncryptedString(sensorId);
+    protected void setSensorId(String sensorId) {
+        this.sensorId = new EncryptedString(sensorId,false);
     }
 
-    public DatabaseReference getDataReference() {
+
+    protected void setSensorIdEncrypted(String sensorId) {
+        this.sensorId = new EncryptedString(sensorId,true);
+    }
+
+    private DatabaseReference getDataReference() {
         return dataReference;
     }
 
-    public void setDataReference(DatabaseReference dataReference) {
+    private void setDataReference(DatabaseReference dataReference) {
         this.dataReference = dataReference;
+    }
+
+    public ArrayList<HealthData> getSensorData() {
+        return (ArrayList<HealthData>)sensorData.clone();
+    }
+
+    public void addHealthData(HealthData values){
+        this.getSensorData().add(values);
+    }
+
+    private void setSensorData(ArrayList<HealthData> sensorData) {
+        this.sensorData = sensorData;
     }
 }

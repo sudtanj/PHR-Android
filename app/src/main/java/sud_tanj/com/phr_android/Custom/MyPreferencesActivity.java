@@ -16,6 +16,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -68,7 +69,7 @@ public class MyPreferencesActivity extends AppCompatActivity {
     public static class MyPreferenceFragment extends PreferenceFragment
     {
         private static ListPreference langListPreferences;
-        private static EditTextPreference fullNamePreferences;
+        private static EditTextPreference agePreferences;
         @Override
         public void onCreate(final Bundle savedInstanceState)
         {
@@ -83,7 +84,7 @@ public class MyPreferencesActivity extends AppCompatActivity {
             //initialized
             String appLangPref=Global.getSettings().getString(getString(R.string.application_language),"");
             langListPreferences = (ListPreference)findPreference(getString(R.string.application_language));
-
+            agePreferences = (EditTextPreference)findPreference("age_key");
 
             //Gson gson = new Gson();
             //String json = settings.getString("MyObject", "");

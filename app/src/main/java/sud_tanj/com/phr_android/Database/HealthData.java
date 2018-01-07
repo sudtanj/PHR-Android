@@ -25,6 +25,7 @@ import sud_tanj.com.phr_android.Custom.Global;
 public class HealthData  {
     public static final String HEALTH_DATA_CHILD_NAME="Health_Data";
     private String data=null;
+    private SensorData parentSensor=null;
     private DatabaseReference dataReference = Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME);
 
 
