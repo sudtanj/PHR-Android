@@ -16,7 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.securepreferences.SecurePreferences;
+
+import java.util.List;
+
+import sud_tanj.com.phr_android.Database.SensorGateway;
 
 /**
  * This class is part of PHRAndroid Project
@@ -36,7 +39,9 @@ public class Global {
     private static Context context=null;
     private static FirebaseDatabase database = null;
     private static DatabaseReference userDatabase = null;
+    private static DatabaseReference mainDatabase =null;
     private static NavigationView navigationView = null;
+    private static SensorGateway sensorGateway=null;
 
     public static Context getContext() {
         return context;
@@ -70,16 +75,16 @@ public class Global {
     public static FirebaseDatabase getDatabase() {
         if(user==null || mAuth==null)
             getFireBaseUser();
-        if(database==null)
-            database=FirebaseDatabase.getInstance();
+        if(database==null) {
+            database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
+        }
         return database;
     }
 
     public static DatabaseReference getUserDatabase() {
-        if(database==null)
-            getDatabase();
         if(userDatabase==null)
-            userDatabase=getDatabase().getReference().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
+            userDatabase=getMainDatabase().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
         return userDatabase;
     }
 
@@ -89,5 +94,28 @@ public class Global {
 
     public static void setNavigationView(NavigationView navigationView) {
         Global.navigationView = navigationView;
+    }
+
+    public static DatabaseReference getMainDatabase() {
+        if(database==null)
+            getDatabase();
+        if(mainDatabase==null) {
+            mainDatabase = getDatabase().getReference();
+            mainDatabase.keepSynced(true);
+        }
+        return mainDatabase;
+    }
+
+
+    public static void setMainDatabase(DatabaseReference mainDatabase) {
+        Global.mainDatabase = mainDatabase;
+    }
+
+    public static SensorGateway getSensorGateway() {
+        return sensorGateway;
+    }
+
+    public static void setSensorGateway(SensorGateway sensorGateway) {
+        Global.sensorGateway = sensorGateway;
     }
 }

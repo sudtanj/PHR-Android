@@ -1,0 +1,20 @@
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2018. All rights reserved.
+  ~
+  ~ Last Modified by User on 1/10/18 3:45 PM
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="sud_tanj.com.phr_android.add_sensor">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+
+</FrameLayout>

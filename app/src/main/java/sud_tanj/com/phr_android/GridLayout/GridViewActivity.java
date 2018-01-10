@@ -23,6 +23,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -48,7 +50,7 @@ public class GridViewActivity extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        List<ItemObject> rowListItem = getAllItemList();
+        List<SensorData> rowListItem = Global.getSensorGateway().getSensorObject();
         lLayout = new GridLayoutManager(getActivity().getApplicationContext(), 4);
 
         RecyclerView rView = (RecyclerView)getView().findViewById(R.id.my_recycler_view);

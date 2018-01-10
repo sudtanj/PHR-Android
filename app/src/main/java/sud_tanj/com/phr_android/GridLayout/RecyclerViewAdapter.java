@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -29,10 +30,10 @@ import sud_tanj.com.phr_android.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
 
-private List<ItemObject> itemList;
+private List<SensorData> itemList;
 private Context context;
 
-public RecyclerViewAdapter(Context context, List<ItemObject> itemList) {
+public RecyclerViewAdapter(Context context, List<SensorData> itemList) {
         this.itemList = itemList;
         this.context = context;
         }
@@ -47,7 +48,7 @@ public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
 @Override
 public void onBindViewHolder(RecyclerViewHolders holder, int position) {
-        holder.countryName.setText(itemList.get(position).getName());
+        holder.countryName.setText(itemList.get(position).getSensorName());
        // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
         }
 

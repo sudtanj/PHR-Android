@@ -8,6 +8,7 @@
 package sud_tanj.com.phr_android;
 
 import android.app.ActivityOptions;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,17 +30,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
 import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.SensorGateway;
 import sud_tanj.com.phr_android.GPlusLogin.Login;
 import sud_tanj.com.phr_android.GridLayout.GridViewActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,SharedPreferences.OnSharedPreferenceChangeListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private TextView fullName;
     private TextView age;
@@ -48,27 +48,25 @@ public class MainActivity extends AppCompatActivity
     private ImageView profilePicture;
     private Fragment currentFragment;
 
-private SensorData arduino;
+    private SensorData arduino;
+    SensorGateway gate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Init navigation view
-        navView=(NavigationView) findViewById(R.id.nav_view);
+        navView = (NavigationView) findViewById(R.id.nav_view);
 
         //Init
         Global.setContext(this);
 
-        //Init firebase database
-        Global.getDatabase().setPersistenceEnabled(true);
-        arduino=new SensorData("wajekfljwklaf");
+        //init SensorGateway
+        Global.setSensorGateway(new SensorGateway());
 
         //init Preference
-        //Global.setSettings(new SecurePreferences(this, Global.getFireBaseUser().getUid(), getString(R.string.settings_pref_file_name)));
-        //Global.setSettings(getSharedPreferences(getString(R.string.settings_pref_file_name), Context.MODE_WORLD_WRITEABLE));
         Global.setSettings(getApplicationContext());
-        Global.changePreferences(getString(R.string.application_language),getString(R.string.settings_lang));
-        System.out.println(Global.getSettings().getString("age_key","0"));
+        Global.changePreferences(getString(R.string.application_language), getString(R.string.settings_lang));
 
         Global.getSettings().registerOnSharedPreferenceChangeListener(this);
 
@@ -98,19 +96,19 @@ private SensorData arduino;
         //init navigation drawer
 
         //init fullname
-        fullName=(TextView) navigationView.getHeaderView(0).findViewById(R.id.fullname);
+        fullName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullname);
         fullName.setText(Global.getFireBaseUser().getDisplayName());
 
 
         //Init profile image
-        profilePicture=(ImageView)navigationView.getHeaderView(0).findViewById(R.id.profile_picture);
+        profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile_picture);
         Glide.with(this)
                 .load(Global.getFireBaseUser().getPhotoUrl())
                 .into(profilePicture);
 
         //init age
-        age=(TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
-        age.setText(Global.getSettings().getString("age_key","")+" Years old");
+        age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
+        age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
 
         //first fragment init
@@ -118,6 +116,8 @@ private SensorData arduino;
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, currentFragment);
         transaction.commit();
+
+        gate = new SensorGateway();
     }
 
     @Override
@@ -134,8 +134,6 @@ private SensorData arduino;
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        //System.out.println(arduino.getSensorId());
-        //System.out.println(arduino.getSensorName());
         return true;
     }
 
@@ -153,10 +151,10 @@ private SensorData arduino;
             ActivityOptions options = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
-                startActivity(i,options.toBundle());
+                startActivity(i, options.toBundle());
             }
             return true;
-        } else if (id.equals(R.id.action_logout)){
+        } else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();
             finish();
             startActivity(new Intent(getApplicationContext(), Login.class));
@@ -173,14 +171,14 @@ private SensorData arduino;
 
         if (id == R.id.nav_camera) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            currentFragment=new CardViewActivity();
+            currentFragment = new CardViewActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
             transaction.addToBackStack(null);
             transaction.commit();
 
         } else if (id == R.id.nav_gallery) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            currentFragment=new GridViewActivity();
+            currentFragment = new GridViewActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
             transaction.addToBackStack(null);
             transaction.commit();
@@ -188,7 +186,12 @@ private SensorData arduino;
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-
+            Intent i = new Intent(getApplicationContext(), MyPreferencesActivity.class);
+            ActivityOptions options = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(i, options.toBundle());
+            }
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -202,6 +205,6 @@ private SensorData arduino;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        age.setText(Global.getSettings().getString("age_key","")+" Years old");
+        age.setText(Global.getSettings().getString("age_key", "") + " Years old");
     }
 }

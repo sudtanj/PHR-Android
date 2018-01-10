@@ -9,18 +9,6 @@ package sud_tanj.com.phr_android.Custom;
 
 import android.support.annotation.NonNull;
 
-import com.tozny.crypto.android.AesCbcWithIntegrity;
-
-import org.jasypt.util.text.StrongTextEncryptor;
-
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-
-import javax.crypto.SecretKey;
-
-import static com.tozny.crypto.android.AesCbcWithIntegrity.generateSalt;
-import static com.tozny.crypto.android.AesCbcWithIntegrity.saltString;
-
 /**
  * This class is part of PHRAndroid Project
  * Any modified within this class without reading the
@@ -33,7 +21,6 @@ import static com.tozny.crypto.android.AesCbcWithIntegrity.saltString;
 
 public class EncryptedString implements Comparable{
     private String stringData=null;
-    private StrongTextEncryptor textEncryptor=null;
     private String salt=null;
     @Override
     public String toString() {

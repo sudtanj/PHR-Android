@@ -11,11 +11,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import sud_tanj.com.phr_android.Custom.EmbeddedScript;
 import sud_tanj.com.phr_android.Custom.EncryptedString;
 import sud_tanj.com.phr_android.Custom.Global;
 
@@ -30,25 +29,29 @@ import sud_tanj.com.phr_android.Custom.Global;
  */
 
 public class SensorData {
-    public static final String SENSOR_DATA_CHILD_NAME="Sensor_Data";
-    private EncryptedString sensorId = null;
-    private EncryptedString sensorName = null;
+    public static final String SENSOR_DATA_CHILD_NAME="sensor";
+    private String sensorId = null;
+    private String sensorName = null;
     private ArrayList<HealthData> sensorData = null;
     private DatabaseReference dataReference = null;
+    private EmbeddedScript scriptListener= null;
 
-    public SensorData(String sensorId) {
+    protected SensorData(String sensorId) {
         this.setSensorId(sensorId);
-        this.setDataReference(Global.getUserDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
+        this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
         ValueEventListener dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot idReference=dataSnapshot.child("Id"),
-                        nameReference=dataSnapshot.child("Name"),
-                        dataReference=dataSnapshot.child("Data");
+                DataSnapshot nameReference=dataSnapshot.child("Name"),
+                        dataReference=dataSnapshot.child("Data"),
+                        scriptReference=dataSnapshot.child("EmbeddedScript");
                 if(dataSnapshot.exists()) {
-                    setSensorIdEncrypted(idReference.getValue(String.class));
                     setSensorNameEncrypted(nameReference.getValue(String.class));
-                    setSensorData(dataReference.getValue(ArrayList.class));
+                    setSensorData(new ArrayList<HealthData>());
+                    for (DataSnapshot childSnapshot: dataReference.getChildren()) {
+                     getSensorData().add(new HealthData(childSnapshot.getValue().toString()));
+                    }
+                    setEmbeddedScriptListener(scriptReference.getValue(String.class));
                 }
             }
 
@@ -62,28 +65,29 @@ public class SensorData {
 
     //get and set
     public String getSensorName(){
-        return sensorName.getDecryptedText();
+        return sensorName;
     }
 
-    protected void setSensorName(String sensorName) {
-        this.sensorName = new EncryptedString(sensorName,false);
+    public void setSensorName(String sensorName) {
+        this.sensorName = new String(sensorName);
+        this.getDataReference().child("Name").setValue(this.sensorName.toString());
     }
 
     protected void setSensorNameEncrypted(String sensorNameEncrypted){
-        this.sensorName = new EncryptedString(sensorNameEncrypted,true);
+        this.sensorName = new String(sensorNameEncrypted);
     }
 
     public String getSensorId() {
-        return sensorId.getDecryptedText();
+        return sensorId;
     }
 
     protected void setSensorId(String sensorId) {
-        this.sensorId = new EncryptedString(sensorId,false);
+        this.sensorId = sensorId;
     }
 
 
     protected void setSensorIdEncrypted(String sensorId) {
-        this.sensorId = new EncryptedString(sensorId,true);
+        this.sensorId = sensorId;
     }
 
     private DatabaseReference getDataReference() {
@@ -95,14 +99,40 @@ public class SensorData {
     }
 
     public ArrayList<HealthData> getSensorData() {
-        return (ArrayList<HealthData>)sensorData.clone();
+        return sensorData;
     }
 
     public void addHealthData(HealthData values){
         this.getSensorData().add(values);
     }
 
+    private void setEmbeddedScriptListener(String scriptName){
+        if(scriptName!=null) {
+            try {
+                Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + scriptName);
+                scriptListener = (EmbeddedScript) (listener.newInstance());
+                System.out.println(scriptListener.run());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
     private void setSensorData(ArrayList<HealthData> sensorData) {
         this.sensorData = sensorData;
+    }
+
+    public EmbeddedScript getScriptListener() {
+        return scriptListener;
+    }
+
+    public void setScriptListener(String scriptListenerId) {
+        getDataReference().child("EmbeddedScript").setValue(scriptListenerId);
     }
 }
