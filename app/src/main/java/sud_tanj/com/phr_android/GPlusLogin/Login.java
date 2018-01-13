@@ -126,6 +126,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            System.out.println("Login Successful");
                             startActivity(new Intent(Login.this, MainActivity.class));
                             Toast.makeText(getApplicationContext(), "Welcome, "+ Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
                             finish();
