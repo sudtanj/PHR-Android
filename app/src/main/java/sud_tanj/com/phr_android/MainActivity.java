@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
-
+        
         //Init
         Global.setContext(this);
 

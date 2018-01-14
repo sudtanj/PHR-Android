@@ -32,24 +32,30 @@ public class SensorData {
     public static final String SENSOR_DATA_CHILD_NAME="sensor";
     private String sensorId = null;
     private String sensorName = null;
+    private Boolean sensorActive = null;
     private ArrayList<HealthData> sensorData = null;
     private DatabaseReference dataReference = null;
     private EmbeddedScript scriptListener= null;
 
     protected SensorData(String sensorId) {
         this.setSensorId(sensorId);
+        sensorActive=false;
         this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
         ValueEventListener dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nameReference=dataSnapshot.child("Name"),
                         dataReference=dataSnapshot.child("Data"),
-                        scriptReference=dataSnapshot.child("EmbeddedScript");
+                        scriptReference=dataSnapshot.child("EmbeddedScript"),
+                        sensorReference=dataSnapshot.child("SensorActive");
                 if(dataSnapshot.exists()) {
                     setSensorNameEncrypted(nameReference.getValue(String.class));
                     setSensorData(new ArrayList<HealthData>());
                     for (DataSnapshot childSnapshot: dataReference.getChildren()) {
                      getSensorData().add(new HealthData(childSnapshot.getValue().toString()));
+                    }
+                    if(sensorReference.getValue()!=null){
+                        sensorActive=sensorReference.getValue(Boolean.class);
                     }
                     setEmbeddedScriptListener(scriptReference.getValue(String.class));
                 }
@@ -134,5 +140,13 @@ public class SensorData {
 
     public void setScriptListener(String scriptListenerId) {
         getDataReference().child("EmbeddedScript").setValue(scriptListenerId);
+    }
+
+    public Boolean getSensorActive() {
+        return sensorActive;
+    }
+
+    public void setSensorActive(Boolean sensorActive) {
+        getDataReference().child("SensorActive").setValue(sensorActive);
     }
 }
