@@ -8,8 +8,6 @@
 package sud_tanj.com.phr_android.Database;
 
 
-import android.renderscript.Sampler;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,28 +28,28 @@ import sud_tanj.com.phr_android.Custom.Global;
  */
 
 public class HealthData implements ValueEventListener {
-    public static final String HEALTH_DATA_CHILD_NAME="Health_Data";
-    private String healthDataId=null;
-    private String values=null;
-    private Date timeStamp=null;
-    private SensorData parentSensor=null;
+    public static final String HEALTH_DATA_CHILD_NAME = "Health_Data";
+    private String healthDataId = null;
+    private String values = null;
+    private Date timeStamp = null;
+    private SensorData parentSensor = null;
     private DatabaseReference dataReference = null;
-    private ValueEventListener dataListener=null;
-    private String parentSensorString=null;
-    private String timeStampString=null;
+    private ValueEventListener dataListener = null;
+    private String parentSensorString = null;
+    private String timeStampString = null;
 
-    public HealthData(SensorData parentSensorargs,String valuesargs){
-        timeStamp=new Date();
-        setHealthDataId(parentSensorargs.getSensorId()+String.valueOf(timeStamp.getTime()));
-            setDataReference(Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME).child(getHealthDataId()));
+    public HealthData(SensorData parentSensorargs, String valuesargs) {
+        timeStamp = new Date();
+        setHealthDataId(parentSensorargs.getSensorId() + String.valueOf(timeStamp.getTime()));
+        setDataReference(Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME).child(getHealthDataId()));
         setParentSensor(parentSensorargs);
         setTimeStamp(timeStamp);
-            setValues(valuesargs);
-           this.getParentSensor().addHealthData(this);
+        setValues(valuesargs);
+        this.getParentSensor().addHealthData(this);
         getDataReference().addValueEventListener(this);
     }
 
-    public HealthData(String healthDataId){
+    public HealthData(String healthDataId) {
         setHealthDataId(healthDataId);
         setDataReference(Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME).child(getHealthDataId()));
         getDataReference().addValueEventListener(this);
@@ -79,7 +77,7 @@ public class HealthData implements ValueEventListener {
 
     public void setParentSensor(SensorData parentSensor) {
         getDataReference().child("ParentSensor").setValue(parentSensor.getSensorId());
-        this.parentSensor=parentSensor;
+        this.parentSensor = parentSensor;
     }
 
     public DatabaseReference getDataReference() {
@@ -101,19 +99,19 @@ public class HealthData implements ValueEventListener {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         String temp = dataSnapshot.child("TimeStamp").getValue(String.class);
-        if(temp!=null) {
+        if (temp != null) {
             timeStampString = temp;
         }
-        timeStamp=new Date(Long.parseLong(timeStampString));
-        temp=dataSnapshot.child("Values").getValue(String.class);
-        if(temp!=null) {
-            values =temp;
+        timeStamp = new Date(Long.parseLong(timeStampString));
+        temp = dataSnapshot.child("Values").getValue(String.class);
+        if (temp != null) {
+            values = temp;
         }
-        temp=dataSnapshot.child("ParentSensor").getValue(String.class);
-        if(temp!=null) {
-            parentSensorString=temp;
+        temp = dataSnapshot.child("ParentSensor").getValue(String.class);
+        if (temp != null) {
+            parentSensorString = temp;
         }
-        parentSensor=Global.getSensorGateway().getSensorData(parentSensorString);
+        parentSensor = Global.getSensorGateway().getSensorData(parentSensorString);
     }
 
     @Override

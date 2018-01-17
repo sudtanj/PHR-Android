@@ -12,6 +12,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
 private List<SensorData> itemList;
 private Context context;
+private int positionLocal;
 
 public RecyclerViewAdapter(Context context, List<SensorData> itemList) {
         this.itemList = itemList;
@@ -48,7 +50,16 @@ public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
 @Override
 public void onBindViewHolder(RecyclerViewHolders holder, int position) {
+        this.positionLocal=position;
         holder.countryName.setText(itemList.get(position).getSensorName());
+        holder.sensorSwitch.setChecked(itemList.get(position).getSensorActive());
+        holder.sensorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                int position=positionLocal;
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        itemList.get(position).setSensorActive(b);
+                }
+        });
        // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
         }
 

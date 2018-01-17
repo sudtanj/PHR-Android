@@ -115,7 +115,6 @@ public class Login extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         //getting the auth credential
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -126,7 +125,6 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            System.out.println("Login Successful");
                             startActivity(new Intent(Login.this, MainActivity.class));
                             Toast.makeText(getApplicationContext(), "Welcome, "+ Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
                             finish();

@@ -35,27 +35,44 @@ public class SensorData {
     private Boolean sensorActive = null;
     private ArrayList<HealthData> sensorData = null;
     private DatabaseReference dataReference = null;
+    private DatabaseReference userDataReference=null;
     private EmbeddedScript scriptListener= null;
 
     protected SensorData(String sensorId) {
         this.setSensorId(sensorId);
         sensorActive=false;
         this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
+        this.setUserDataReference(Global.getUserDatabase().child("sensors").child(this.getSensorId()));
+        ValueEventListener userDataListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot sensorReference=dataSnapshot.child("SensorActive");
+                if(sensorReference.getValue()!=null){
+                    sensorActive=sensorReference.getValue(Boolean.class);
+                }
+                else {
+                    sensorReference.getRef().setValue(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        this.getUserDataReference().addValueEventListener(userDataListener);
         ValueEventListener dataListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nameReference=dataSnapshot.child("Name"),
                         dataReference=dataSnapshot.child("Data"),
-                        scriptReference=dataSnapshot.child("EmbeddedScript"),
-                        sensorReference=dataSnapshot.child("SensorActive");
+                        scriptReference=dataSnapshot.child("EmbeddedScript");
                 if(dataSnapshot.exists()) {
                     setSensorNameEncrypted(nameReference.getValue(String.class));
                     setSensorData(new ArrayList<HealthData>());
                     for (DataSnapshot childSnapshot: dataReference.getChildren()) {
                      getSensorData().add(new HealthData(childSnapshot.getValue().toString()));
-                    }
-                    if(sensorReference.getValue()!=null){
-                        sensorActive=sensorReference.getValue(Boolean.class);
                     }
                     setEmbeddedScriptListener(scriptReference.getValue(String.class));
                 }
@@ -117,7 +134,6 @@ public class SensorData {
             try {
                 Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + scriptName);
                 scriptListener = (EmbeddedScript) (listener.newInstance());
-                System.out.println(scriptListener.run());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -125,6 +141,12 @@ public class SensorData {
             } catch (InstantiationException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void runScriptListener(){
+        if(getSensorActive()){
+            scriptListener.run();
         }
     }
 
@@ -147,6 +169,14 @@ public class SensorData {
     }
 
     public void setSensorActive(Boolean sensorActive) {
-        getDataReference().child("SensorActive").setValue(sensorActive);
+        getUserDataReference().child("SensorActive").setValue(sensorActive);
+    }
+
+    public DatabaseReference getUserDataReference() {
+        return userDataReference;
+    }
+
+    public void setUserDataReference(DatabaseReference userDataReference) {
+        this.userDataReference = userDataReference;
     }
 }
