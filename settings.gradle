@@ -5,4 +5,4 @@
  * Last Modified by User on 12/14/17 6:51 PM
  */
 
-include ':app', ':PhysicaloidLibrary'
+include ':app'

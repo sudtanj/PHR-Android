@@ -51,12 +51,12 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
     compile 'com.android.support:cardview-v7:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
-    compile project(path: ':PhysicaloidLibrary')
+    compile 'com.github.sudtanj:PhysicaloidLibrary:0b83314149'
 }
 
 
 
 
 
-
+apply plugin: 'maven'
 apply plugin: 'com.google.gms.google-services'
