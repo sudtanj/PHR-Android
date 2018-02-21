@@ -19,7 +19,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('D:/Users/user/AndroidStudioProjects/PHRAndroid/key.jks')
+            storeFile file('../PHRAndroid/key.jks')
             storePassword "sudonotanjung"
             keyAlias "key0"
             keyPassword "sudonotanjung"
