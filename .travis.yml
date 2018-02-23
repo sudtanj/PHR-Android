@@ -3,6 +3,16 @@ sudo: required
 jdk:
   - oraclejdk8
 install: true
+before_deploy:
+  # Set up git user name and tag this commit
+  - git config --local user.name "sudtanj"
+  - git config --local user.email "sudono007@gmail.com"
+  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key: "815cb00bef5576a5aea0871f811906d758a34e10"
+  file: "$TRAVIS_BUILD_DIR/outputs/apk/release.apk"
+  skip_cleanup: true
 before_install:
 - yes | sdkmanager "platforms;android-27"
 before_script:
