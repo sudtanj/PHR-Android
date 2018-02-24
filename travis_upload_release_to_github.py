@@ -23,7 +23,7 @@ github_header_accept = 'application/vnd.github.v3+json'
 github_header_user_agent = 'TravisUploader/0.1'
 
 DEVNULL = open(os.devnull, 'w')
-repo_url = "https://github.com/sudtanj/PHR-Android/"
+repo_url = "https://github.com/sudtanj/PHR-Android"
 
 try:
     repo_url = check_output(['git', 'config', '--get', 'remote.origin.url']).splitlines()[0]
