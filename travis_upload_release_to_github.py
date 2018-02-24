@@ -14,7 +14,7 @@ from os import getenv
 from subprocess import check_output
 from subprocess import CalledProcessError
 
-__author__ = 'mariotaku'
+__author__ = 'sudtanj'
 git_https_url_prefix = 'https://github.com/'
 git_ssh_url_prefix = 'git@github.com:'
 git_git_url_prefix = 'git://github.com/'
@@ -23,7 +23,7 @@ github_header_accept = 'application/vnd.github.v3+json'
 github_header_user_agent = 'TravisUploader/0.1'
 
 DEVNULL = open(os.devnull, 'w')
-repo_url = None
+repo_url = "https://github.com/sudtanj/PHR-Android/"
 
 try:
     repo_url = check_output(['git', 'config', '--get', 'remote.origin.url']).splitlines()[0]
