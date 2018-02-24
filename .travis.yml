@@ -13,6 +13,7 @@ deploy:
   api_key: "815cb00bef5576a5aea0871f811906d758a34e10"
   file: "./app/build/outputs/apk/release/app-release.apk"
   skip_cleanup: true
+  prerelease: true
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
