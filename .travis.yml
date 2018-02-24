@@ -8,7 +8,7 @@ before_deploy:
   - git config --local user.name "sudtanj"
   - git config --local user.email "sudono007@gmail.com"
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-after_success: ./scripts/travis_upload_release_to_github.py
+after_success: ./travis_upload_release_to_github.py
 before_install:
 - yes | sdkmanager "platforms;android-27"
 before_script:
