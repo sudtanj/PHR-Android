@@ -11,7 +11,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key: "815cb00bef5576a5aea0871f811906d758a34e10"
-  file: "app/build/outputs/apk/app-release.apk"
+  file: "$TRAVIS_BUILD_DIR/app-release.apk"
   skip_cleanup: true
 before_install:
 - yes | sdkmanager "platforms;android-27"
