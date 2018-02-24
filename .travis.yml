@@ -8,6 +8,11 @@ before_deploy:
   - git config --local user.name "sudtanj"
   - git config --local user.email "sudono007@gmail.com"
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key: "815cb00bef5576a5aea0871f811906d758a34e10"
+  file: "./app/build/outputs/apk/release/app-release.apk"
+  skip_cleanup: true
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
