@@ -9,8 +9,7 @@ before_deploy:
   - git config --local user.email "sudono007@gmail.com"
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
 after_success: 
-  - cd $TRAVIS_BUILD_DIR
-  - ls
+  - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
   - yes | sdkmanager "platforms;android-27"
 before_script:
