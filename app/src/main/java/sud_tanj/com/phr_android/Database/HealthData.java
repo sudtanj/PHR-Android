@@ -48,7 +48,7 @@ public class HealthData implements ValueEventListener {
         setParentSensor(parentSensorargs);
         setTimeStamp(timeStamp);
         setValues(valuesargs);
-        this.getParentSensor().addHealthData(this);
+        parentSensorargs.addHealthData(this);
         getDataReference().addValueEventListener(this);
     }
 
@@ -102,7 +102,7 @@ public class HealthData implements ValueEventListener {
     public void onDataChange(DataSnapshot dataSnapshot) {
         String temp = dataSnapshot.child("TimeStamp").getValue(String.class);
         if (temp != null) {
-            timeStampString = new EncryptedString(temp,true).getDecryptedText();
+            timeStampString = temp;
         }
         timeStamp = new Date(Long.parseLong(timeStampString));
         temp = dataSnapshot.child("Values").getValue(String.class);
