@@ -13,8 +13,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import sud_tanj.com.phr_android.Custom.EncryptedString;
 import sud_tanj.com.phr_android.Custom.Global;
 
 /**
@@ -68,7 +71,7 @@ public class HealthData implements ValueEventListener {
     }
 
     public void setValues(String values) {
-        getDataReference().child("Values").setValue(values);
+        getDataReference().child("Values").setValue(new EncryptedString(values,false).getEncryptedText());
     }
 
     public SensorData getParentSensor() {
@@ -76,8 +79,7 @@ public class HealthData implements ValueEventListener {
     }
 
     public void setParentSensor(SensorData parentSensor) {
-        getDataReference().child("ParentSensor").setValue(parentSensor.getSensorId());
-        this.parentSensor = parentSensor;
+        getDataReference().child("ParentSensor").setValue(new EncryptedString(parentSensor.getSensorId(),false).getEncryptedText());
     }
 
     public DatabaseReference getDataReference() {
@@ -100,16 +102,16 @@ public class HealthData implements ValueEventListener {
     public void onDataChange(DataSnapshot dataSnapshot) {
         String temp = dataSnapshot.child("TimeStamp").getValue(String.class);
         if (temp != null) {
-            timeStampString = temp;
+            timeStampString = new EncryptedString(temp,true).getDecryptedText();
         }
         timeStamp = new Date(Long.parseLong(timeStampString));
         temp = dataSnapshot.child("Values").getValue(String.class);
         if (temp != null) {
-            values = temp;
+            values = new EncryptedString(temp,true).getDecryptedText();
         }
         temp = dataSnapshot.child("ParentSensor").getValue(String.class);
         if (temp != null) {
-            parentSensorString = temp;
+            parentSensorString = new EncryptedString(temp,true).getDecryptedText();
         }
         parentSensor = Global.getSensorGateway().getSensorData(parentSensorString);
     }
