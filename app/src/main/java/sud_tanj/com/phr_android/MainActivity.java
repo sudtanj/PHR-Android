@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
-        
+
         //Init
         Global.setContext(this);
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         Integer id = item.getItemId();
-
+        gate.getSensorData("pedometer03102").runScriptListener();
         //noinspection SimplifiableIfStatement
         if (id.equals(R.id.action_settings)) {
             //getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new SettingsFragment()).commit();
