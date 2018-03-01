@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -49,7 +50,10 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFragment;
 
     private SensorData arduino;
-    SensorGateway gate;
+    private SensorGateway gate;
+    private Handler sensorHandler=new Handler();
+    private int delay = 5*1000;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +125,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        //start handler as activity become visible
+
+        sensorHandler.postDelayed(new Runnable() {
+            public void run() {
+                //do something
+                for(SensorData temp : gate.getSensorObject()){
+                    temp.runScriptListener();
+                }
+                runnable=this;
+
+                sensorHandler.postDelayed(runnable, delay);
+            }
+        }, delay);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        sensorHandler.removeCallbacks(runnable); //stop handler when activity not visible
+        super.onPause();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -143,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         Integer id = item.getItemId();
-        gate.getSensorData("pedometer03102").runScriptListener();
+
         //noinspection SimplifiableIfStatement
         if (id.equals(R.id.action_settings)) {
             //getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new SettingsFragment()).commit();
