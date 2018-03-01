@@ -35,7 +35,6 @@ public class PedometerSensor implements EmbeddedScript {
     @Override
     public Boolean run() {
         pedometer=Global.getSensorGateway().getSensorData(sensorId);
-        pedometer.addHealthData(new HealthData(pedometer,"10"));
         SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor != null) {
