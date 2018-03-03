@@ -2,11 +2,20 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 2/28/18 5:50 PM
+ * Last Modified by User on 3/3/18 2:00 PM
  */
 
 package sud_tanj.com.phr_android.Custom;
 
+/**
+ * This class is part of PHRAndroid Project
+ * Any modified within this class without reading the
+ * manual will cause problem!
+ * <p>
+ * Created by Sudono Tanjung on 03/03/2018 - 14:00.
+ * <p>
+ * This class last modified by User
+ */
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -21,15 +30,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 import android.util.Base64;
 
-/**
- * This class is part of PHRAndroid Project
- * Any modified within this class without reading the
- * manual will cause problem!
- * <p>
- * Created by Sudono Tanjung on 28/02/2018 - 17:50.
- * <p>
- * This class last modified by User
- */
 
 public class CryptLib {
 

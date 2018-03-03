@@ -104,4 +104,12 @@ public class SensorGateway {
     public void setSensorObject(ArrayList<SensorData> sensorObject) {
         this.sensorObject = sensorObject;
     }
+    public Boolean isReady(){
+        for(SensorData temp:this.getSensorObject()){
+            if(!temp.isReady()){
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -71,7 +71,8 @@ public class HealthData implements ValueEventListener {
     }
 
     public void setValues(String values) {
-        getDataReference().child("Values").setValue(new EncryptedString(values,false).getEncryptedText());
+        //getDataReference().child("Values").setValue(new EncryptedString(values,false).getEncryptedText());
+        getDataReference().child("Values").setValue(values);
     }
 
     public SensorData getParentSensor() {
@@ -79,7 +80,8 @@ public class HealthData implements ValueEventListener {
     }
 
     public void setParentSensor(SensorData parentSensor) {
-        getDataReference().child("ParentSensor").setValue(new EncryptedString(parentSensor.getSensorId(),false).getEncryptedText());
+        //getDataReference().child("ParentSensor").setValue(new EncryptedString(parentSensor.getSensorId(),false).getEncryptedText());
+        getDataReference().child("ParentSensor").setValue(parentSensor.getSensorId());
     }
 
     public DatabaseReference getDataReference() {
@@ -105,13 +107,16 @@ public class HealthData implements ValueEventListener {
             timeStampString = temp;
         }
         timeStamp = new Date(Long.parseLong(timeStampString));
-        temp = dataSnapshot.child("Values").getValue(String.class);
+        temp = dataSnapshot.child("Values").getValue().toString();
+        //System.out.println(temp);
         if (temp != null) {
-            values = new EncryptedString(temp,true).getDecryptedText();
+            //values = new EncryptedString(temp,true).getDecryptedText();
+            values=temp;
         }
         temp = dataSnapshot.child("ParentSensor").getValue(String.class);
         if (temp != null) {
-            parentSensorString = new EncryptedString(temp,true).getDecryptedText();
+            //parentSensorString = new EncryptedString(temp,true).getDecryptedText();
+            parentSensorString = temp;
         }
         parentSensor = Global.getSensorGateway().getSensorData(parentSensorString);
     }
@@ -119,5 +124,19 @@ public class HealthData implements ValueEventListener {
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    public Boolean isReady()
+    {
+        if(this.getValues()==null){
+            return false;
+        }
+        if(this.getTimeStamp()==null){
+            return false;
+        }
+        if(this.getParentSensor()==null){
+            return false;
+        }
+        return true;
     }
 }

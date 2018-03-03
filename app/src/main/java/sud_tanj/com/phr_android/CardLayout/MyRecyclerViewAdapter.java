@@ -6,6 +6,8 @@
  */
 
 package sud_tanj.com.phr_android.CardLayout;
+
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.HealthData;
+import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -31,19 +42,27 @@ public class MyRecyclerViewAdapter extends RecyclerView
         .Adapter<MyRecyclerViewAdapter
         .DataObjectHolder> {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private ArrayList<DataObject> mDataset;
+    private ArrayList<SensorData> mDataset;
     private static MyClickListener myClickListener;
+    private ArrayList<Handler> sensorHandler=new ArrayList<Handler>();
+    private int delay = 12*1000;
+    private Runnable runnable;
+    private DataObjectHolder innerHolder;
+    private int innerPosition;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder
             implements View
             .OnClickListener {
         TextView label;
         TextView dateTime;
+        GraphView graph;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.age);
             dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            graph = (GraphView) itemView.findViewById(R.id.graph);
+
             Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
         }
@@ -58,7 +77,7 @@ public class MyRecyclerViewAdapter extends RecyclerView
         this.myClickListener = myClickListener;
     }
 
-    public MyRecyclerViewAdapter(ArrayList<DataObject> myDataset) {
+    public MyRecyclerViewAdapter(ArrayList<SensorData> myDataset) {
         mDataset = myDataset;
     }
 
@@ -74,11 +93,42 @@ public class MyRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getmText1());
-        holder.dateTime.setText(mDataset.get(position).getmText2());
+        holder.label.setText(mDataset.get(position).getSensorName());
+        innerHolder=holder;
+        innerPosition=position;
+        try {
+            sensorHandler.get(innerPosition);
+        } catch (IndexOutOfBoundsException e){
+            sensorHandler.add(new Handler());
+            sensorHandler.get(position).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("init chart");
+                    System.out.println(mDataset.get(innerPosition).isReady());
+                    if(mDataset.get(innerPosition).isReady()) {
+                        System.out.println("run chart");
+                        ArrayList<HealthData> healthData = mDataset.get(innerPosition).getSensorData();
+                        DataPoint[] data = new DataPoint[healthData.size()];
+                        System.out.println(mDataset.get(innerPosition).getSensorName());
+                        System.out.println(healthData.size());
+                        for (int i = 0; i < healthData.size(); i++) {
+                            data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
+                            System.out.println(Double.parseDouble(healthData.get(i).getValues()));
+                        }
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
+                        if(!innerHolder.graph.getSeries().equals(series))
+                            innerHolder.graph.addSeries(series);
+                    }
+                    runnable=this;
+                    sensorHandler.get(innerPosition).postDelayed(runnable,delay);
+                }
+            },delay);
+        }
+
+        //holder.dateTime.setText(mDataset.get(position).getmText2());
     }
 
-    public void addItem(DataObject dataObj, int index) {
+    public void addItem(SensorData dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }
@@ -90,6 +140,9 @@ public class MyRecyclerViewAdapter extends RecyclerView
 
     @Override
     public int getItemCount() {
+        if(mDataset==null){
+            return 0;
+        }
         return mDataset.size();
     }
 

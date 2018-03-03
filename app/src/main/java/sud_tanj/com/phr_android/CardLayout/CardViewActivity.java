@@ -20,6 +20,7 @@ import android.view.animation.LayoutAnimationController;
 
 import java.util.ArrayList;
 
+import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -56,7 +57,7 @@ public class CardViewActivity extends Fragment {
         mRecyclerView.setLayoutAnimation(animation);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapter(getDataSet());
+        mAdapter = new MyRecyclerViewAdapter(Global.getSensorGateway().getSensorObject());
         mRecyclerView.setAdapter(mAdapter);
 
         // Code to Add an item with default animation

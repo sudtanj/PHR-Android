@@ -43,6 +43,22 @@ public class SensorData {
         sensorActive=false;
         this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(this.getSensorId()));
         this.setUserDataReference(Global.getUserDatabase().child("sensors").child(this.getSensorId()));
+        ValueEventListener healthDataListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot dataReference=dataSnapshot.child("Health_Data");
+                setSensorData(new ArrayList<HealthData>());
+                for (DataSnapshot childSnapshot: dataReference.getChildren()) {
+                    getSensorData().add(new HealthData(childSnapshot.getKey().toString()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        Global.getUserDatabase().addValueEventListener(healthDataListener);
         ValueEventListener userDataListener = new ValueEventListener() {
 
             @Override
@@ -66,14 +82,9 @@ public class SensorData {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nameReference=dataSnapshot.child("Name"),
-                        dataReference=dataSnapshot.child("Data"),
                         scriptReference=dataSnapshot.child("EmbeddedScript");
                 if(dataSnapshot.exists()) {
                     setSensorNameEncrypted(nameReference.getValue(String.class));
-                    setSensorData(new ArrayList<HealthData>());
-                    for (DataSnapshot childSnapshot: dataReference.getChildren()) {
-                     getSensorData().add(new HealthData(childSnapshot.getValue().toString()));
-                    }
                     setEmbeddedScriptListener(scriptReference.getValue(String.class));
                 }
             }
@@ -178,5 +189,13 @@ public class SensorData {
 
     public void setUserDataReference(DatabaseReference userDataReference) {
         this.userDataReference = userDataReference;
+    }
+    public Boolean isReady(){
+        for(HealthData temp:this.getSensorData()){
+            if(!temp.isReady()){
+                return false;
+            }
+        }
+        return true;
     }
 }
