@@ -54,6 +54,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:27.0.2'
     compile 'com.github.sudtanj:PhysicaloidLibrary:0b83314149'
     compile 'com.jjoe64:graphview:4.2.1'
+    compile 'com.github.sudtanj:Android-AES:2c07733a39'
 }
 
 
