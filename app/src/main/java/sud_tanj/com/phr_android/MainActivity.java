@@ -7,6 +7,7 @@
 
 package sud_tanj.com.phr_android;
 
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
@@ -48,12 +51,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navView;
     private ImageView profilePicture;
     private Fragment currentFragment;
-
+    private Runnable chartBackground;
     private SensorData arduino;
-    private SensorGateway gate;
-    private Handler sensorHandler=new Handler();
-    private int delay = 5*1000;
-    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,37 +114,45 @@ public class MainActivity extends AppCompatActivity
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
 
-        //first fragment init
-        currentFragment = new CardViewActivity();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, currentFragment);
-        transaction.commit();
 
-        gate = new SensorGateway();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     @Override
     protected void onResume() {
         //start handler as activity become visible
-
-        sensorHandler.postDelayed(new Runnable() {
-            public void run() {
-                //do something
-                for(SensorData temp : gate.getSensorObject()){
-                    temp.runScriptListener();
+        //first fragment init
+        if(chartBackground==null){
+            chartBackground=new Runnable() {
+                @Override
+                public void run() {
+                    if(Global.getSensorGateway().isDataReady()){
+                        if(currentFragment==null) {
+                            currentFragment = new CardViewActivity();
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_container, currentFragment);
+                            transaction.commit();
+                        }
+                    }
+                    for(SensorData temp : Global.getSensorGateway().getSensorObject()){
+                        temp.runScriptListener();
+                    }
                 }
-                runnable=this;
-
-                sensorHandler.postDelayed(runnable, delay);
-            }
-        }, delay);
+            };
+        }
+        if(!Global.isBackgroundWorkExist(chartBackground))
+            Global.addBackgroundWork(chartBackground);
 
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        sensorHandler.removeCallbacks(runnable); //stop handler when activity not visible
         super.onPause();
     }
 
