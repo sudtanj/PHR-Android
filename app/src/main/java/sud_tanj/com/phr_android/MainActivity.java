@@ -68,6 +68,11 @@ public class MainActivity extends AppCompatActivity
         //Init
         Global.setContext(this);
 
+        //Init floating button
+        Global.setFloatingButton((FloatingActionButton) findViewById(R.id.fab));
+
+        Global.getFloatingButton().hide();
+
         //init SensorGateway
         Global.setSensorGateway(new SensorGateway());
 

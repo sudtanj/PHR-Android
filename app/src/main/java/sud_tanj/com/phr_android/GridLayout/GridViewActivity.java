@@ -61,7 +61,17 @@ public class GridViewActivity extends Fragment {
         rView.setAdapter(rcAdapter);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Global.getFloatingButton().hide();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Global.getFloatingButton().show();
+    }
 
     private List<ItemObject> getAllItemList(){
 

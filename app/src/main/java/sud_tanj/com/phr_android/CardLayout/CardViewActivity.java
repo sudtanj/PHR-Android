@@ -47,6 +47,12 @@ public class CardViewActivity extends Fragment {
         return inflater.inflate(R.layout.activity_card_view, container, false);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 

@@ -10,6 +10,7 @@ package sud_tanj.com.phr_android.Custom;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,50 +33,55 @@ import sud_tanj.com.phr_android.Database.SensorGateway;
  */
 
 public class Global {
-    public static String DATABASE_USER_CHILD="users";
-    private static FirebaseAuth mAuth=null;
+    public static String DATABASE_USER_CHILD = "users";
+    private static FirebaseAuth mAuth = null;
     private static FirebaseUser user = null;
-    private static SharedPreferences settings=null;
-    private static Context context=null;
+    private static SharedPreferences settings = null;
+    private static Context context = null;
     private static FirebaseDatabase database = null;
     private static DatabaseReference userDatabase = null;
-    private static DatabaseReference mainDatabase =null;
+    private static DatabaseReference mainDatabase = null;
     private static NavigationView navigationView = null;
-    private static SensorGateway sensorGateway=null;
+    private static SensorGateway sensorGateway = null;
+    private static FloatingActionButton floatingButton = null;
 
     public static Context getContext() {
         return context;
     }
 
+    public static void setContext(Context conx) {
+        context = conx;
+    }
 
-    public static FirebaseAuth getFireBaseAuth(){
-        if(mAuth==null)
-            mAuth=FirebaseAuth.getInstance();
+    public static FirebaseAuth getFireBaseAuth() {
+        if (mAuth == null)
+            mAuth = FirebaseAuth.getInstance();
         return mAuth;
     }
-    public static FirebaseUser getFireBaseUser(){
-        if(user==null)
-            user=getFireBaseAuth().getCurrentUser();
+
+    public static FirebaseUser getFireBaseUser() {
+        if (user == null)
+            user = getFireBaseAuth().getCurrentUser();
         return user;
     }
-    public static void setContext(Context conx){
-        context=conx;
-    }
-    public static SharedPreferences getSettings(){
+
+    public static SharedPreferences getSettings() {
         return settings;
     }
-    public static void setSettings(final Context mainActivity){
-        settings= PreferenceManager.getDefaultSharedPreferences(mainActivity);
+
+    public static void setSettings(final Context mainActivity) {
+        settings = PreferenceManager.getDefaultSharedPreferences(mainActivity);
     }
-    public static void changePreferences(String prefId,String value){
-        if(getSettings().getString(prefId,"").isEmpty())
-            getSettings().edit().putString(prefId,value).commit();
+
+    public static void changePreferences(String prefId, String value) {
+        if (getSettings().getString(prefId, "").isEmpty())
+            getSettings().edit().putString(prefId, value).commit();
     }
 
     public static FirebaseDatabase getDatabase() {
-        if(user==null || mAuth==null)
+        if (user == null || mAuth == null)
             getFireBaseUser();
-        if(database==null) {
+        if (database == null) {
             database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
         }
@@ -83,8 +89,8 @@ public class Global {
     }
 
     public static DatabaseReference getUserDatabase() {
-        if(userDatabase==null)
-            userDatabase=getMainDatabase().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
+        if (userDatabase == null)
+            userDatabase = getMainDatabase().child(DATABASE_USER_CHILD).child(Global.getFireBaseUser().getUid());
         return userDatabase;
     }
 
@@ -97,15 +103,14 @@ public class Global {
     }
 
     public static DatabaseReference getMainDatabase() {
-        if(database==null)
+        if (database == null)
             getDatabase();
-        if(mainDatabase==null) {
+        if (mainDatabase == null) {
             mainDatabase = getDatabase().getReference();
             mainDatabase.keepSynced(true);
         }
         return mainDatabase;
     }
-
 
     public static void setMainDatabase(DatabaseReference mainDatabase) {
         Global.mainDatabase = mainDatabase;
@@ -117,5 +122,13 @@ public class Global {
 
     public static void setSensorGateway(SensorGateway sensorGateway) {
         Global.sensorGateway = sensorGateway;
+    }
+
+    public static FloatingActionButton getFloatingButton() {
+        return floatingButton;
+    }
+
+    public static void setFloatingButton(FloatingActionButton floatingButton) {
+        Global.floatingButton = floatingButton;
     }
 }
