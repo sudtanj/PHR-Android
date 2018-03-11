@@ -10,12 +10,17 @@ before_deploy:
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
 deploy:
   provider: releases
-  api_key: "815cb00bef5576a5aea0871f811906d758a34e10"
+  api_key: 
+    secure: "gv8odqUMRDLyQvuGAjOagQOxRcc2+8eN5BsQnuQwDlH86IOvQc4yFP9n/BPQ1HMIAbLpwVKofvy/2I4xZSIeSmmVxXBQp7NIVF+R7jsHurSubDRKoGQfE8UV+D15+8eFzHTXIcqWH3IL1WjfgLy7CVOJyl2a31Jibdqdr6nCQHs3nuvAi3OMUxVn04XKoZgLvGLPnz0Hogjt8bUVIHb+ZX2T+UJq4a4aoZj2l9mVTZGny/EMxoKjD884EphhLwWxSprgdk0OHP3SqqmoGbHYQCBP63kkfWSpIbsnzwYCdtqFaAU9hZM18ZDcLpVL8AuR0GIhaRpFe269KBXz8codOdCntMRwg+2/VZmOo7z8xm7MPyPhBxkv1BnhpmB4Mnpq2SjZ59pjW/X+oavF4Y2HFpIuI45ESx8Xj0dbf8RgMVNsIWwbzjJvhHklyTYFlhbYUkJ41j7wx9ju4SK8G9VjopxZwpnr4xfzFU+27SzuopJVXCx/iYxI8+Y4mNJ8KnQcFNDpGyXIzq1gMtLhvoHCqBLG/Np0wA1m4G6CG7FwLYgY3kiiS2dBuhgTyCFjPcf357Md9FmF+1Hn9k0B+se4M3g38tPOxbsconnXna0E98dxO1RSMuomJ873/JnMRbsiT5EDglSzn907ly8nyNEmW6M1NMkH422m9awHbeF4vwk="
   file: "./app/build/outputs/apk/release/app-release.apk"
   skip_cleanup: true
   prerelease: true
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
+  - ./publish_javadoc.sh
+env:
+  global:
+    secure: "Bsv5tIYdj/hCwbt0BVoxFyFStOBopco92ZnxvLCKfDTiPWgmLaKPC/E55OCr2cDJmjxM5xb+fDb6/VfR2QFuqC7yhIykpNu4Xt2loNBkINrj0H3SP+3KQFtfYSX//amypTR2+ChXjm3toc4a9sSlFu+qlppEJoOsAsPNSOA9YsYgnfU9PLkTRUNaUgFcFZzMgZRn7kvG94apk0Flq+uyp7DZ5dgRFA6I2ryMdiLJRs4W69rnffTuqNgoyEz3JUBfXKMSEDwFNnXMf+5g123hQ7z5OqnEKpBIDB35nMUrFbOUHLXH6buosVzxNOnHgXffnSy9hglx15aegTEeXlC3gGXlrHazCAkwV5+BESKFVtxxqV7K14rYuGUu9pqkwYal5cgwvJDz2fZa6ZQbSclrl2EjUNswKTuiYal3ifKfA5OI8SaV7Cyt9S6pUXV4NfsafiEJ4xHJFJdZ51TEH7eaKXLd1GBGTRdu4MaZzoAPQkBKkrZpZtm2lR+aPUPl6nTIPoYwzdv8s8xqw+MzOCdGJIQXcV1DeD2DSF7auLkYcBMwq+fa13w39wCe9+ckh/5b1UY8nG5ul3LtEcoI79HwV3Mdv+1YzV6nXix1i8ObtAgfbgNiq2E5L5/bXqJgD/HoCc+gVrsumA5VwYtNT0BAeI+iWErnZ/Op4FQhCACEd1k="
 before_install:
   - yes | sdkmanager "platforms;android-27"
 before_script:
