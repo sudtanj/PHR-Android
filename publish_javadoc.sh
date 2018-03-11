@@ -1,7 +1,4 @@
 #!/bin/bash
-
-if [ "$TRAVIS_REPO_SLUG" == "yyssc/tims-ocr-api" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
-
   echo -e "Publishing jsdoc...\n"
 
   cp -R "out/tims-ocr-api/2.0.5" $HOME/jsdoc-latest
@@ -19,5 +16,4 @@ if [ "$TRAVIS_REPO_SLUG" == "yyssc/tims-ocr-api" ] && [ "$TRAVIS_PULL_REQUEST" =
   git push -fq origin gh-pages > /dev/null
 
   echo -e "Published Javadoc to gh-pages.\n"
-  
-fi
+ 
