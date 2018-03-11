@@ -40,6 +40,9 @@ public class ModifySensors extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_sensors);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         data=getIntent().getExtras();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mFormBuilder = new FormBuilder(getApplicationContext(), mRecyclerView);
@@ -62,6 +65,12 @@ public class ModifySensors extends AppCompatActivity {
         mFormBuilder.addFormElements(formItems);
 
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +85,9 @@ public class ModifySensors extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_save:
                 //Do Whatever you want to do here.
                 if(data.getBoolean("modifySensor")){
