@@ -33,10 +33,12 @@ public class SensorData {
     private String sensorId = null;
     private String sensorName = null;
     private Boolean sensorActive = null;
+    private String sensorOwner = null;
     private ArrayList<HealthData> sensorData = null;
     private DatabaseReference dataReference = null;
     private DatabaseReference userDataReference=null;
     private EmbeddedScript scriptListener= null;
+    private String scriptListenerName= null;
 
     protected SensorData(String sensorId) {
         this.setSensorId(sensorId);
@@ -82,10 +84,13 @@ public class SensorData {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nameReference=dataSnapshot.child("Name"),
-                        scriptReference=dataSnapshot.child("EmbeddedScript");
+                        scriptReference=dataSnapshot.child("EmbeddedScript"),
+                        ownerReference=dataSnapshot.child("Owner");
                 if(dataSnapshot.exists()) {
                     setSensorNameEncrypted(nameReference.getValue(String.class));
                     setEmbeddedScriptListener(scriptReference.getValue(String.class));
+                    scriptListenerName=scriptReference.getValue(String.class);
+                    sensorOwner=ownerReference.getValue(String.class);
                 }
             }
 
@@ -171,6 +176,10 @@ public class SensorData {
         return scriptListener;
     }
 
+    public String getScriptListenerName() {
+        return this.scriptListenerName;
+    }
+
     public void setScriptListener(String scriptListenerId) {
         getDataReference().child("EmbeddedScript").setValue(scriptListenerId);
     }
@@ -197,5 +206,13 @@ public class SensorData {
             }
         }
         return true;
+    }
+
+    public String getSensorOwner() {
+        return sensorOwner;
+    }
+
+    public void setSensorOwner(String sensorOwner) {
+        this.getDataReference().child("Owner").setValue(sensorOwner);
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2018. All rights reserved.
+  ~
+  ~ Last Modified by User on 3/11/18 4:56 PM
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme"
+    tools:context="sud_tanj.com.phr_android.ModifySensors">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:orientation="vertical">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</android.support.constraint.ConstraintLayout>

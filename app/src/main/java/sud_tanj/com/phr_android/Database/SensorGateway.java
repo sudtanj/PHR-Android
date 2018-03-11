@@ -89,6 +89,30 @@ public class SensorGateway {
         return null;
     }
 
+    public SensorData getSensorDataByName(String sensorName){
+        for(SensorData temp:getSensorObject()){
+            if (temp.getSensorName().contains(sensorName)) {
+                return temp;
+            }
+        }
+        return null;
+    }
+
+    public boolean isSensorIdExist(String sensorId){
+        if(this.getSensorData(sensorId)==null)
+            return false;
+        return true;
+    }
+
+    public boolean isSensorNameExist(String sensorName){
+        for(SensorData temp:getSensorObject()){
+            if (temp.getSensorName().contains(sensorName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<SensorData> getSensorObject(){
         return this.sensorObject;
     }
@@ -112,4 +136,5 @@ public class SensorGateway {
         }
         return true;
     }
+
 }

@@ -6,15 +6,18 @@
  */
 
 package sud_tanj.com.phr_android.GridLayout;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.SensorData;
 import sud_tanj.com.phr_android.R;
+import sud_tanj.com.phr_android.ModifySensors;
 
 /**
  * This class is part of PHRAndroid Project
@@ -42,6 +45,16 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(view.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+        SensorData sensor=Global.getSensorGateway().getSensorDataByName(countryName.getText().toString());
+        if(sensor.getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
+            Intent modifySensor = new Intent(Global.getContext(), ModifySensors.class);
+            modifySensor.putExtra("modifySensor", true);
+            modifySensor.putExtra("sensorName", countryName.getText());
+            Global.getContext().startActivity(modifySensor);
+        }
+        else {
+            Toast.makeText(view.getContext(), "You can't modify sensor that you don't own!", Toast.LENGTH_SHORT).show();
+        }
+        //Toast.makeText(view.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
     }
 }

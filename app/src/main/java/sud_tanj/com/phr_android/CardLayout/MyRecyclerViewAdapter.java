@@ -94,36 +94,40 @@ public class MyRecyclerViewAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.label.setText(mDataset.get(position).getSensorName());
-        innerHolder=holder;
-        innerPosition=position;
+        System.out.println("Position "+position);
+        System.out.println("array size "+sensorHandler.size());
+        if(sensorHandler.size()<(position+1)){
+            Handler tempHandler = new Handler();
+            sensorHandler.add(tempHandler);
+            GraphRunnable sensorRun=new GraphRunnable(tempHandler,delay,mDataset.get(position),holder);
+            tempHandler.postDelayed(sensorRun,delay);
+        }
+        /**
         try {
-            sensorHandler.get(innerPosition);
+            sensorHandler.get(position);
         } catch (IndexOutOfBoundsException e){
-            sensorHandler.add(new Handler());
+            Handler tempHandler = new Handler();
+            sensorHandler.add(tempHandler);
+            GraphRunnable sensorRun=new GraphRunnable(tempHandler,delay,mDataset.get(position),holder);
+            tempHandler.postDelayed(sensorRun,delay);
             sensorHandler.get(position).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("init chart");
-                    System.out.println(mDataset.get(innerPosition).isReady());
-                    if(mDataset.get(innerPosition).isReady()) {
-                        System.out.println("run chart");
-                        ArrayList<HealthData> healthData = mDataset.get(innerPosition).getSensorData();
+                    if(mDataset.get(position).isReady()) {
+                        ArrayList<HealthData> healthData = mDataset.get(position).getSensorData();
                         DataPoint[] data = new DataPoint[healthData.size()];
-                        System.out.println(mDataset.get(innerPosition).getSensorName());
-                        System.out.println(healthData.size());
                         for (int i = 0; i < healthData.size(); i++) {
                             data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
-                            System.out.println(Double.parseDouble(healthData.get(i).getValues()));
                         }
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
                         if(!innerHolder.graph.getSeries().equals(series))
                             innerHolder.graph.addSeries(series);
                     }
                     runnable=this;
-                    sensorHandler.get(innerPosition).postDelayed(runnable,delay);
+                    sensorHandler.get(position).postDelayed(runnable,delay);
                 }
             },delay);
-        }
+        }*/
 
         //holder.dateTime.setText(mDataset.get(position).getmText2());
     }
