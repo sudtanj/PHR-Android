@@ -14,6 +14,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
+import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.HealthData;
 import sud_tanj.com.phr_android.Database.SensorData;
 
@@ -28,7 +29,7 @@ import sud_tanj.com.phr_android.Database.SensorData;
  */
 
 public class GraphRunnable implements Runnable {
-    private int  delay=-1;
+    private int delay=-1;
     private SensorData mDataset;
     private MyRecyclerViewAdapter.DataObjectHolder holder;
     private Handler sensorHandler;
@@ -43,9 +44,8 @@ public class GraphRunnable implements Runnable {
         if(mDataset.isReady()) {
             ArrayList<HealthData> healthData = mDataset.getSensorData();
             DataPoint[] data = new DataPoint[healthData.size()];
-            for (int i = 0; i < healthData.size(); i++) {
+            for (int i = 0; i < healthData.size(); i++)
                 data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
-            }
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
             if(!holder.graph.getSeries().equals(series))
                 holder.graph.addSeries(series);

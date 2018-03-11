@@ -50,7 +50,7 @@ public class CardViewActivity extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
+        ((MyRecyclerViewAdapter)mAdapter).stopHandler();
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class CardViewActivity extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyRecyclerViewAdapter(Global.getSensorGateway().getSensorObject());
         mRecyclerView.setAdapter(mAdapter);
+
 
         // Code to Add an item with default animation
         //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);

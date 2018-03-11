@@ -51,7 +51,8 @@ public class SensorData {
                 DataSnapshot dataReference=dataSnapshot.child("Health_Data");
                 setSensorData(new ArrayList<HealthData>());
                 for (DataSnapshot childSnapshot: dataReference.getChildren()) {
-                    getSensorData().add(new HealthData(childSnapshot.getKey().toString()));
+                    if(childSnapshot.getKey().toString().contains(getSensorId()))
+                        getSensorData().add(new HealthData(childSnapshot.getKey().toString()));
                 }
             }
 
