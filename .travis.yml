@@ -15,6 +15,7 @@ deploy:
       secure: "gv8odqUMRDLyQvuGAjOagQOxRcc2+8eN5BsQnuQwDlH86IOvQc4yFP9n/BPQ1HMIAbLpwVKofvy/2I4xZSIeSmmVxXBQp7NIVF+R7jsHurSubDRKoGQfE8UV+D15+8eFzHTXIcqWH3IL1WjfgLy7CVOJyl2a31Jibdqdr6nCQHs3nuvAi3OMUxVn04XKoZgLvGLPnz0Hogjt8bUVIHb+ZX2T+UJq4a4aoZj2l9mVTZGny/EMxoKjD884EphhLwWxSprgdk0OHP3SqqmoGbHYQCBP63kkfWSpIbsnzwYCdtqFaAU9hZM18ZDcLpVL8AuR0GIhaRpFe269KBXz8codOdCntMRwg+2/VZmOo7z8xm7MPyPhBxkv1BnhpmB4Mnpq2SjZ59pjW/X+oavF4Y2HFpIuI45ESx8Xj0dbf8RgMVNsIWwbzjJvhHklyTYFlhbYUkJ41j7wx9ju4SK8G9VjopxZwpnr4xfzFU+27SzuopJVXCx/iYxI8+Y4mNJ8KnQcFNDpGyXIzq1gMtLhvoHCqBLG/Np0wA1m4G6CG7FwLYgY3kiiS2dBuhgTyCFjPcf357Md9FmF+1Hn9k0B+se4M3g38tPOxbsconnXna0E98dxO1RSMuomJ873/JnMRbsiT5EDglSzn907ly8nyNEmW6M1NMkH422m9awHbeF4vwk="
     keep-history: false
     local-dir: "./javadoc"
+    target-branch: "gh-pages"
     on:
       branch: gh-pages
   - provider: releases
