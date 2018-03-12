@@ -61,7 +61,6 @@ dependencies {
 
 }
 
-
-apply plugin: "com.vanniktech.android.javadoc"
+apply plugin : 'org.ysb33r.doxygen'
 apply plugin: 'maven'
 apply plugin: 'com.google.gms.google-services'
