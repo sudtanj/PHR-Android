@@ -8,6 +8,8 @@ before_deploy:
   - git config --local user.name "sudtanj"
   - git config --local user.email "sudono007@gmail.com"
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+notifications:
+  email: false
 deploy:
   - provider: pages
     skip-cleanup: true
@@ -16,6 +18,7 @@ deploy:
     keep-history: false
     local-dir: "./javadoc"
     target-branch: "gh-pages"
+    repo: "sudtanj/PHR-Android"
     on:
       branch: gh-pages
   - provider: releases
