@@ -1,9 +1,5 @@
 #!/bin/sh
 
-setup_git() {
-  
-}
-
 commit_website_files() {
   git checkout gh-pages
   git checkout master -- javadoc
@@ -17,6 +13,5 @@ upload_files() {
    git push origin HEAD:gh-pages
 }
 
-setup_git
 commit_website_files
 upload_files
