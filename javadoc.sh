@@ -1,9 +1,7 @@
 #!/bin/sh
 
 setup_git() {
-  git config --global user.email "travis@travis-ci.org"
-  git config --global user.name "Travis CI"
-  git config remote.origin.url https://$GITHUB_TOKEN@github.com/sudtanj/PHR-Android.git
+  
 }
 
 commit_website_files() {
