@@ -1,7 +1,7 @@
 #!/bin/bash
   echo -e "Publishing jsdoc...\n"
 
-  cp -R "out/tims-ocr-api/2.0.5" $HOME/jsdoc-latest
+  cp -R "sudtanj/PHR-Android/2.0.5" $HOME/jsdoc-latest
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
