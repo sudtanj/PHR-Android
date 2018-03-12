@@ -28,6 +28,8 @@ deploy:
     prerelease: true
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
+  - chmod +x javadoc.sh
+  - ./javadoc.sh
 env:
   global:
     secure: "Bsv5tIYdj/hCwbt0BVoxFyFStOBopco92ZnxvLCKfDTiPWgmLaKPC/E55OCr2cDJmjxM5xb+fDb6/VfR2QFuqC7yhIykpNu4Xt2loNBkINrj0H3SP+3KQFtfYSX//amypTR2+ChXjm3toc4a9sSlFu+qlppEJoOsAsPNSOA9YsYgnfU9PLkTRUNaUgFcFZzMgZRn7kvG94apk0Flq+uyp7DZ5dgRFA6I2ryMdiLJRs4W69rnffTuqNgoyEz3JUBfXKMSEDwFNnXMf+5g123hQ7z5OqnEKpBIDB35nMUrFbOUHLXH6buosVzxNOnHgXffnSy9hglx15aegTEeXlC3gGXlrHazCAkwV5+BESKFVtxxqV7K14rYuGUu9pqkwYal5cgwvJDz2fZa6ZQbSclrl2EjUNswKTuiYal3ifKfA5OI8SaV7Cyt9S6pUXV4NfsafiEJ4xHJFJdZ51TEH7eaKXLd1GBGTRdu4MaZzoAPQkBKkrZpZtm2lR+aPUPl6nTIPoYwzdv8s8xqw+MzOCdGJIQXcV1DeD2DSF7auLkYcBMwq+fa13w39wCe9+ckh/5b1UY8nG5ul3LtEcoI79HwV3Mdv+1YzV6nXix1i8ObtAgfbgNiq2E5L5/bXqJgD/HoCc+gVrsumA5VwYtNT0BAeI+iWErnZ/Op4FQhCACEd1k="
