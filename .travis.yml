@@ -19,7 +19,7 @@ deploy:
     skip-cleanup: true
     github-token: $GH_TOKEN
     keep-history: false
-    local-dir: "./javadoc"
+    local-dir: "./app/build/docs/javadoc/Release"
     target-branch: "gh-pages"
   - provider: releases
     api_key: 
