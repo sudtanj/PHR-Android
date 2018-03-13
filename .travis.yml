@@ -30,12 +30,28 @@ deploy:
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 env:
-  global:
-    secure: "Bsv5tIYdj/hCwbt0BVoxFyFStOBopco92ZnxvLCKfDTiPWgmLaKPC/E55OCr2cDJmjxM5xb+fDb6/VfR2QFuqC7yhIykpNu4Xt2loNBkINrj0H3SP+3KQFtfYSX//amypTR2+ChXjm3toc4a9sSlFu+qlppEJoOsAsPNSOA9YsYgnfU9PLkTRUNaUgFcFZzMgZRn7kvG94apk0Flq+uyp7DZ5dgRFA6I2ryMdiLJRs4W69rnffTuqNgoyEz3JUBfXKMSEDwFNnXMf+5g123hQ7z5OqnEKpBIDB35nMUrFbOUHLXH6buosVzxNOnHgXffnSy9hglx15aegTEeXlC3gGXlrHazCAkwV5+BESKFVtxxqV7K14rYuGUu9pqkwYal5cgwvJDz2fZa6ZQbSclrl2EjUNswKTuiYal3ifKfA5OI8SaV7Cyt9S6pUXV4NfsafiEJ4xHJFJdZ51TEH7eaKXLd1GBGTRdu4MaZzoAPQkBKkrZpZtm2lR+aPUPl6nTIPoYwzdv8s8xqw+MzOCdGJIQXcV1DeD2DSF7auLkYcBMwq+fa13w39wCe9+ckh/5b1UY8nG5ul3LtEcoI79HwV3Mdv+1YzV6nXix1i8ObtAgfbgNiq2E5L5/bXqJgD/HoCc+gVrsumA5VwYtNT0BAeI+iWErnZ/Op4FQhCACEd1k="
+  matrix:
+    - API=android-16 ABI=armeabi-v7a
+    - API=android-17 ABI=armeabi-v7a
+    - API=android-18 ABI=armeabi-v7a
+    - API=android-19 ABI=armeabi-v7a
+    - API=android-10 ABI=armeabi-v7a
+    - API=android-21 ABI=armeabi-v7a
+    - API=android-22 ABI=armeabi-v7a
+    - API=android-23 ABI=armeabi-v7a
+    - API=android-24 ABI=armeabi-v7a
+    - API=android-25 ABI=armeabi-v7a
+    - API=android-26 ABI=armeabi-v7a
+    - API=android-27 ABI=armeabi-v7a
 before_install:
   - yes | sdkmanager "platforms;android-27"
 before_script:
   - chmod u+x gradlew
+  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}'
+  - echo no | android create avd --force -n test -t $API --abi $ABI
+  - emulator -avd test -no-audio -no-window
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 script:
   - ./gradlew assembleRelease --stacktrace --info
   - ./gradlew generateReleaseJavadoc
@@ -43,21 +59,17 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-27.0.2
-    - android-15
-    - extra-google-google_play_services
-    - extra-google-m2repository
+    - android-16
+    - android-17
+    - android-18
+    - android-19
+    - android-20
+    - android-21
+    - android-22
+    - android-23
+    - android-24
+    - android-25
+    - android-26
+    - android-27
+    - build-tools-25.0.2
     - extra-android-m2repository
-    - addon-google_apis-google-26
-    - sys-img-armeabi-v7a-android-27
-    - sys-img-armeabi-v7a-android-26
-    - sys-img-armeabi-v7a-android-25
-    - sys-img-armeabi-v7a-android-24
-    - sys-img-armeabi-v7a-android-23
-    - sys-img-armeabi-v7a-android-22
-    - sys-img-armeabi-v7a-android-21
-    - sys-img-armeabi-v7a-android-20
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-armeabi-v7a-android-18
-    - sys-img-armeabi-v7a-android-17
-    - sys-img-armeabi-v7a-android-16
