@@ -3,6 +3,14 @@ sudo: required
 jdk:
   - oraclejdk8
 install: true
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
 before_deploy:
   # Set up git user name and tag this commit
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
