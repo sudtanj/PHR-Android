@@ -11,7 +11,7 @@ commit_website_files() {
 }
 
 upload_files() {
-   git push -f http://$GH_TOKEN@github.com/sudtanj/PHR-Android.git HEAD:gh-pages
+   git push -f http://$GH_TOKEN:x-oauth-basic@github.com/sudtanj/PHR-Android.git HEAD:gh-pages
 }
 
 commit_website_files
