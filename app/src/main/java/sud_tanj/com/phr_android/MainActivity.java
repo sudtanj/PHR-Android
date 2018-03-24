@@ -10,8 +10,10 @@ package sud_tanj.com.phr_android;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -26,9 +28,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
+import com.physicaloid.lib.Boards;
+import com.physicaloid.lib.Physicaloid;
+import com.physicaloid.lib.programmer.avr.UploadErrors;
+
+import java.io.IOException;
 
 import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
@@ -58,7 +66,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
-
         //Init
         Global.setContext(this);
 
@@ -119,8 +126,6 @@ public class MainActivity extends AppCompatActivity
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
-
-
     }
 
     @Override
@@ -130,9 +135,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPhysicaloid.close();
+    }
+
+    @Override
     protected void onResume() {
         //start handler as activity become visible
-
         sensorHandler.postDelayed(new Runnable() {
             public void run() {
                 //do something
@@ -178,8 +188,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
