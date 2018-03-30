@@ -9,6 +9,7 @@ package sud_tanj.com.phr_android.Custom;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 import sud_tanj.com.phr_android.Database.SensorGateway;
 
 /**
@@ -44,6 +46,7 @@ public class Global {
     private static NavigationView navigationView = null;
     private static SensorGateway sensorGateway = null;
     private static FloatingActionButton floatingButton = null;
+    private static CH34xUARTDriver driver=null;
 
     public static Context getContext() {
         return context;
@@ -130,5 +133,16 @@ public class Global {
 
     public static void setFloatingButton(FloatingActionButton floatingButton) {
         Global.floatingButton = floatingButton;
+    }
+
+    public static CH34xUARTDriver getCH340Driver() {
+        if(driver==null)
+            driver=new CH34xUARTDriver(
+                    (UsbManager) getContext().getSystemService(Context.USB_SERVICE), getContext(),
+                    "cn.wch.wchusbdriver.USB_PERMISSION");
+        if(driver.UsbFeatureSupported())
+            return driver;
+        else
+            return null;
     }
 }

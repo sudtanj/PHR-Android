@@ -107,7 +107,7 @@ public class HealthData implements ValueEventListener {
             timeStampString = temp;
         }
         timeStamp = new Date(Long.parseLong(timeStampString));
-        temp = dataSnapshot.child("Values").getValue().toString();
+        temp = dataSnapshot.child("Values").getValue(String.class);
         //System.out.println(temp);
         if (temp != null) {
             //values = new EncryptedString(temp,true).getDecryptedText();
