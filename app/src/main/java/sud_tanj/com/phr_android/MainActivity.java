@@ -137,11 +137,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Global.getCH340Driver().CloseDevice();
     }
 
     @Override
     protected void onResume() {
         //start handler as activity become visible
+        if(!Global.getCH340Driver().isConnected()) {
+            int retval = Global.getCH340Driver().ResumeUsbPermission();
+        }
         sensorHandler.postDelayed(new Runnable() {
             public void run() {
                 //do something
