@@ -13,6 +13,6 @@
         android:id="@+id/action_save"
         android:orderInCategory="100"
         android:title="Save"
-        android:icon="@drawable/air_ic_send_dark"
+        android:icon="@drawable/ic_menu_send"
         app:showAsAction="ifRoom" />
 </menu>

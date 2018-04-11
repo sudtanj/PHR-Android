@@ -31,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
 import com.physicaloid.lib.Boards;
 import com.physicaloid.lib.Physicaloid;
 import com.physicaloid.lib.programmer.avr.UploadErrors;
@@ -213,27 +212,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i, options.toBundle());
             }
             return true;
-        } else if(id.equals(R.id.action_report)){
-            IssueReporterLauncher.forTarget("sudtanj", "PHR-Android")
-                    // [Recommended] Theme to use for the reporter.
-                    // (See #theming for further information.)
-                    .theme(R.style.Theme_AppCompat)
-                    // [Optional] Auth token to open issues if users don't have a GitHub account
-                    // You can register a bot account on GitHub and copy ist OAuth2 token here.
-                    // (See #how-to-create-a-bot-key for further information.)
-                    .guestToken("7c2d324c17d873083b1a32220d3cb39c1c0f9a9e")
-                    // [Optional] Force users to enter an email adress when the report is sent using
-                    // the guest token.
-                    .guestEmailRequired(true)
-                    // [Optional] Set a minimum character limit for the description to filter out
-                    // empty reports.
-                    .minDescriptionLength(100)
-                    // [Optional] Include other relevant info in the bug report (like custom variables)
-                    .putExtraInfo("Test 1", "Example string")
-                    .putExtraInfo("Test 2", true)
-                    // [Optional] Disable back arrow in toolbar
-                    .homeAsUpEnabled(true)
-                    .launch(this);
         }
         else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();
