@@ -152,11 +152,11 @@ public class SensorData {
                 Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + scriptName);
                 scriptListener = (EmbeddedScript) (listener.newInstance());
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+
             } catch (InstantiationException e) {
-                e.printStackTrace();
+
             }
         }
     }

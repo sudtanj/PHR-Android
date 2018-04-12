@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
         //init Preference
         Global.setSettings(getApplicationContext());
-        Global.changePreferences(getString(R.string.application_language), getString(R.string.settings_lang));
+        Global.changePreferences("app_lang_settings", getString(R.string.settings_lang));
 
         Global.getSettings().registerOnSharedPreferenceChangeListener(this);
 
@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity
         //init age
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
-
     }
 
     @Override
@@ -141,10 +140,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        //start handler as activity become visible
-        if(!Global.getCH340Driver().isConnected()) {
-            int retval = Global.getCH340Driver().ResumeUsbPermission();
-        }
+        super.onResume();
+        if(!Global.getCH340Driver().isConnected())
+            Global.getCH340Driver().ResumeUsbPermission();
         sensorHandler.postDelayed(new Runnable() {
             public void run() {
                 //do something
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity
             }
         }, delay);
 
-        super.onResume();
+
     }
 
     @Override

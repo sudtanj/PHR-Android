@@ -28,14 +28,16 @@ public abstract class CH340Sensor implements EmbeddedScript {
     private int retval=0;
 
     public Boolean openConnection(){
-        retval=Global.getCH340Driver().ResumeUsbList();
-        if (retval == -1)
-            Global.getCH340Driver().CloseDevice();
-        else if (retval == 0){
-            if(Global.getCH340Driver().UartInit())
-                return true;
-            else
-                return false;
+        if(!Global.getCH340Driver().isConnected()) {
+            retval = Global.getCH340Driver().ResumeUsbList();
+            if (retval == -1)
+                Global.getCH340Driver().CloseDevice();
+            else if (retval == 0) {
+                if (Global.getCH340Driver().UartInit())
+                    return true;
+                else
+                    return false;
+            }
         }
         return true;
     }

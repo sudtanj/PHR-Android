@@ -21,13 +21,8 @@
     <string name="name_settings">Full Name</string>
     <string name="name_description_settings">Please provided your full name</string>
 
-    <!--Settings Key Storage -->
-    <string name="application_language">app_lang_settings</string>
-    <string name="fullname">patient_name_settings</string>
-
     <!-- Global Settings -->
     <string name="settings_default_fullname">Jane Doe</string>
-    <string name="settings_pref_file_name">phr-android.settings</string>
     <string name="settings_lang">English</string>
     <string name="settings_lang_loc"></string>
 

@@ -106,7 +106,11 @@ public class HealthData implements ValueEventListener {
         if (temp != null) {
             timeStampString = temp;
         }
-        timeStamp = new Date(Long.parseLong(timeStampString));
+        try {
+            timeStamp = new Date(Long.parseLong(timeStampString));
+        } catch (NumberFormatException e){
+            timeStamp = new Date(0);
+        }
         temp = dataSnapshot.child("Values").getValue(String.class);
         //System.out.println(temp);
         if (temp != null) {

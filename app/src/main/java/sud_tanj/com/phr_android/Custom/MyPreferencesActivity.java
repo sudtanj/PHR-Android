@@ -82,8 +82,8 @@ public class MyPreferencesActivity extends AppCompatActivity {
             super.onActivityCreated(savedInstanceState);
             // run the code making use of getActivity() from here
             //initialized
-            String appLangPref=Global.getSettings().getString(getString(R.string.application_language),"");
-            langListPreferences = (ListPreference)findPreference(getString(R.string.application_language));
+            String appLangPref=Global.getSettings().getString("app_lang_settings","");
+            langListPreferences = (ListPreference)findPreference("app_lang_settings");
             agePreferences = (EditTextPreference)findPreference("age_key");
 
             //Gson gson = new Gson();
