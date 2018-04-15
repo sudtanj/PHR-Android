@@ -106,10 +106,13 @@ public class HealthData implements ValueEventListener {
         if (temp != null) {
             timeStampString = temp;
         }
+        else {
+            this.delete();
+        }
         try {
             timeStamp = new Date(Long.parseLong(timeStampString));
         } catch (NumberFormatException e){
-            timeStamp = new Date(0);
+            e.printStackTrace();
         }
         temp = dataSnapshot.child("Values").getValue(String.class);
         //System.out.println(temp);
@@ -117,10 +120,16 @@ public class HealthData implements ValueEventListener {
             //values = new EncryptedString(temp,true).getDecryptedText();
             values=temp;
         }
+        else {
+            this.delete();
+        }
         temp = dataSnapshot.child("ParentSensor").getValue(String.class);
         if (temp != null) {
             //parentSensorString = new EncryptedString(temp,true).getDecryptedText();
             parentSensorString = temp;
+        }
+        else {
+            this.delete();
         }
         parentSensor = Global.getSensorGateway().getSensorData(parentSensorString);
     }
@@ -142,5 +151,10 @@ public class HealthData implements ValueEventListener {
             return false;
         }
         return true;
+    }
+
+    public void delete(){
+        Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME).child(getHealthDataId()).removeValue();
+        this.getParentSensor().deleteData(this);
     }
 }

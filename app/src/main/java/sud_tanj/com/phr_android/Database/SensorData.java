@@ -216,4 +216,8 @@ public class SensorData {
     public void setSensorOwner(String sensorOwner) {
         this.getDataReference().child("Owner").setValue(sensorOwner);
     }
+
+    public void deleteData(HealthData healthData){
+        this.sensorData.remove(healthData);
+    }
 }
