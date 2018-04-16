@@ -36,7 +36,7 @@ before_install:
   - yes | sdkmanager "platforms;$API"
 before_script:
   - chmod u+x gradlew
-  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}'
+  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}' --no-ui --force
   - echo no | android create avd --force -n test -t $API --abi $ABI
   - emulator -avd test -no-audio -no-window
   - android-wait-for-emulator
@@ -52,7 +52,5 @@ android:
     - android-15
     - android-26
     - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
     - addon-google_apis-google-26
 
