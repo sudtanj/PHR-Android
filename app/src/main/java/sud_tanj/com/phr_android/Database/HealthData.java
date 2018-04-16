@@ -108,6 +108,7 @@ public class HealthData implements ValueEventListener {
         }
         else {
             this.delete();
+            return;
         }
         try {
             timeStamp = new Date(Long.parseLong(timeStampString));
@@ -122,6 +123,7 @@ public class HealthData implements ValueEventListener {
         }
         else {
             this.delete();
+            return;
         }
         temp = dataSnapshot.child("ParentSensor").getValue(String.class);
         if (temp != null) {
@@ -130,6 +132,7 @@ public class HealthData implements ValueEventListener {
         }
         else {
             this.delete();
+            return;
         }
         parentSensor = Global.getSensorGateway().getSensorData(parentSensorString);
     }
