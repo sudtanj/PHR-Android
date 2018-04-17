@@ -36,6 +36,7 @@ before_install:
   - yes | sdkmanager "platforms;$API"
 before_script:
   - chmod u+x gradlew
+  - android list sdk --all
   - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}' --no-ui --force
   - echo no | android create avd --force -n test -t $API --abi $ABI
   - emulator -avd test -no-audio -no-window
@@ -48,8 +49,7 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-27.0.2
-    - android-15
+    - build-tools-26.0.2
     - android-26
     - extra-google-google_play_services
     - addon-google_apis-google-26
