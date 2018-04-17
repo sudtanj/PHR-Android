@@ -38,7 +38,6 @@ before_script:
   - chmod u+x gradlew
   - android list sdk --all
   - sdkmanager --list --verbose
-  - find ~/.android-sdk/ -name package.xml -exec sh -c 'eval $(xmllint --xpath "//*[local-name()='\'localPackage\'']/@path" $0) && echo $path' {} \;
   - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}' --no-ui --force
   - echo no | android create avd --force -n test -t $API --abi $ABI
   - emulator -avd test -no-audio -no-window
@@ -53,6 +52,7 @@ android:
     - platform-tools
     - build-tools-25.0.3
     - android-26
+    - sys-img-$ABI-$API
     - extra-google-google_play_services
     - addon-google_apis-google-25
 
