@@ -33,7 +33,7 @@ deploy:
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
-  - yes | sdkmanager "platforms;22"
+  - yes | sdkmanager "platforms;android-22"
 before_script:
   - chmod u+x gradlew
   - android list sdk --extended --no-ui --all
