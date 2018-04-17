@@ -52,7 +52,7 @@ android:
     - tools
     - platform-tools
     - build-tools-25.0.3
-    - android-26
+    - android-25
     - add-on
     - extra
     - sys-img-$ABI-$API
