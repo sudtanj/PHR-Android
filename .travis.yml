@@ -66,12 +66,9 @@ android:
   components:
     - tools
     - tools
-    - extra-android-support
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
+    - extra
     - android-$ANDROID_API
-    - sys-img-$ANDROID_ABI-google_apis-android-$ANDROID_API
+    - sys-img-$ANDROID_ABI-addon-google_apis-android-$ANDROID_API
     - build-tools-$ANDROID_API.0.1
     - platform-tools
   licenses:
