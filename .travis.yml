@@ -36,9 +36,9 @@ before_install:
   - yes | sdkmanager "platforms;$API"
 before_script:
   - chmod u+x gradlew
-  - android list sdk --all
+  - android list sdk --extended --no-ui --all
   - sdkmanager --list --verbose
-  - android-update-sdk --components=sys-img-$ABI-$API --accept-licenses='android-sdk-license-[0-9a-f]{8}' --no-ui --force
+  - echo "y" | android update sdk -a --no-ui --force --filter sys-img-$ABI-$API
   - echo no | android create avd --force -n test -t $API --abi $ABI
   - emulator -avd test -no-audio -no-window
   - android-wait-for-emulator
