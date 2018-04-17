@@ -13,16 +13,16 @@ addons:
       - graphviz
 env:
   matrix:
-    - ANDROID_API=25 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=24 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=23 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=22 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=21 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=20 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=19 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=18 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=17 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a
+    - ANDROID_API=25 ANDROID_ABI=
+    #- ANDROID_API=24 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=23 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=22 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=20 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a
 before_deploy:
   # Set up git user name and tag this commit
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
