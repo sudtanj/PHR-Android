@@ -33,7 +33,7 @@ deploy:
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
-  - yes | sdkmanager "platforms;android-22"
+  - sdkmanager --update && yes | sdkmanager --licenses
 before_script:
   - chmod u+x gradlew
   - android list sdk --extended --no-ui --all
@@ -48,6 +48,8 @@ script:
   - ./gradlew generateReleaseJavadoc
 android:
   components:
+    - tools
+    - tools
     - extra-android-support
     - extra-google-google_play_services
     - extra-google-m2repository
