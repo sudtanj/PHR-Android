@@ -39,6 +39,7 @@ before_script:
   - android list sdk --extended --no-ui --all
   - sdkmanager --list --verbose
   - echo "y" | android update sdk -a --no-ui --force --filter $ABI,$API
+  - android list targets
   - echo no | android create avd --force -n test -t $API --abi "default/$ABI"
   - emulator -avd test -no-audio -no-window
   - android-wait-for-emulator
