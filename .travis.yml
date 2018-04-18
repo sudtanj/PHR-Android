@@ -8,7 +8,7 @@ addons:
     packages:
 env:
   matrix:
-    - ANDROID_API=25 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=ANDROID_TAG_EMULATOR
+    - ANDROID_API=25 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=24 ANDROID_ABI=armeabi-v7a
     #- ANDROID_API=23 ANDROID_ABI=armeabi-v7a
     #- ANDROID_API=22 ANDROID_ABI=armeabi-v7a
@@ -36,9 +36,6 @@ deploy:
     prerelease: true
 after_success: 
   - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
-  - adb push ./app/build/outputs/apk/release/app-release.apk /data/local/tmp/sud_tanj.com.phr_android
-  - adb shell pm install -t -r "/data/local/tmp/sud_tanj.com.phr_android"
-  - adb shell am start -n "sud_tanj.com.phr_android/sud_tanj.com.phr_android.GPlusLogin.Login" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -D
 before_install:
   - yes | sdkmanager "platforms;android-27"
   - yes | sdkmanager "platforms;android-$ANDROID_API"
@@ -62,6 +59,9 @@ cache:
 script:
   - ./gradlew assembleRelease --stacktrace --info
   - ./gradlew generateReleaseJavadoc
+  - adb push ./app/build/outputs/apk/release/app-release.apk /data/local/tmp/sud_tanj.com.phr_android
+  - adb shell pm install -t -r "/data/local/tmp/sud_tanj.com.phr_android"
+  - adb shell am start -n "sud_tanj.com.phr_android/sud_tanj.com.phr_android.GPlusLogin.Login" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -D
 android:
   components:
     - tools
