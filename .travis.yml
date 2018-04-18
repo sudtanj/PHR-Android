@@ -13,11 +13,11 @@ env:
     #- ANDROID_API=23 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=20 ANDROID_ABI=armeabi-v7a
-    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a
-    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a
-    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a
-    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a
+    #- ANDROID_API=20 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=android ANDROID_TAG_COMPONENT=default
 before_deploy:
   # Set up git user name and tag this commit
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
@@ -44,7 +44,7 @@ before_script:
   - android list sdk --no-ui --all --extended
   - sdkmanager --list --verbose
   - android list targets
-  - echo no | android create avd --force -n test -t android-$ANDROID_API --abi $ANDROID_ABI --tag "google_apis"
+  - echo no | android create avd --force -n test -t android-$ANDROID_API --abi $ANDROID_ABI --tag $ANDROID_TAG_EMULATOR
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
@@ -68,7 +68,7 @@ android:
     - tools
     - extra
     - android-$ANDROID_API
-    - sys-img-$ANDROID_ABI-google_apis-$ANDROID_API
+    - sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
     - build-tools-$ANDROID_API.0.1
     - platform-tools
   licenses:
