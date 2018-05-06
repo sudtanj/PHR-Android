@@ -59,8 +59,10 @@ public class MyRecyclerViewAdapter extends RecyclerView
     }
 
     public void stopHandler(){
-        for(int i=0;i<sensorHandler.size();i++){
-            sensorHandler.get(i).removeCallbacks(handlerRunnable.get(i));
+        if(sensorHandler.size()>0) {
+            for (int i = 1; i <= sensorHandler.size(); i++) {
+                //sensorHandler.get(i).removeCallbacks(handlerRunnable.get(i));
+            }
         }
     }
 
@@ -77,12 +79,16 @@ public class MyRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getSensorName());
-        Handler tempHandler = new Handler();
-        sensorHandler.add(tempHandler);
-        GraphRunnable sensorRun = new GraphRunnable(tempHandler, delay, mDataset.get(position), holder);
-        handlerRunnable.add(sensorRun);
-        tempHandler.postDelayed(sensorRun, delay);
+
+        holder.title.setText(mDataset.get(position).getSensorName());
+        ArrayList<HealthData> healthData=mDataset.get(position).getSensorData();
+        if(healthData.size()>0)
+            holder.value.setText(healthData.get(healthData.size()-1).getValues());
+        //Handler tempHandler = new Handler();
+        //sensorHandler.add(tempHandler);
+        //GraphRunnable sensorRun = new GraphRunnable(tempHandler, delay, mDataset.get(position), holder);
+        //handlerRunnable.add(sensorRun);
+        //tempHandler.postDelayed(sensorRun, delay);
     }
 
     public void addItem(SensorData dataObj, int index) {
@@ -110,16 +116,20 @@ public class MyRecyclerViewAdapter extends RecyclerView
     public static class DataObjectHolder extends RecyclerView.ViewHolder
             implements View
             .OnClickListener {
-        TextView label;
+
+        TextView title,value;
+        /**
         TextView dateTime;
         GraphView graph;
-
+*/
         public DataObjectHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.age);
+            title = (TextView) itemView.findViewById(R.id.health_sensor_title);
+            value = (TextView) itemView.findViewById(R.id.health_sensor_value);
+            /**
             dateTime = (TextView) itemView.findViewById(R.id.textView2);
             graph = (GraphView) itemView.findViewById(R.id.graph);
-
+*/
             Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
         }
