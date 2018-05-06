@@ -2,14 +2,14 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/14/18 7:38 PM
+ * Last Modified by User on 5/6/18 5:49 PM
  */
 
-package sud_tanj.com.phr_android.CustomSensor;
+package sud_tanj.com.phr_android.Hardware_Driver;
 
 import com.physicaloid.lib.Physicaloid;
 
-import sud_tanj.com.phr_android.Custom.EmbeddedScript;
+import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 import sud_tanj.com.phr_android.Custom.Global;
 
 /**
@@ -22,7 +22,7 @@ import sud_tanj.com.phr_android.Custom.Global;
  * This class last modified by User
  */
 
-public abstract class ArduinoUnoSensor implements EmbeddedScript {
+public abstract class ArduinoUno implements EmbeddedScript {
     private Physicaloid mPhysicaloid=null;
 
     /**

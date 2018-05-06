@@ -2,29 +2,24 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/7/18 4:38 PM
+ * Last Modified by User on 5/6/18 5:34 PM
  */
 
-package sud_tanj.com.phr_android.GridLayout;
+package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**

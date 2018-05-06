@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 3/11/18 6:46 PM
+ * Last Modified by User on 5/6/18 5:37 PM
  */
 
-package sud_tanj.com.phr_android.CardLayout;
+package sud_tanj.com.phr_android.Health_Data.CardLayout;
 
 import android.os.Handler;
 
@@ -14,9 +14,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
-import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.HealthData;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 /**
  * This class is part of PHRAndroid Project

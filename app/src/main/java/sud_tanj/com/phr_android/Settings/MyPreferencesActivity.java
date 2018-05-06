@@ -1,11 +1,11 @@
 /*
  * Create by Sudono Tanjung
- * Copyright (c) 2017. All rights reserved.
+ * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 12/14/17 6:51 PM
+ * Last Modified by User on 5/6/18 5:41 PM
  */
 
-package sud_tanj.com.phr_android.Custom;
+package sud_tanj.com.phr_android.Settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Custom.SuperString;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -82,7 +84,7 @@ public class MyPreferencesActivity extends AppCompatActivity {
             super.onActivityCreated(savedInstanceState);
             // run the code making use of getActivity() from here
             //initialized
-            String appLangPref=Global.getSettings().getString("app_lang_settings","");
+            String appLangPref= Global.getSettings().getString("app_lang_settings","");
             langListPreferences = (ListPreference)findPreference("app_lang_settings");
             agePreferences = (EditTextPreference)findPreference("age_key");
 

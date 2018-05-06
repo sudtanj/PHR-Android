@@ -19,10 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.List;
-
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
-import sud_tanj.com.phr_android.Database.SensorGateway;
+import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
 
 /**
  * This class is part of PHRAndroid Project

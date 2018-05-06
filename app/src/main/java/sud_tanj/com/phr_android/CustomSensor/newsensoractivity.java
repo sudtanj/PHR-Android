@@ -8,8 +8,9 @@
 package sud_tanj.com.phr_android.CustomSensor;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.HealthData;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Hardware_Driver.ArduinoUnoCH340;
 
 /**
  * This class is part of PHRAndroid Project
@@ -20,7 +21,7 @@ import sud_tanj.com.phr_android.Database.SensorData;
  * <p>
  * This class last modified by User
  */
-public class newsensoractivity extends CH340Sensor {
+public class newsensoractivity extends ArduinoUnoCH340 {
     private Boolean firstTime=true;
     private SensorData sensor=Global.getSensorGateway().getSensorData("NewSensor148");
     private int baudRate = 9600;
@@ -38,7 +39,7 @@ public class newsensoractivity extends CH340Sensor {
                 }
             if(Global.getCH340Driver().isConnected()) {
                 Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity,flowControl);
-                //sensor.addHealthData(new HealthData(sensor, this.getDataAtCurrent()));
+                //sensor.addHealthData(new Data(sensor, this.getDataAtCurrent()));
                 String[] temp=this.getDataAtCurrent().split("\n");
                 String result="";
                 if(temp.length>0)

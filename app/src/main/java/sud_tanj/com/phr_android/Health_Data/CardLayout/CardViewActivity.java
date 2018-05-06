@@ -1,11 +1,11 @@
 /*
  * Create by Sudono Tanjung
- * Copyright (c) 2017. All rights reserved.
+ * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 12/20/17 4:49 PM
+ * Last Modified by User on 5/6/18 5:37 PM
  */
 
-package sud_tanj.com.phr_android.CardLayout;
+package sud_tanj.com.phr_android.Health_Data.CardLayout;
 
 import android.os.Bundle;
 import android.app.Fragment;

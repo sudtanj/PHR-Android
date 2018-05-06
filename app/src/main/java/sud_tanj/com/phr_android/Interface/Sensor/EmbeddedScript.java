@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/10/18 7:55 PM
+ * Last Modified by User on 5/6/18 5:47 PM
  */
 
-package sud_tanj.com.phr_android.Custom;
+package sud_tanj.com.phr_android.Interface.Sensor;
 
 /**
  * This class is part of PHRAndroid Project

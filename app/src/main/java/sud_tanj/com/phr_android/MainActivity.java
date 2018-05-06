@@ -10,10 +10,8 @@ package sud_tanj.com.phr_android;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -28,22 +26,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.physicaloid.lib.Boards;
-import com.physicaloid.lib.Physicaloid;
-import com.physicaloid.lib.programmer.avr.UploadErrors;
 
-import java.io.IOException;
-
-import sud_tanj.com.phr_android.CardLayout.CardViewActivity;
+import sud_tanj.com.phr_android.Health_Data.CardLayout.CardViewActivity;
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Custom.MyPreferencesActivity;
-import sud_tanj.com.phr_android.Database.SensorData;
-import sud_tanj.com.phr_android.Database.SensorGateway;
-import sud_tanj.com.phr_android.GPlusLogin.Login;
-import sud_tanj.com.phr_android.GridLayout.GridViewActivity;
+import sud_tanj.com.phr_android.Settings.MyPreferencesActivity;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
+import sud_tanj.com.phr_android.Login.Login;
+import sud_tanj.com.phr_android.Health_Sensor.GridLayout.GridViewActivity;
+import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -92,7 +85,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
              //   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                //         .setAction("Action", null).show();
-                Intent intent=new Intent(getApplicationContext(),ModifySensors.class);
+                Intent intent=new Intent(getApplicationContext(),ModifySensor.class);
                 intent.putExtra("modifySensor",false);
                 startActivity(intent);
             }

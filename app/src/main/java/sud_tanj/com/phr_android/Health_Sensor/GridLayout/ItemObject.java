@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/7/18 4:45 PM
+ * Last Modified by User on 5/6/18 5:34 PM
  */
 
-package sud_tanj.com.phr_android.GridLayout;
+package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
 
 /**
  * This class is part of PHRAndroid Project

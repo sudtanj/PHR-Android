@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/7/18 11:05 AM
+ * Last Modified by User on 5/6/18 5:39 PM
  */
 
-package sud_tanj.com.phr_android.Database;
+package sud_tanj.com.phr_android.Database.Sensor;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,8 +16,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import sud_tanj.com.phr_android.Custom.EmbeddedScript;
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 /**
  * This class is part of PHRAndroid Project

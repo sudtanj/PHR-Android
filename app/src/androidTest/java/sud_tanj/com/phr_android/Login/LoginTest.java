@@ -5,7 +5,7 @@
  * Last Modified by User on 2/28/18 6:03 PM
  */
 
-package sud_tanj.com.phr_android.GPlusLogin;
+package sud_tanj.com.phr_android.Login;
 
 
 import android.support.test.espresso.DataInteraction;

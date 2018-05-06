@@ -1,11 +1,11 @@
 /*
  * Create by Sudono Tanjung
- * Copyright (c) 2017. All rights reserved.
+ * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 12/20/17 4:50 PM
+ * Last Modified by User on 5/6/18 5:37 PM
  */
 
-package sud_tanj.com.phr_android.CardLayout;
+package sud_tanj.com.phr_android.Health_Data.CardLayout;
 
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -15,17 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.HealthData;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**

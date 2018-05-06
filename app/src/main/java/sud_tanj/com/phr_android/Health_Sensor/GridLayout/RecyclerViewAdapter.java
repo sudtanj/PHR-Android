@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/7/18 4:41 PM
+ * Last Modified by User on 5/6/18 5:34 PM
  */
 
-package sud_tanj.com.phr_android.GridLayout;
+package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
 
 import android.support.v7.widget.RecyclerView;
 import android.content.Context;
@@ -16,7 +16,7 @@ import android.widget.CompoundButton;
 
 import java.util.List;
 
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.R;
 
 /**

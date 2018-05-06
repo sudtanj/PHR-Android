@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme"
-    tools:context="sud_tanj.com.phr_android.ModifySensors">
+    tools:context="sud_tanj.com.phr_android.Health_Sensor.ModifySensor">
 
 
     <android.support.v7.widget.RecyclerView

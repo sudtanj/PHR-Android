@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 1/7/18 4:37 PM
+ * Last Modified by User on 5/6/18 5:34 PM
  */
 
-package sud_tanj.com.phr_android.GridLayout;
+package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.R;
-import sud_tanj.com.phr_android.ModifySensors;
+import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
 
 /**
  * This class is part of PHRAndroid Project
@@ -47,7 +47,7 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
     public void onClick(View view) {
         SensorData sensor=Global.getSensorGateway().getSensorDataByName(countryName.getText().toString());
         if(sensor.getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
-            Intent modifySensor = new Intent(Global.getContext(), ModifySensors.class);
+            Intent modifySensor = new Intent(Global.getContext(), ModifySensor.class);
             modifySensor.putExtra("modifySensor", true);
             modifySensor.putExtra("sensorName", countryName.getText());
             Global.getContext().startActivity(modifySensor);

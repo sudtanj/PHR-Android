@@ -2,16 +2,15 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 3/11/18 4:56 PM
+ * Last Modified by User on 5/6/18 5:35 PM
  */
 
-package sud_tanj.com.phr_android;
+package sud_tanj.com.phr_android.Health_Sensor;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -24,9 +23,10 @@ import me.riddhimanadib.formmaster.model.BaseFormElement;
 import me.riddhimanadib.formmaster.model.FormElementTextSingleLine;
 import me.riddhimanadib.formmaster.model.FormHeader;
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.R;
 
-public class ModifySensors extends AppCompatActivity {
+public class ModifySensor extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private FormBuilder mFormBuilder;
