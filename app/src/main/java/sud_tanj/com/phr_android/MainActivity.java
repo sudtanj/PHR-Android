@@ -9,6 +9,7 @@ package sud_tanj.com.phr_android;
 
 import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,8 +30,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import sud_tanj.com.phr_android.Health_Data.CardLayout.CardViewActivity;
+import sud_tanj.com.phr_android.Health_Data.CardLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.SensorHandler.Interface.SensorRunnable;
 import sud_tanj.com.phr_android.Settings.MyPreferencesActivity;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
@@ -48,14 +50,14 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFragment;
     private SensorData arduino;
     private SensorGateway gate;
-    private Handler sensorHandler=new Handler();
     private int delay = 5*1000;
-    private Runnable runnable;
+    private HandlerLoop sensorBackgroundHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
         //Init
@@ -117,12 +119,14 @@ public class MainActivity extends AppCompatActivity
         //init age
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        this.sensorBackgroundHandler=new HandlerLoop(3,new SensorRunnable());
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container,new HealthDataListActivity()).commit();
     }
 
     @Override
@@ -136,34 +140,11 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         if(!Global.getCH340Driver().isConnected())
             Global.getCH340Driver().ResumeUsbPermission();
-        sensorHandler.postDelayed(new Runnable() {
-            public void run() {
-                //do something
-                //first fragment init
-                if(Global.getSensorGateway().isReady()) {
-                    if (currentFragment == null) {
-                        currentFragment = new CardViewActivity();
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, currentFragment);
-                        transaction.commit();
-                    }
-                }
-
-                for(SensorData temp : Global.getSensorGateway().getSensorObject()){
-                    temp.getBackgroundJob().run();
-                }
-                runnable=this;
-
-                sensorHandler.postDelayed(runnable, delay);
-            }
-        }, delay);
-
 
     }
 
     @Override
     protected void onPause() {
-        sensorHandler.removeCallbacks(runnable); //stop handler when activity not visible
         super.onPause();
     }
 
@@ -221,7 +202,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            currentFragment = new CardViewActivity();
+            currentFragment = new HealthDataListActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
             transaction.addToBackStack(null);
             transaction.commit();

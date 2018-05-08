@@ -30,9 +30,9 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public class GraphRunnable implements Runnable {
     private int delay=-1;
     private SensorData mDataset;
-    private MyRecyclerViewAdapter.DataObjectHolder holder;
+    private HealthDataListRecyclerViewAdapter.DataObjectHolder holder;
     private Handler sensorHandler;
-    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset, MyRecyclerViewAdapter.DataObjectHolder holder){
+    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset, HealthDataListRecyclerViewAdapter.DataObjectHolder holder){
         this.mDataset=mDataset;
         this.holder=holder;
         this.delay=delay;

@@ -7,8 +7,8 @@
 
 package sud_tanj.com.phr_android.Health_Data.CardLayout;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +21,8 @@ import android.view.animation.LayoutAnimationController;
 import java.util.ArrayList;
 
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataList;
+import sud_tanj.com.phr_android.HandlerLoop;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -33,24 +35,52 @@ import sud_tanj.com.phr_android.R;
  * This class last modified by User
  */
 
-public class CardViewActivity extends Fragment {
+public class HealthDataListActivity extends Fragment {
 
     private static String LOG_TAG = "CardViewActivity";
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private HealthDataList healthDataList;
+    private HealthDataListRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private HandlerLoop handlerLoop;
+    private Boolean dataReady;
+    public HealthDataListActivity() {
+        this.healthDataList=new HealthDataList(this);
+        this.handlerLoop=new HandlerLoop(5,this.healthDataList);
+        this.dataReady=Boolean.FALSE;
+    }
+
+    public RecyclerView getmRecyclerView() {
+        return mRecyclerView;
+    }
+
+    public HealthDataListRecyclerViewAdapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public void setmAdapter(HealthDataListRecyclerViewAdapter mAdapter) {
+        this.mAdapter = mAdapter;
+    }
+
+    public Boolean isDataReady() {
+        return dataReady;
+    }
+
+    public void setDataReady(Boolean dataReady) {
+        this.dataReady = dataReady;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.activity_card_view, container, false);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ((MyRecyclerViewAdapter)mAdapter).stopHandler();
+        ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
+        this.handlerLoop.removeCallbacks(this.healthDataList);
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -63,8 +93,6 @@ public class CardViewActivity extends Fragment {
         mRecyclerView.setLayoutAnimation(animation);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyRecyclerViewAdapter(Global.getSensorGateway().getSensorObject());
-        mRecyclerView.setAdapter(mAdapter);
 
 
         // Code to Add an item with default animation
@@ -80,18 +108,10 @@ public class CardViewActivity extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter
-                .MyClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                Log.i(LOG_TAG, " Clicked on Item " + position);
-            }
-        });
         LayoutAnimationController controller =
                 AnimationUtils.loadLayoutAnimation(mRecyclerView.getContext(), R.anim.layout_animation_slide_right);
 
         mRecyclerView.setLayoutAnimation(controller);
-        mRecyclerView.getAdapter().notifyDataSetChanged();
         mRecyclerView.scheduleLayoutAnimation();
     }
 

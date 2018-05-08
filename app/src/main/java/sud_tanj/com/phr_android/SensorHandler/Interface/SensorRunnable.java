@@ -1,0 +1,29 @@
+/*
+ * Create by Sudono Tanjung
+ * Copyright (c) 2018. All rights reserved.
+ *
+ * Last Modified by User on 5/8/18 3:24 PM
+ */
+
+package sud_tanj.com.phr_android.SensorHandler.Interface;
+
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+
+/**
+ * This class is part of PHRAndroid Project
+ * Any modified within this class without reading the
+ * manual will cause problem!
+ * <p>
+ * Created by Sudono Tanjung on 08/05/2018 - 15:24.
+ * <p>
+ * This class last modified by User
+ */
+public class SensorRunnable implements Runnable {
+    @Override
+    public void run() {
+        for(SensorData temp : Global.getSensorGateway().getSensorObject())
+            temp.getBackgroundJob().run();
+
+    }
+}
