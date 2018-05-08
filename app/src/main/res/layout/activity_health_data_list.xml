@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2018. All rights reserved.
+  ~
+  ~ Last Modified by User on 5/8/18 8:36 PM
+  -->
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/health_data_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/health_title"
+                    android:textSize="24sp" />
+
+                <Spinner
+                    android:id="@+id/health_data_graph_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown" />
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/health_data_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/health_data_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/health_comment"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+        </ScrollView>
+
+</LinearLayout>

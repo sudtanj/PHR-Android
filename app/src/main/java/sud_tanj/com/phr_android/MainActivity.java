@@ -9,12 +9,10 @@ package sud_tanj.com.phr_android;
 
 import android.app.ActivityOptions;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +30,7 @@ import com.bumptech.glide.Glide;
 
 import sud_tanj.com.phr_android.Health_Data.CardLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 import sud_tanj.com.phr_android.SensorHandler.Interface.SensorRunnable;
 import sud_tanj.com.phr_android.Settings.MyPreferencesActivity;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
@@ -120,6 +119,8 @@ public class MainActivity extends AppCompatActivity
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
+        Intent i = new Intent(getApplicationContext(), HealthDataList.class);
+        startActivity(i);
     }
 
     @Override

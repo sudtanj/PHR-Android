@@ -79,8 +79,10 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
-        this.handlerLoop.removeCallbacks(this.healthDataList);
+        if (this.getmAdapter() != null)
+            ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
+        if(this.healthDataList!=null)
+            this.handlerLoop.removeCallbacks(this.healthDataList);
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {

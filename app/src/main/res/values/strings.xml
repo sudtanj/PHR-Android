@@ -33,6 +33,7 @@
     <string name="country_name">Nigeria</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="health_title">Default Health Monitoring</string>
+    <string name="health_comment">Comment</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
