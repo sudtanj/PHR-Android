@@ -53,8 +53,8 @@ public class ModifySensor extends AppCompatActivity {
 
         if(data.getBoolean("modifySensor")){
             currentSensor=Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
-            elementName.setValue(currentSensor.getSensorName());
-            elementEmbedded.setValue(currentSensor.getScriptListenerName());
+            elementName.setValue(currentSensor.getSensorInformation().getSensorName());
+            elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
         }
 
         List<BaseFormElement> formItems = new ArrayList<>();
@@ -91,8 +91,8 @@ public class ModifySensor extends AppCompatActivity {
             case R.id.action_save:
                 //Do Whatever you want to do here.
                 if(data.getBoolean("modifySensor")){
-                    currentSensor.setSensorName(elementName.getValue());
-                    currentSensor.setScriptListener(elementEmbedded.getValue());
+                    currentSensor.getSensorInformation().setSensorName(elementName.getValue());
+                    currentSensor.getBackgroundJob().setName(elementEmbedded.getValue());
                     finish();
                     return true;
                 }
@@ -100,9 +100,9 @@ public class ModifySensor extends AppCompatActivity {
                     SensorData temp=null;
                     while(temp==null)
                         temp=Global.getSensorGateway().createSensorDataObject(elementName.getValue()+String.valueOf(new Random().nextInt(1000)));
-                    temp.setSensorName(elementName.getValue());
-                    temp.setScriptListener(elementEmbedded.getValue());
-                    temp.setSensorOwner(Global.getFireBaseUser().getUid());
+                    temp.getSensorInformation().setSensorName(elementName.getValue());
+                    temp.getBackgroundJob().setName(elementEmbedded.getValue());
+                    temp.getSensorInformation().setSensorOwner(Global.getFireBaseUser().getUid());
                     Toast.makeText(getApplicationContext(),"Sensor added succesfully!",Toast.LENGTH_SHORT);
                     finish();
                 }

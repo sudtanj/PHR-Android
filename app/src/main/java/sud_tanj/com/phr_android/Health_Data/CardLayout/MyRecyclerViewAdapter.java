@@ -73,7 +73,7 @@ public class MyRecyclerViewAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
 
-        holder.title.setText(mDataset.get(position).getSensorName());
+        holder.title.setText(mDataset.get(position).getSensorInformation().getSensorName());
         ArrayList<HealthData> healthData=mDataset.get(position).getSensorData();
         if(healthData.size()>0)
             holder.value.setText(healthData.get(healthData.size()-1).getValues());

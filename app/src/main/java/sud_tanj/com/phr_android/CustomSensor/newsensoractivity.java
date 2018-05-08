@@ -46,7 +46,9 @@ public class newsensoractivity extends ArduinoUnoCH340 {
                 result=temp[temp.length-1];
                 if(this.isNumeric(result)){
                     System.out.println(result);
-                    sensor.addHealthData(new HealthData(sensor, result));
+                    HealthData healthData=new HealthData(sensor);
+                    healthData.setValues(result);
+                    sensor.addHealthData(healthData);
                 }
 
             }

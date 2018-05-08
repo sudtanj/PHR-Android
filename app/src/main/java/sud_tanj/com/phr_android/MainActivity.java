@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 for(SensorData temp : Global.getSensorGateway().getSensorObject()){
-                    temp.runScriptListener();
+                    temp.getBackgroundJob().run();
                 }
                 runnable=this;
 

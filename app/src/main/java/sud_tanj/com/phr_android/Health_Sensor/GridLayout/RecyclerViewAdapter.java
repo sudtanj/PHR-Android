@@ -51,13 +51,13 @@ public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 @Override
 public void onBindViewHolder(RecyclerViewHolders holder, int position) {
         this.positionLocal=position;
-        holder.countryName.setText(itemList.get(position).getSensorName());
-        holder.sensorSwitch.setChecked(itemList.get(position).getSensorActive());
+        holder.countryName.setText(itemList.get(position).getSensorInformation().getSensorName());
+        holder.sensorSwitch.setChecked(itemList.get(position).getSensorInformation().isSensorActive());
         holder.sensorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 int position=positionLocal;
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        itemList.get(position).setSensorActive(b);
+                        itemList.get(position).getSensorInformation().setSensorActive(b);
                 }
         });
        // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());

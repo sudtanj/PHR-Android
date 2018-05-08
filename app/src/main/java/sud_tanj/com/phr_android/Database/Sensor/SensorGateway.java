@@ -7,6 +7,8 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
+import android.hardware.Sensor;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +20,8 @@ import java.util.List;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorGatewayListener.SensorInitializerListener;
+import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorGatewaySynchronizer;
 
 /**
  * This class is part of PHRAndroid Project
@@ -32,57 +36,31 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public class SensorGateway {
     public static final String SENSOR_COLLECTION_KEY="sensor_collection";
     public static final String SENSOR_DATA_CHILD_NAME="sensor";
-    private List<String> sensorList = null;
     private DatabaseReference dataReference = null;
     private ArrayList<SensorData> sensorObject=null;
+    private SensorGatewaySynchronizer sensorGatewaySynchronizer=null;
 
     public SensorGateway(){
-        this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(SENSOR_COLLECTION_KEY));
-        ValueEventListener dataListener = new ValueEventListener() {
+        this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME));
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                sensorList= new ArrayList<String>();
-                setSensorObject(new ArrayList<SensorData>());
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                    sensorList.add(childSnapshot.getValue().toString());
-                    getSensorObject().add(new SensorData(childSnapshot.getValue().toString()));
-                }
-            }
+        this.sensorObject=new ArrayList<>();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        this.getDataReference().addValueEventListener(dataListener);
-    }
-
-    public List<String> getSensorList() {
-        return sensorList;
-    }
-
-    public void setSensorList(List<String> sensorList) {
-        this.getDataReference().setValue(sensorList);
+        this.sensorGatewaySynchronizer=new SensorGatewaySynchronizer(this.getDataReference(),this);
+        this.sensorGatewaySynchronizer.add(new SensorInitializerListener(),SENSOR_COLLECTION_KEY);
     }
 
     public SensorData createSensorDataObject(String sensorId){
-        if(this.getSensorList().indexOf(sensorId)==-1){
+        if(this.getSensorData(sensorId)==null){
             SensorData temp =new SensorData(sensorId);
-            addNewSensor(temp);
+            this.sensorObject.add(temp);
             return temp;
         }
         return null;
     }
 
-    private void addNewSensor(SensorData sensor){
-        this.getSensorList().add(sensor.getSensorId());
-        this.setSensorList(this.getSensorList());
-    }
-
     public SensorData getSensorData(String sensorId){
         for(SensorData temp:getSensorObject()){
-            if (temp.getSensorId().contains(sensorId)) {
+            if (temp.getSensorInformation().getSensorId().contains(sensorId)) {
                 return temp;
             }
         }
@@ -91,7 +69,7 @@ public class SensorGateway {
 
     public SensorData getSensorDataByName(String sensorName){
         for(SensorData temp:getSensorObject()){
-            if (temp.getSensorName().contains(sensorName)) {
+            if (temp.getSensorInformation().getSensorName().contains(sensorName)) {
                 return temp;
             }
         }
@@ -106,7 +84,7 @@ public class SensorGateway {
 
     public boolean isSensorNameExist(String sensorName){
         for(SensorData temp:getSensorObject()){
-            if (temp.getSensorName().contains(sensorName)) {
+            if (temp.getSensorInformation().getSensorName().contains(sensorName)) {
                 return true;
             }
         }
@@ -125,16 +103,20 @@ public class SensorGateway {
         this.dataReference = dataReference;
     }
 
-    public void setSensorObject(ArrayList<SensorData> sensorObject) {
-        this.sensorObject = sensorObject;
-    }
     public Boolean isReady(){
-        for(SensorData temp:this.getSensorObject()){
-            if(!temp.isReady()){
-                return false;
+        if(this.getSensorObject()!=null) {
+            for (SensorData temp : this.getSensorObject()) {
+                if (!temp.isReady()) {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    public void resetSensorList(){
+        this.sensorObject=new ArrayList<>();
     }
 
 }

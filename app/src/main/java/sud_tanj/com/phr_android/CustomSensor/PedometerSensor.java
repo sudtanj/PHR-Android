@@ -8,6 +8,7 @@
 package sud_tanj.com.phr_android.CustomSensor;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -35,22 +36,28 @@ public class PedometerSensor implements EmbeddedScript {
     @Override
     public Boolean run() {
         pedometer=Global.getSensorGateway().getSensorData(sensorId);
-        SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (countSensor != null) {
-            sensorManager.registerListener(new SensorEventListener() {
-                @Override
-                public void onSensorChanged(SensorEvent sensorEvent) {
-                    pedometer.addHealthData(new HealthData(pedometer,String.valueOf(sensorEvent.values[0])));
-                }
+        PackageManager packageManager= Global.getContext().getPackageManager();
+        if(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
+            SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
+            Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            if (countSensor != null) {
+                sensorManager.registerListener(new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent sensorEvent) {
+                        HealthData healthData=new HealthData(pedometer);
+                        healthData.setValues(String.valueOf(sensorEvent.values[0]));
+                        pedometer.addHealthData(healthData);
+                    }
 
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int i) {
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int i) {
 
-                }
-            }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                    }
+                }, countSensor, SensorManager.SENSOR_DELAY_UI);
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

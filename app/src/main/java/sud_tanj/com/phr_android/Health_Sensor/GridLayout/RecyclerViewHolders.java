@@ -46,7 +46,7 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
     @Override
     public void onClick(View view) {
         SensorData sensor=Global.getSensorGateway().getSensorDataByName(countryName.getText().toString());
-        if(sensor.getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
+        if(sensor.getSensorInformation().getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
             Intent modifySensor = new Intent(Global.getContext(), ModifySensor.class);
             modifySensor.putExtra("modifySensor", true);
             modifySensor.putExtra("sensorName", countryName.getText());
