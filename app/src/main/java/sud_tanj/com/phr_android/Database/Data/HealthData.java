@@ -132,6 +132,11 @@ public class HealthData {
         if(this.getParentSensor()==null){
             return false;
         }
+        /**
+        if(this.getValues().equals("0")){
+            return false;
+        }
+         */
         return true;
     }
 

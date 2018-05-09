@@ -28,6 +28,7 @@ public abstract class ArduinoUnoCH340 implements EmbeddedScript {
     private int retval=0;
 
     public Boolean openConnection(){
+
         if(!Global.getCH340Driver().isConnected()) {
             retval = Global.getCH340Driver().ResumeUsbList();
             if (retval == -1)

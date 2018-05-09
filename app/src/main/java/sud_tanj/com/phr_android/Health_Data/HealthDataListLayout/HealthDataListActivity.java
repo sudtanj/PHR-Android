@@ -5,13 +5,13 @@
  * Last Modified by User on 5/6/18 5:37 PM
  */
 
-package sud_tanj.com.phr_android.Health_Data.CardLayout;
+package sud_tanj.com.phr_android.Health_Data.HealthDataListLayout;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-
-import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataList;
+import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataListListener;
 import sud_tanj.com.phr_android.HandlerLoop;
 import sud_tanj.com.phr_android.R;
 
@@ -40,28 +37,23 @@ public class HealthDataListActivity extends Fragment {
 
     private static String LOG_TAG = "CardViewActivity";
     private RecyclerView mRecyclerView;
-    private HealthDataList healthDataList;
+    private HealthDataListListener healthDataList;
     private HealthDataListRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private HandlerLoop handlerLoop;
     private Boolean dataReady;
+    private ProgressBar progressBar;
+
     public HealthDataListActivity() {
-        this.healthDataList=new HealthDataList(this);
+        this.healthDataList=new HealthDataListListener(this);
         this.handlerLoop=new HandlerLoop(5,this.healthDataList);
         this.dataReady=Boolean.FALSE;
-    }
-
-    public RecyclerView getmRecyclerView() {
-        return mRecyclerView;
     }
 
     public HealthDataListRecyclerViewAdapter getmAdapter() {
         return mAdapter;
     }
 
-    public void setmAdapter(HealthDataListRecyclerViewAdapter mAdapter) {
-        this.mAdapter = mAdapter;
-    }
 
     public Boolean isDataReady() {
         return dataReady;
@@ -69,6 +61,14 @@ public class HealthDataListActivity extends Fragment {
 
     public void setDataReady(Boolean dataReady) {
         this.dataReady = dataReady;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(this.handlerLoop!=null){
+            this.handlerLoop=new HandlerLoop(5,this.healthDataList);
+        }
     }
 
     @Override
@@ -80,19 +80,25 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if(this.healthDataList!=null){
+            this.handlerLoop.removeCallbacks(this.healthDataList);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (this.getmAdapter() != null)
-            ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
+       // if (this.getmAdapter() != null)
+         //   ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
         if(this.healthDataList!=null)
             this.handlerLoop.removeCallbacks(this.healthDataList);
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        this.progressBar = (ProgressBar) getActivity().findViewById(R.id.health_data_list_progress_bar);
+        this.progressBar.setVisibility(View.GONE);
 
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -101,15 +107,10 @@ public class HealthDataListActivity extends Fragment {
         mRecyclerView.setLayoutAnimation(animation);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter=new HealthDataListRecyclerViewAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
 
-        // Code to Add an item with default animation
-        //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);
-
-        //((MyRecyclerViewAdapter) mAdapter).addItem(new DataObject("aaa","bbb"), 1);
-
-        // Code to remove an item with default animation
-        //((MyRecyclerViewAdapter) mAdapter).deleteItem(index);
     }
 
 
@@ -123,13 +124,4 @@ public class HealthDataListActivity extends Fragment {
         mRecyclerView.scheduleLayoutAnimation();
     }
 
-    private ArrayList<DataObject> getDataSet() {
-        ArrayList results = new ArrayList<DataObject>();
-        for (int index = 0; index < 20; index++) {
-            DataObject obj = new DataObject("Some Primary Text " + index,
-                    "Secondary " + index);
-            results.add(index, obj);
-        }
-        return results;
-    }
 }

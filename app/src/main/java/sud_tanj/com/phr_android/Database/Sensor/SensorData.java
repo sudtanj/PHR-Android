@@ -58,8 +58,7 @@ public class SensorData {
     }
 
     public void addHealthData(HealthData values) {
-        if(this.isReady())
-            this.getSensorData().add(values);
+        this.getSensorData().add(values);
     }
 
     public Boolean isReady() {

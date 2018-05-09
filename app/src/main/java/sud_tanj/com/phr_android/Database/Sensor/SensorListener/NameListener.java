@@ -30,9 +30,6 @@ public class NameListener implements SensorSyncable {
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
         SensorInformation sensorInformation=sensor.getSensorInformation();
         String value=DatabaseUtility.convertToString(dataSnapshot);
-        System.out.println(sensorInformation.getSensorName());
-        System.out.println(value);
-        System.out.println(sensorInformation.getSensorName().equals(value));
         if(!sensorInformation.getSensorName().equals(value))
             sensorInformation.setSensorName(value);
     }

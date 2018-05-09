@@ -5,7 +5,7 @@
  * Last Modified by User on 5/6/18 5:37 PM
  */
 
-package sud_tanj.com.phr_android.Health_Data.CardLayout;
+package sud_tanj.com.phr_android.Health_Data.HealthDataListLayout;
 
 import android.os.Handler;
 
@@ -30,11 +30,11 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public class GraphRunnable implements Runnable {
     private int delay=-1;
     private SensorData mDataset;
-    private HealthDataListRecyclerViewAdapter.DataObjectHolder holder;
+    //private HealthDataListRecyclerViewAdapter.DataObjectHolder holder;
     private Handler sensorHandler;
-    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset, HealthDataListRecyclerViewAdapter.DataObjectHolder holder){
+    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset){
         this.mDataset=mDataset;
-        this.holder=holder;
+      // this.holder=holder;
         this.delay=delay;
         this.sensorHandler=sensorHandler;
     }

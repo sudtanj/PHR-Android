@@ -10,7 +10,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Health_Data.CardLayout.HealthDataListActivity">
+    tools:context=".Health_Data.HealthDataListLayout.HealthDataListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
@@ -20,14 +20,16 @@
         android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>
+
     <ProgressBar
         android:id="@+id/health_data_list_progress_bar"
         style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:maxHeight="135dip"
+        android:maxWidth="110dip"
         android:minHeight="135dip"
         android:minWidth="110dip"
-        android:maxWidth="110dip"
-        android:layout_centerInParent="true" />
+        android:visibility="invisible" />
 </RelativeLayout>

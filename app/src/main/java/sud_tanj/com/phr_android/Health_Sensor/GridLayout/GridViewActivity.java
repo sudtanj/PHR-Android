@@ -56,8 +56,6 @@ public class GridViewActivity extends Fragment {
         RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), rowListItem);
         rView.setAdapter(rcAdapter);
 
-        ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.health_data_list_progress_bar);
-        progressBar.setVisibility(View.GONE);
     }
 
     @Override

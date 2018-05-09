@@ -10,7 +10,10 @@ package sud_tanj.com.phr_android;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -34,7 +37,7 @@ import com.bumptech.glide.Glide;
 import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
 import com.heinrichreimersoftware.androidissuereporter.model.Report;
 
-import sud_tanj.com.phr_android.Health_Data.CardLayout.HealthDataListActivity;
+import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 import sud_tanj.com.phr_android.SensorHandler.Interface.SensorRunnable;
@@ -143,8 +146,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if(!Global.getCH340Driver().isConnected())
-            Global.getCH340Driver().ResumeUsbPermission();
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getExtras().getBoolean("connected")) {
+                    //start doing something for state - connected
+                    if(!Global.getCH340Driver().isConnected())
+                        Global.getCH340Driver().ResumeUsbPermission();
+                } else {
+                    //start doing something for state - disconnected
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.hardware.usb.action.USB_STATE");
+
+        registerReceiver(receiver, filter);
 
     }
 

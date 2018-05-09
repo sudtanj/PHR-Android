@@ -22,8 +22,10 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public class SensorRunnable implements Runnable {
     @Override
     public void run() {
-        for(SensorData temp : Global.getSensorGateway().getSensorObject())
-            temp.getBackgroundJob().run();
+        if(Global.getSensorGateway().isReady()) {
+            for (SensorData temp : Global.getSensorGateway().getSensorObject())
+                temp.getBackgroundJob().run();
+        }
 
     }
 }
