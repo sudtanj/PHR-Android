@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,9 @@ public class GridViewActivity extends Fragment {
 
         RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), rowListItem);
         rView.setAdapter(rcAdapter);
+
+        ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.health_data_list_progress_bar);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

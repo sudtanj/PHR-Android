@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -20,13 +21,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.Theme;
 import com.bumptech.glide.Glide;
+import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
+import com.heinrichreimersoftware.androidissuereporter.model.Report;
 
 import sud_tanj.com.phr_android.Health_Data.CardLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Custom.Global;
@@ -119,8 +125,6 @@ public class MainActivity extends AppCompatActivity
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
-        Intent i = new Intent(getApplicationContext(), HealthDataList.class);
-        startActivity(i);
     }
 
     @Override
@@ -185,6 +189,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i, options.toBundle());
             }
             return true;
+        }
+        else if(id.equals(R.id.action_report)){
+            ReportView.launch(this);
         }
         else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();

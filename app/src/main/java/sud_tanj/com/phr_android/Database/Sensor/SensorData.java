@@ -40,6 +40,15 @@ public class SensorData {
         healthDataManager.add(new HealthDataListener(), "Health_Data");
     }
 
+    public Boolean isHealthIdExist(String healthId){
+        for(HealthData healthData:this.sensorData){
+            if(healthData.getHealthDataId().equals(healthId)){
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
+
     public SensorInformation getSensorInformation() {
         return sensorInformation;
     }

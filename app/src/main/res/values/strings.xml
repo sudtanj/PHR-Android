@@ -35,5 +35,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="health_title">Default Health Monitoring</string>
     <string name="health_comment">Comment</string>
+
+    <string name="sensor_save">Save</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

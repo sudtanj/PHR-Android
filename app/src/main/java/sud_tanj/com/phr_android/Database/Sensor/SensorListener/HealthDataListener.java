@@ -28,10 +28,11 @@ public class HealthDataListener implements SensorSyncable {
 
     @Override
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
-        sensor.resetHealthData();
         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-            if(childSnapshot.getKey().contains(sensor.getSensorInformation().getSensorId()))
-                sensor.getSensorData().add(new HealthData(childSnapshot.getKey(),sensor));
+            String healthId=childSnapshot.getKey();
+            if(healthId.contains(sensor.getSensorInformation().getSensorId()))
+                if(!sensor.isHealthIdExist(healthId))
+                    sensor.addHealthData(new HealthData(healthId,sensor));
         }
     }
 

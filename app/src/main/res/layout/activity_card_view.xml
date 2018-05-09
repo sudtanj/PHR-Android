@@ -17,6 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layoutAnimation="@anim/layout_animation_slide_right"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical">
 
+    </android.support.v7.widget.RecyclerView>
+    <ProgressBar
+        android:id="@+id/health_data_list_progress_bar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="135dip"
+        android:minHeight="135dip"
+        android:minWidth="110dip"
+        android:maxWidth="110dip"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

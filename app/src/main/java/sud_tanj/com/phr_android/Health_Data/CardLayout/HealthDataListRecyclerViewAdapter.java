@@ -17,10 +17,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataList;
 import sud_tanj.com.phr_android.R;
 
 /**

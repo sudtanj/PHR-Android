@@ -11,8 +11,8 @@
 
     <item
         android:id="@+id/action_save"
+        android:icon="@android:drawable/ic_menu_save"
         android:orderInCategory="100"
-        android:title="Save"
-        android:icon="@drawable/ic_menu_send"
+        android:title="@string/sensor_save"
         app:showAsAction="ifRoom" />
 </menu>

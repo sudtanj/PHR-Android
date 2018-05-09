@@ -39,6 +39,12 @@ android {
             debuggable true
             signingConfig signingConfigs.release
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.release
+        }
     }
     buildToolsVersion '27.0.3'
 }
@@ -63,6 +69,8 @@ dependencies {
     implementation 'com.jjoe64:graphview:4.2.1'
     implementation 'com.github.sudtanj:Android-AES:2c07733a39'
     implementation 'me.riddhimanadib.form-master:form-master:1.1.0'
+    implementation 'com.github.sudtanj:android-issue-reporter:b5579f5df3'
+    implementation 'com.github.clans:fab:1.6.4'
     implementation files('libs/CH34xUARTDriver.jar')
 }
 
