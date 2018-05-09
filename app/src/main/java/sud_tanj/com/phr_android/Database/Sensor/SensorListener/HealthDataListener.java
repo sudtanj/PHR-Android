@@ -9,6 +9,8 @@ package sud_tanj.com.phr_android.Database.Sensor.SensorListener;
 
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.Collections;
+
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
@@ -32,8 +34,9 @@ public class HealthDataListener implements SensorSyncable {
             String healthId=childSnapshot.getKey();
             if(healthId.contains(sensor.getSensorInformation().getSensorId()))
                 if(!sensor.isHealthIdExist(healthId))
-                    sensor.addHealthData(new HealthData(healthId,sensor));
+                    sensor.addHealthData(healthId);
         }
+        Collections.sort(sensor.getSensorData());
     }
 
     @Override

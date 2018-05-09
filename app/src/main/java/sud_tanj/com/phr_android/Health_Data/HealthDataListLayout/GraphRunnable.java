@@ -40,17 +40,19 @@ public class GraphRunnable implements Runnable {
     }
     @Override
     public void run() {
+        /**
         if(mDataset.isReady()) {
             ArrayList<HealthData> healthData = mDataset.getSensorData();
             DataPoint[] data = new DataPoint[healthData.size()];
             for (int i = 0; i < healthData.size(); i++)
                 data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
-            /**
+
             if(!holder.graph.getSeries().equals(series))
                 holder.graph.addSeries(series);
-             */
+
         }
         sensorHandler.postDelayed(this,delay);
+        */
     }
 }

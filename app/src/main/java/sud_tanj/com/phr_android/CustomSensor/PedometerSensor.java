@@ -46,7 +46,6 @@ public class PedometerSensor implements EmbeddedScript {
                     public void onSensorChanged(SensorEvent sensorEvent) {
                         HealthData healthData=new HealthData(pedometer);
                         healthData.setValues(String.valueOf(sensorEvent.values[0]));
-                        pedometer.addHealthData(healthData);
                     }
 
                     @Override

@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.DataListener.DataValueListener;
@@ -44,13 +45,13 @@ public class HealthData {
 
     public HealthData(String healthDataId,SensorData parentSensor) {
         this.timeStamp = new Date();
-        this.values="0";
+        this.values="-1";
         this.parentSensor=parentSensor;
 
         if(healthDataId.isEmpty()){
             String newHealthDataId=parentSensor.getSensorInformation().getSensorId() + String.valueOf(this.timeStamp.getTime());
             this.healthDataId=newHealthDataId;
-            parentSensor.addHealthData(this);
+            parentSensor.addHealthData(newHealthDataId);
         } else {
             this.healthDataId=healthDataId;
         }
@@ -61,12 +62,6 @@ public class HealthData {
         this.dataReferenceSynchronizer.add(new TimeStampListener(),HEALTH_DATA_CHILD_TIMESTAMP);
         this.dataReferenceSynchronizer.add(new DataValueListener(),HEALTH_DATA_CHILD_VALUE);
         this.dataReferenceSynchronizer.add(new ParentSensorListener(),HEALTH_DATA_CHILD_PARENTSENSOR);
-
-        if(healthDataId.isEmpty()) {
-            this.setParentSensor(parentSensor);
-            this.setTimeStamp(this.timeStamp);
-            this.setValues(this.values);
-        }
 
 
     }
@@ -90,8 +85,18 @@ public class HealthData {
     }
 
     public void setValues(String values) {
-        this.values=values;
-        this.dataReferenceSynchronizer.changeVariable(this.values);
+        if(!this.getParentSensor().getLatestData().getValues().equals(values)) {
+            if(this.getValues().equals("-1")) {
+                this.values = values;
+                this.syncToFirebase();
+                return;
+            }
+            this.values=values;
+            this.dataReferenceSynchronizer.changeVariable(this.values);
+        }
+        else {
+            this.delete();
+        }
     }
 
     public SensorData getParentSensor() {
@@ -132,16 +137,26 @@ public class HealthData {
         if(this.getParentSensor()==null){
             return false;
         }
-        /**
-        if(this.getValues().equals("0")){
+        if(this.getValues().equals("-1")){
             return false;
         }
-         */
+
         return true;
     }
 
     public void delete(){
         this.getDataReference().removeValue();
         this.getParentSensor().deleteData(this);
+    }
+
+    public void syncToFirebase(){
+        HashMap<String,String> temporaryPayload=new HashMap<>();
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_PARENTSENSOR,parentSensor.getSensorInformation().getSensorName());
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_VALUE,values);
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP,String.valueOf(timeStamp.getTime()));
+        this.dataReferenceSynchronizer.changeVariable(temporaryPayload);
+        //this.setParentSensor(parentSensor);
+        //this.setTimeStamp(this.timeStamp);
+        //this.setValues(this.values);
     }
 }

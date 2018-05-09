@@ -37,9 +37,9 @@ public class HealthDataSynchronizer extends DatabaseSynchronizer {
     @Override
     protected void runDataChange(DataSnapshot dataSnapshot, DatabaseSyncable listener) {
         ((HealthDataSyncable)listener).updateData(this.healthData,dataSnapshot);
-        if(this.isDataCorrupt()){
-                this.healthData.delete();
-        }
+        //if(this.isDataCorrupt()){
+          //      this.healthData.delete();
+        //}
     }
 
     @Override

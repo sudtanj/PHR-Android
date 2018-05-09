@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
@@ -60,6 +61,10 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
                 break;
             }
         }
+    }
+
+    public void changeVariable(HashMap<String,String> value){
+        this.database.setValue(value);
     }
 
     public Boolean isDataCorrupt(){

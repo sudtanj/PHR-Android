@@ -48,7 +48,6 @@ public class newsensoractivity extends ArduinoUnoCH340 {
                     System.out.println(result);
                     HealthData healthData=new HealthData(sensor);
                     healthData.setValues(result);
-                    sensor.addHealthData(healthData);
                 }
 
             }

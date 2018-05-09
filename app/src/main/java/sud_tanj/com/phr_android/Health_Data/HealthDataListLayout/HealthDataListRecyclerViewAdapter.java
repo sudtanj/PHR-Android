@@ -59,25 +59,22 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(HealthDataListHolder holder, int position) {
         if(Global.getSensorGateway().isReady()) {
-            holder.updateOnClick();
             if(this.lastValue.size()==0){
                 for(SensorData tempDataset:Global.getSensorGateway().getSensorObject()){
                     lastValue.add("0");
                 }
             }
+            holder.updateOnClick();
             holder.getTitle().setText(mDataset.get(position).getSensorInformation().getSensorName());
-            ArrayList<HealthData> healthData = mDataset.get(position).getSensorData();
-            if (healthData.size() > 0) {
-                for (int i = healthData.size() - 1; i > -1; i--) {
-                    Double temp = new Double(healthData.get(i).getValues());
-                    if (temp > 0) {
-                        String result = String.valueOf(temp);
-                        holder.getValue().setText(result);
-                        if (!lastValue.get(position).equals(result)) {
-                            lastValue.set(position, result);
-                            this.dataChanged = Boolean.TRUE;
-                        }
-                        break;
+            HealthData latestHealthData=mDataset.get(position).getLatestData();
+            if(latestHealthData!=null) {
+                Double temp = new Double(latestHealthData.getValues());
+                if (temp > 0) {
+                    String result = String.valueOf(latestHealthData.getValues());
+                    holder.getValue().setText(result);
+                    if (!lastValue.get(position).equals(result)) {
+                        lastValue.set(position, result);
+                        this.dataChanged = Boolean.TRUE;
                     }
                 }
             }
@@ -94,13 +91,15 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
             this.mDataset=Global.getSensorGateway().getSensorObject();
         }
         for(int i=0;i<this.getItemCount();i++){
-            ArrayList<HealthData> mDatasetHealthData=this.mDataset.get(i).getSensorData();
             try {
-                String mDatasetValue=mDatasetHealthData.get(mDatasetHealthData.size()-1).getValues(),
-                        lastValue=this.lastValue.get(i);
-                if(!mDatasetValue.equals(lastValue)){
-                    this.lastValue.set(i,mDatasetValue);
-                    return Boolean.TRUE;
+                HealthData latestHealthData=this.mDataset.get(i).getLatestData();
+                if(latestHealthData!=null) {
+                    String mDatasetValue = this.mDataset.get(i).getLatestData().getValues(),
+                            lastValue = this.lastValue.get(i);
+                    if (!mDatasetValue.equals(lastValue)) {
+                        this.lastValue.set(i, mDatasetValue);
+                        return Boolean.TRUE;
+                    }
                 }
             } catch ( IndexOutOfBoundsException e ) {
                 this.lastValue.add(new String("0"));

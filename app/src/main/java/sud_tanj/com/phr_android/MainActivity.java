@@ -231,14 +231,12 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             currentFragment = new HealthDataListActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
-            transaction.addToBackStack(null);
             transaction.commit();
 
         } else if (id == R.id.nav_gallery) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             currentFragment = new GridViewActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
-            transaction.addToBackStack(null);
             transaction.commit();
 
         } else if (id == R.id.nav_slideshow) {

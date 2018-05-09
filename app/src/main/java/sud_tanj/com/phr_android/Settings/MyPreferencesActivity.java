@@ -94,7 +94,7 @@ public class MyPreferencesActivity extends AppCompatActivity {
 
             //Language Option
             List<String> langList = Arrays.asList(Locale.getISOLanguages());
-            ArrayList<SuperString> langListName = new ArrayList<SuperString>();
+            ArrayList<SuperString> langListName = new ArrayList<>();
             int defaultValue=0;
             for (int i=0;i<langList.size();i++) {
                 Locale loc = new Locale(langList.get(i));
