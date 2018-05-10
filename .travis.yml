@@ -9,11 +9,11 @@ addons:
 env:
   matrix:
     - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
-    - ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    - ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    - ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    - ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
+    #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 before_deploy:
   # Set up git user name and tag this commit
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
@@ -54,14 +54,16 @@ cache:
     - $HOME/.android/build-cache
 script:
   - ./gradlew assembleDebug
-  - ./gradlew assembleAndroidTest
+  - ./gradlew test
+  - ./gradlew connectedAndroidTest
+  #- ./gradlew assembleAndroidTest
   - ./gradlew assembleRelease 
   - ./gradlew generateReleaseJavadoc
-  - adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
-  - adb push ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk /data/local/tmp/app-debug-androidTest.apk
-  - adb shell pm install -t -r "/data/local/tmp/app-debug.apk"
-  - adb shell pm install -t -r "/data/local/tmp/app-debug-androidTest.apk"
-  - adb shell monkey -p sud_tanj.com.phr_android -c android.intent.category.LAUNCHER 1
+  #- adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
+  #- adb push ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk /data/local/tmp/app-debug-androidTest.apk
+  #- adb shell pm install -t -r "/data/local/tmp/app-debug.apk"
+  #- adb shell pm install -t -r "/data/local/tmp/app-debug-androidTest.apk"
+  #- adb shell monkey -p sud_tanj.com.phr_android -c android.intent.category.LAUNCHER 1
   #- adb shell pm install -t -r "/data/local/tmp/sud_tanj.com.phr_android"
   #- adb shell am start -n "sud_tanj.com.phr_android/sud_tanj.com.phr_android.GPlusLogin.Login" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -D
 android:
