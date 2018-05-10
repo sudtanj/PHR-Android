@@ -18,14 +18,15 @@ import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
  * <p>
  * This class last modified by User
  */
-public class SensorEmbeddedScript implements Runnable{
-    private String name= null;
-    private EmbeddedScript script=null;
-    private SensorData sensorData=null;
+public class SensorEmbeddedScript implements Runnable {
+    private String name = null;
+    private EmbeddedScript script = null;
+    private SensorData sensorData = null;
     private Boolean scriptExist;
-    public SensorEmbeddedScript(String name,SensorData sensorData) {
+
+    public SensorEmbeddedScript(String name, SensorData sensorData) {
         this.name = name;
-        this.sensorData=sensorData;
+        this.sensorData = sensorData;
     }
 
     public String getName() {
@@ -36,25 +37,25 @@ public class SensorEmbeddedScript implements Runnable{
         this.name = name;
     }
 
-    private void findScript(){
+    private void findScript() {
         try {
             Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
             script = (EmbeddedScript) (listener.newInstance());
-            this.scriptExist=true;
+            this.scriptExist = true;
         } catch (Exception e) {
-            this.scriptExist=false;
+            this.scriptExist = false;
         }
     }
 
-    private Boolean isScriptExist(){
+    private Boolean isScriptExist() {
         findScript();
         return scriptExist;
     }
 
     @Override
     public void run() {
-        if(sensorData.getSensorInformation().isSensorActive()){
-            if(isScriptExist()){
+        if (sensorData.getSensorInformation().isSensorActive()) {
+            if (isScriptExist()) {
                 this.script.run();
             }
         }

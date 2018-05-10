@@ -8,18 +8,13 @@
 package sud_tanj.com.phr_android;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import com.heinrichreimersoftware.androidissuereporter.IssueReporterActivity;
 import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
-import com.heinrichreimersoftware.androidissuereporter.model.github.ExtraInfo;
-import com.heinrichreimersoftware.androidissuereporter.model.github.GithubTarget;
 
 import sud_tanj.com.phr_android.Custom.Global;
 
 public class ReportView {
-    public static void launch(Context context){
+    public static void launch(Context context) {
         IssueReporterLauncher.forTarget("sudtanj", "CPP-Collection")
                 // [Recommended] Theme to use for the reporter.
                 // (See #theming for further information.)
@@ -35,7 +30,7 @@ public class ReportView {
                 // empty reports.
                 .minDescriptionLength(20)
                 // [Optional] Include other relevant info in the bug report (like custom variables)
-                .putExtraInfo("userId",Global.getFireBaseUser().getUid())
+                .putExtraInfo("userId", Global.getFireBaseUser().getUid())
                 // [Optional] Disable back arrow in toolbar
                 .homeAsUpEnabled(Boolean.TRUE)
                 .launch(context);

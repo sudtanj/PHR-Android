@@ -7,8 +7,8 @@
 
 package sud_tanj.com.phr_android.Health_Sensor;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +33,7 @@ public class ModifySensor extends AppCompatActivity {
     private FormElementTextSingleLine elementName;
     private FormElementTextSingleLine elementEmbedded;
     private Bundle data;
-    private SensorData currentSensor=null;
+    private SensorData currentSensor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class ModifySensor extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        data=getIntent().getExtras();
+        data = getIntent().getExtras();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mFormBuilder = new FormBuilder(getApplicationContext(), mRecyclerView);
 
@@ -51,8 +51,8 @@ public class ModifySensor extends AppCompatActivity {
         elementName = FormElementTextSingleLine.createInstance().setTitle("Sensor Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
 
-        if(data.getBoolean("modifySensor")){
-            currentSensor=Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
+        if (data.getBoolean("modifySensor")) {
+            currentSensor = Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
             elementName.setValue(currentSensor.getSensorInformation().getSensorName());
             elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
         }
@@ -65,6 +65,7 @@ public class ModifySensor extends AppCompatActivity {
         mFormBuilder.addFormElements(formItems);
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -90,24 +91,23 @@ public class ModifySensor extends AppCompatActivity {
                 return true;
             case R.id.action_save:
                 //Do Whatever you want to do here.
-                if(data.getBoolean("modifySensor")){
+                if (data.getBoolean("modifySensor")) {
                     currentSensor.getSensorInformation().setSensorName(elementName.getValue());
                     currentSensor.getBackgroundJob().setName(elementEmbedded.getValue());
                     finish();
                     return true;
                 }
-                if(!Global.getSensorGateway().isSensorNameExist(elementName.getValue())){
-                    SensorData temp=null;
-                    while(temp==null)
-                        temp=Global.getSensorGateway().createSensorDataObject(elementName.getValue()+String.valueOf(new Random().nextInt(1000)));
+                if (!Global.getSensorGateway().isSensorNameExist(elementName.getValue())) {
+                    SensorData temp = null;
+                    while (temp == null)
+                        temp = Global.getSensorGateway().createSensorDataObject(elementName.getValue() + String.valueOf(new Random().nextInt(1000)));
                     temp.getSensorInformation().setSensorName(elementName.getValue());
                     temp.getBackgroundJob().setName(elementEmbedded.getValue());
                     temp.getSensorInformation().setSensorOwner(Global.getFireBaseUser().getUid());
-                    Toast.makeText(getApplicationContext(),"Sensor added succesfully!",Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Sensor added succesfully!", Toast.LENGTH_SHORT);
                     finish();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Sensor failed to be added! please change to other name",Toast.LENGTH_SHORT);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sensor failed to be added! please change to other name", Toast.LENGTH_SHORT);
                 }
                 return true;
         }

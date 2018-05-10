@@ -7,19 +7,11 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
-import android.hardware.Sensor;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
 
 import java.util.ArrayList;
-import java.util.List;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGatewayListener.SensorInitializerListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorGatewaySynchronizer;
 

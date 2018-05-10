@@ -19,14 +19,16 @@ import com.google.firebase.database.DataSnapshot;
  * This class last modified by User
  */
 public class DatabaseUtility {
-    public static String convertToString(DataSnapshot dataSnapshot){
+    public static String convertToString(DataSnapshot dataSnapshot) {
         return dataSnapshot.getValue(String.class);
     }
-    public static Boolean convertToBoolean(DataSnapshot dataSnapshot){
-        String value= dataSnapshot.getValue().toString();
+
+    public static Boolean convertToBoolean(DataSnapshot dataSnapshot) {
+        String value = dataSnapshot.getValue().toString();
         return Boolean.valueOf(value);
     }
-    public static Long convertToLong(DataSnapshot dataSnapshot){
+
+    public static Long convertToLong(DataSnapshot dataSnapshot) {
         return Long.parseLong(dataSnapshot.getValue(String.class));
     }
 }

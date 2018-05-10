@@ -14,10 +14,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 
 /**
  * This class is part of PHRAndroid Project
@@ -31,20 +31,20 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 public class PedometerSensor implements EmbeddedScript {
     private SensorData pedometer;
-    private String sensorId="pedometer03102";
+    private String sensorId = "pedometer03102";
 
     @Override
     public Boolean run() {
-        pedometer=Global.getSensorGateway().getSensorData(sensorId);
-        PackageManager packageManager= Global.getContext().getPackageManager();
-        if(packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
+        pedometer = Global.getSensorGateway().getSensorData(sensorId);
+        PackageManager packageManager = Global.getContext().getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
             SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
             Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
             if (countSensor != null) {
                 sensorManager.registerListener(new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent sensorEvent) {
-                        HealthData healthData=new HealthData(pedometer);
+                        HealthData healthData = new HealthData(pedometer);
                         healthData.setValues(String.valueOf(sensorEvent.values[0]));
                     }
 

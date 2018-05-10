@@ -16,17 +16,21 @@ import android.support.annotation.NonNull;
  */
 
 public class SuperString implements Comparable {
-    private String stringData=null;
-    private String translatedString=null;
+    private String stringData = null;
+    private String translatedString = null;
+
+    public SuperString(String stringData) {
+        this.setStringData(stringData);
+        this.setTranslatedString("");
+    }
 
     @Override
     public String toString() {
-        if(this.getTranslatedString().isEmpty())
+        if (this.getTranslatedString().isEmpty())
             return this.getStringData();
         else
             return this.getTranslatedString();
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -44,17 +48,12 @@ public class SuperString implements Comparable {
         return this.getStringData().hashCode();
     }
 
-    public SuperString(String stringData){
-        this.setStringData(stringData);
-        this.setTranslatedString("");
+    public String getStringData() {
+        return stringData;
     }
 
     public void setStringData(String stringData) {
         this.stringData = stringData;
-    }
-
-    public String getStringData() {
-        return stringData;
     }
 
     public String getTranslatedString() {

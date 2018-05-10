@@ -36,33 +36,32 @@ public class EncryptedString implements Comparable {
 
     public EncryptedString(String stringData, Boolean encrypted) {
 
-            try {
-                if (!encrypted) {
-                    this.setStringData(this.getCryptLib().encryptSimple(stringData, Global.getFireBaseUser().getUid(), "1234"));
-                }
-                else {
-                    this.setStringData(this.getCryptLib().decryptSimple(stringData, Global.getFireBaseUser().getUid(), "1234"));
-                }
-            } catch (InvalidKeyException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
-            } catch (IllegalBlockSizeException e) {
-                e.printStackTrace();
-            } catch (BadPaddingException e) {
-                e.printStackTrace();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+        try {
+            if (!encrypted) {
+                this.setStringData(this.getCryptLib().encryptSimple(stringData, Global.getFireBaseUser().getUid(), "1234"));
+            } else {
+                this.setStringData(this.getCryptLib().decryptSimple(stringData, Global.getFireBaseUser().getUid(), "1234"));
             }
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public CryptLib getCryptLib() {
-        if(this.cryptLib==null){
+        if (this.cryptLib == null) {
             try {
-                this.cryptLib=new CryptLib();
+                this.cryptLib = new CryptLib();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (NoSuchPaddingException e) {

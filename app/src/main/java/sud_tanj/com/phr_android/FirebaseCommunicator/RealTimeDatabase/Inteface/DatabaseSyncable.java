@@ -7,10 +7,6 @@
 
 package sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface;
 
-import com.google.firebase.database.DataSnapshot;
-
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-
 /**
  * This class is part of PHRAndroid Project
  * Any modified within this class without reading the

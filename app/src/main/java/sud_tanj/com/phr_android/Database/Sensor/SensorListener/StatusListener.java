@@ -12,7 +12,6 @@ import com.google.firebase.database.DataSnapshot;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorInformation;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.SensorSyncable;
 
 /**
@@ -28,15 +27,15 @@ public class StatusListener implements SensorSyncable {
 
     @Override
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
-        Boolean result =DatabaseUtility.convertToBoolean(dataSnapshot);
-        SensorInformation sensorInformation=sensor.getSensorInformation();
-        if(!sensorInformation.isSensorActive().equals(result))
+        Boolean result = DatabaseUtility.convertToBoolean(dataSnapshot);
+        SensorInformation sensorInformation = sensor.getSensorInformation();
+        if (!sensorInformation.isSensorActive().equals(result))
             sensorInformation.setSensorActive(result);
     }
 
     @Override
     public Boolean isEqual(SensorData sensor, String other) {
-        if(sensor.getSensorInformation().isSensorActive().equals(Boolean.getBoolean(other)))
+        if (sensor.getSensorInformation().isSensorActive().equals(Boolean.getBoolean(other)))
             return true;
         return false;
     }

@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Create by Sudono Tanjung
   ~ Copyright (c) 2017. All rights reserved.
   ~
   ~ Last Modified by User on 12/14/17 6:51 PM
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         android:defaultValue="1"

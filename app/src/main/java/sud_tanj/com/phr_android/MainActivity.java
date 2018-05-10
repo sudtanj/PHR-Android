@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -24,29 +23,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.Theme;
 import com.bumptech.glide.Glide;
-import com.heinrichreimersoftware.androidissuereporter.IssueReporterLauncher;
-import com.heinrichreimersoftware.androidissuereporter.model.Report;
 
-import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Health_Data.HealthDataList;
-import sud_tanj.com.phr_android.SensorHandler.Interface.SensorRunnable;
-import sud_tanj.com.phr_android.Settings.MyPreferencesActivity;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
-import sud_tanj.com.phr_android.Login.Login;
+import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Health_Sensor.GridLayout.GridViewActivity;
 import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
+import sud_tanj.com.phr_android.Login.Login;
+import sud_tanj.com.phr_android.SensorHandler.Interface.SensorRunnable;
+import sud_tanj.com.phr_android.Settings.MyPreferencesActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -58,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFragment;
     private SensorData arduino;
     private SensorGateway gate;
-    private int delay = 5*1000;
+    private int delay = 5 * 1000;
     private HandlerLoop sensorBackgroundHandler;
 
     @Override
@@ -93,10 +87,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-               //         .setAction("Action", null).show();
-                Intent intent=new Intent(getApplicationContext(),ModifySensor.class);
-                intent.putExtra("modifySensor",false);
+                //   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //         .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), ModifySensor.class);
+                intent.putExtra("modifySensor", false);
                 startActivity(intent);
             }
         });
@@ -133,8 +127,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        this.sensorBackgroundHandler=new HandlerLoop(3,new SensorRunnable());
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container,new HealthDataListActivity()).commit();
+        this.sensorBackgroundHandler = new HandlerLoop(3, new SensorRunnable());
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HealthDataListActivity()).commit();
     }
 
     @Override
@@ -152,7 +146,7 @@ public class MainActivity extends AppCompatActivity
             public void onReceive(Context context, Intent intent) {
                 if (intent.getExtras().getBoolean("connected")) {
                     //start doing something for state - connected
-                    if(!Global.getCH340Driver().isConnected())
+                    if (!Global.getCH340Driver().isConnected())
                         Global.getCH340Driver().ResumeUsbPermission();
                 } else {
                     //start doing something for state - disconnected
@@ -208,11 +202,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i, options.toBundle());
             }
             return true;
-        }
-        else if(id.equals(R.id.action_report)){
+        } else if (id.equals(R.id.action_report)) {
             ReportView.launch(this);
-        }
-        else if (id.equals(R.id.action_logout)) {
+        } else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();
             finish();
             startActivity(new Intent(getApplicationContext(), Login.class));

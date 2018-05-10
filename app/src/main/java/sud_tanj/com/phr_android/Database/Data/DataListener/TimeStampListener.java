@@ -12,10 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.Date;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorInformation;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 
 /**
@@ -31,16 +28,16 @@ public class TimeStampListener implements HealthDataSyncable {
 
     @Override
     public void updateData(HealthData healthData, DataSnapshot dataSnapshot) {
-        Date timeStamp=healthData.getTimeStamp();
-        Date value= new Date();
+        Date timeStamp = healthData.getTimeStamp();
+        Date value = new Date();
         value.setTime(DatabaseUtility.convertToLong(dataSnapshot));
-        if(!timeStamp.equals(value))
+        if (!timeStamp.equals(value))
             healthData.setTimeStamp(value);
     }
 
     @Override
     public Boolean isEqual(HealthData healthData, String other) {
-        if(String.valueOf(healthData.getTimeStamp().getTime()).equals(other)){
+        if (String.valueOf(healthData.getTimeStamp().getTime()).equals(other)) {
             return true;
         }
         return false;

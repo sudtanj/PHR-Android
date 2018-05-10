@@ -20,7 +20,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
 import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataListListener;
-import sud_tanj.com.phr_android.HandlerLoop;
+import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.R;
 
 /**
@@ -45,9 +45,9 @@ public class HealthDataListActivity extends Fragment {
     private ProgressBar progressBar;
 
     public HealthDataListActivity() {
-        this.healthDataList=new HealthDataListListener(this);
-        this.handlerLoop=new HandlerLoop(5,this.healthDataList);
-        this.dataReady=Boolean.FALSE;
+        this.healthDataList = new HealthDataListListener(this);
+        this.handlerLoop = new HandlerLoop(5, this.healthDataList);
+        this.dataReady = Boolean.FALSE;
     }
 
     public HealthDataListRecyclerViewAdapter getmAdapter() {
@@ -66,8 +66,8 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(this.handlerLoop!=null){
-            this.handlerLoop=new HandlerLoop(5,this.healthDataList);
+        if (this.handlerLoop != null) {
+            this.handlerLoop = new HandlerLoop(5, this.healthDataList);
         }
     }
 
@@ -80,7 +80,7 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        if(this.healthDataList!=null){
+        if (this.healthDataList != null) {
             this.handlerLoop.removeCallbacks(this.healthDataList);
         }
     }
@@ -88,9 +88,9 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-       // if (this.getmAdapter() != null)
-         //   ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
-        if(this.healthDataList!=null)
+        // if (this.getmAdapter() != null)
+        //   ((HealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
+        if (this.healthDataList != null)
             this.handlerLoop.removeCallbacks(this.healthDataList);
     }
 
@@ -107,7 +107,7 @@ public class HealthDataListActivity extends Fragment {
         mRecyclerView.setLayoutAnimation(animation);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter=new HealthDataListRecyclerViewAdapter(this);
+        mAdapter = new HealthDataListRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
 

@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseReference;
 
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.SensorSyncable;
 
 /**
@@ -26,19 +25,20 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.S
  */
 public class SensorSynchronizer extends DatabaseSynchronizer {
     private SensorData sensorData;
-    public SensorSynchronizer(DatabaseReference database,SensorData sensorData) {
+
+    public SensorSynchronizer(DatabaseReference database, SensorData sensorData) {
         super(database);
-        this.sensorData=sensorData;
+        this.sensorData = sensorData;
 
     }
 
     @Override
     protected void runDataChange(DataSnapshot dataSnapshot, DatabaseSyncable listener) {
-        ((SensorSyncable)listener).updateData(this.sensorData,dataSnapshot);
+        ((SensorSyncable) listener).updateData(this.sensorData, dataSnapshot);
     }
 
     @Override
     protected Boolean equals(String value, DatabaseSyncable listener) {
-        return ((SensorSyncable)listener).isEqual(this.sensorData,value);
+        return ((SensorSyncable) listener).isEqual(this.sensorData, value);
     }
 }

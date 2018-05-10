@@ -7,8 +7,8 @@
 
 package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
 
-import android.support.v7.widget.RecyclerView;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,40 +31,41 @@ import sud_tanj.com.phr_android.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
 
-private List<SensorData> itemList;
-private Context context;
-private int positionLocal;
+    private List<SensorData> itemList;
+    private Context context;
+    private int positionLocal;
 
-public RecyclerViewAdapter(Context context, List<SensorData> itemList) {
+    public RecyclerViewAdapter(Context context, List<SensorData> itemList) {
         this.itemList = itemList;
         this.context = context;
-        }
+    }
 
-@Override
-public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_sensor_item, null);
         RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView);
         return rcv;
-        }
+    }
 
-@Override
-public void onBindViewHolder(RecyclerViewHolders holder, int position) {
-        this.positionLocal=position;
+    @Override
+    public void onBindViewHolder(RecyclerViewHolders holder, int position) {
+        this.positionLocal = position;
         holder.countryName.setText(itemList.get(position).getSensorInformation().getSensorName());
         holder.sensorSwitch.setChecked(itemList.get(position).getSensorInformation().isSensorActive());
         holder.sensorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                int position=positionLocal;
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        itemList.get(position).getSensorInformation().setSensorActive(b);
-                }
-        });
-       // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
-        }
+            int position = positionLocal;
 
-@Override
-public int getItemCount() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                itemList.get(position).getSensorInformation().setSensorActive(b);
+            }
+        });
+        // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
+    }
+
+    @Override
+    public int getItemCount() {
         return this.itemList.size();
-        }
-        }
+    }
+}

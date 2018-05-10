@@ -9,12 +9,6 @@ package sud_tanj.com.phr_android.Health_Data.HealthDataListLayout;
 
 import android.os.Handler;
 
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
-import java.util.ArrayList;
-
-import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 /**
@@ -28,31 +22,33 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
  */
 
 public class GraphRunnable implements Runnable {
-    private int delay=-1;
+    private int delay = -1;
     private SensorData mDataset;
     //private HealthDataListRecyclerViewAdapter.DataObjectHolder holder;
     private Handler sensorHandler;
-    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset){
-        this.mDataset=mDataset;
-      // this.holder=holder;
-        this.delay=delay;
-        this.sensorHandler=sensorHandler;
+
+    public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset) {
+        this.mDataset = mDataset;
+        // this.holder=holder;
+        this.delay = delay;
+        this.sensorHandler = sensorHandler;
     }
+
     @Override
     public void run() {
         /**
-        if(mDataset.isReady()) {
-            ArrayList<HealthData> healthData = mDataset.getSensorData();
-            DataPoint[] data = new DataPoint[healthData.size()];
-            for (int i = 0; i < healthData.size(); i++)
-                data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
+         if(mDataset.isReady()) {
+         ArrayList<HealthData> healthData = mDataset.getSensorData();
+         DataPoint[] data = new DataPoint[healthData.size()];
+         for (int i = 0; i < healthData.size(); i++)
+         data[i] = new DataPoint(i, Double.parseDouble(healthData.get(i).getValues()));
+         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
-            if(!holder.graph.getSeries().equals(series))
-                holder.graph.addSeries(series);
+         if(!holder.graph.getSeries().equals(series))
+         holder.graph.addSeries(series);
 
-        }
-        sensorHandler.postDelayed(this,delay);
-        */
+         }
+         sensorHandler.postDelayed(this,delay);
+         */
     }
 }

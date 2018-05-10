@@ -22,31 +22,31 @@ import sud_tanj.com.phr_android.Hardware_Driver.ArduinoUnoCH340;
  * This class last modified by User
  */
 public class newsensoractivity extends ArduinoUnoCH340 {
-    private Boolean firstTime=true;
-    private SensorData sensor=Global.getSensorGateway().getSensorData("NewSensor148");
+    private Boolean firstTime = true;
+    private SensorData sensor = Global.getSensorGateway().getSensorData("NewSensor148");
     private int baudRate = 9600;
     private byte stopBit = 1;
-    private byte dataBit= 8;
-    private byte parity= 0;
-    private byte flowControl= 0;
+    private byte dataBit = 8;
+    private byte parity = 0;
+    private byte flowControl = 0;
 
     @Override
     public Boolean run() {
-        if(Global.getCH340Driver()!=null) {
-                if (firstTime) {
-                    this.openConnection();
-                    firstTime = false;
-                }
-            if(Global.getCH340Driver().isConnected()) {
-                Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity,flowControl);
+        if (Global.getCH340Driver() != null) {
+            if (firstTime) {
+                this.openConnection();
+                firstTime = false;
+            }
+            if (Global.getCH340Driver().isConnected()) {
+                Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
                 //sensor.addHealthData(new Data(sensor, this.getDataAtCurrent()));
-                String[] temp=this.getDataAtCurrent().split("\n");
-                String result="";
-                if(temp.length>0)
-                result=temp[temp.length-1];
-                if(this.isNumeric(result)){
+                String[] temp = this.getDataAtCurrent().split("\n");
+                String result = "";
+                if (temp.length > 0)
+                    result = temp[temp.length - 1];
+                if (this.isNumeric(result)) {
                     System.out.println(result);
-                    HealthData healthData=new HealthData(sensor);
+                    HealthData healthData = new HealthData(sensor);
                     healthData.setValues(result);
                 }
 
@@ -55,8 +55,7 @@ public class newsensoractivity extends ArduinoUnoCH340 {
         return true;
     }
 
-    public boolean isNumeric(String str)
-    {
+    public boolean isNumeric(String str) {
         return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 

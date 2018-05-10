@@ -12,11 +12,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 
 /**
@@ -35,10 +33,10 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
     private ArrayList<Boolean> syncStatus;
 
     public DatabaseSynchronizer(DatabaseReference database) {
-        this.database=database;
-        this.referenceName=new ArrayList<>();
-        this.syncStatus=new ArrayList<>();
-        this.databaseSyncables=new ArrayList<>();
+        this.database = database;
+        this.referenceName = new ArrayList<>();
+        this.syncStatus = new ArrayList<>();
+        this.databaseSyncables = new ArrayList<>();
         this.database.addValueEventListener(this);
     }
 
@@ -46,7 +44,7 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
         return databaseSyncables;
     }
 
-    public void add(DatabaseSyncable databaseSyncable,String referenceName){
+    public void add(DatabaseSyncable databaseSyncable, String referenceName) {
         database.removeEventListener(this);
         this.referenceName.add(referenceName);
         this.databaseSyncables.add(databaseSyncable);
@@ -54,40 +52,40 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
         database.addValueEventListener(this);
     }
 
-    public void changeVariable(String value){
-        for(int i=0;i<this.databaseSyncables.size();i++) {
-            if(this.equals(value,this.databaseSyncables.get(i))){
+    public void changeVariable(String value) {
+        for (int i = 0; i < this.databaseSyncables.size(); i++) {
+            if (this.equals(value, this.databaseSyncables.get(i))) {
                 this.database.child(this.referenceName.get(i)).setValue(value);
                 break;
             }
         }
     }
 
-    public void changeVariable(HashMap<String,String> value){
-        this.database.setValue(value);
+    public void changeVariable(HashMap<String, Object> value) {
+        this.database.updateChildren(value);
     }
 
-    public Boolean isDataCorrupt(){
-        for(Boolean statusTemp:this.syncStatus){
-            if(!statusTemp)
+    public Boolean isDataCorrupt() {
+        for (Boolean statusTemp : this.syncStatus) {
+            if (!statusTemp)
                 return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
 
-    protected abstract void runDataChange(DataSnapshot dataSnapshot,DatabaseSyncable listener);
+    protected abstract void runDataChange(DataSnapshot dataSnapshot, DatabaseSyncable listener);
 
-    protected abstract Boolean equals(String value,DatabaseSyncable listener);
+    protected abstract Boolean equals(String value, DatabaseSyncable listener);
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        for(int i=0;i<this.referenceName.size();i++){
-            if(dataSnapshot.exists()){
+        for (int i = 0; i < this.referenceName.size(); i++) {
+            if (dataSnapshot.exists()) {
                 DataSnapshot reference = dataSnapshot.child(this.referenceName.get(i));
-                if(reference.exists()) {
-                    this.runDataChange(reference,this.databaseSyncables.get(i));
+                if (reference.exists()) {
+                    this.runDataChange(reference, this.databaseSyncables.get(i));
                 } else {
-                    this.syncStatus.set(i,Boolean.FALSE);
+                    this.syncStatus.set(i, Boolean.FALSE);
                 }
             }
         }

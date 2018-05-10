@@ -9,7 +9,6 @@ package sud_tanj.com.phr_android.Database.Data;
 
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -33,41 +32,41 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.HealthData
 
 public class HealthData {
     public static final String HEALTH_DATA_CHILD_NAME = "Health_Data";
-    public static final String HEALTH_DATA_CHILD_TIMESTAMP= "TimeStamp";
-    public static final String HEALTH_DATA_CHILD_VALUE="Values";
-    public static final String HEALTH_DATA_CHILD_PARENTSENSOR="ParentSensor";
+    public static final String HEALTH_DATA_CHILD_TIMESTAMP = "TimeStamp";
+    public static final String HEALTH_DATA_CHILD_VALUE = "Values";
+    public static final String HEALTH_DATA_CHILD_PARENTSENSOR = "ParentSensor";
     private String healthDataId = null;
-    private String values = null;
+    protected String values = null;
     private Date timeStamp = null;
     private SensorData parentSensor = null;
     private DatabaseReference dataReference = null;
-    private HealthDataSynchronizer dataReferenceSynchronizer=null;
+    private HealthDataSynchronizer dataReferenceSynchronizer = null;
 
-    public HealthData(String healthDataId,SensorData parentSensor) {
+    public HealthData(String healthDataId, SensorData parentSensor) {
         this.timeStamp = new Date();
-        this.values="-1";
-        this.parentSensor=parentSensor;
+        this.values = "-1";
+        this.parentSensor = parentSensor;
 
-        if(healthDataId.isEmpty()){
-            String newHealthDataId=parentSensor.getSensorInformation().getSensorId() + String.valueOf(this.timeStamp.getTime());
-            this.healthDataId=newHealthDataId;
+        if (healthDataId.isEmpty()) {
+            String newHealthDataId = parentSensor.getSensorInformation().getSensorId() + String.valueOf(this.timeStamp.getTime());
+            this.healthDataId = newHealthDataId;
             parentSensor.addHealthData(newHealthDataId);
         } else {
-            this.healthDataId=healthDataId;
+            this.healthDataId = healthDataId;
         }
 
         this.setDataReference(Global.getUserDatabase().child(HEALTH_DATA_CHILD_NAME).child(this.getHealthDataId()));
 
-        this.dataReferenceSynchronizer=new HealthDataSynchronizer(this.getDataReference(),this);
-        this.dataReferenceSynchronizer.add(new TimeStampListener(),HEALTH_DATA_CHILD_TIMESTAMP);
-        this.dataReferenceSynchronizer.add(new DataValueListener(),HEALTH_DATA_CHILD_VALUE);
-        this.dataReferenceSynchronizer.add(new ParentSensorListener(),HEALTH_DATA_CHILD_PARENTSENSOR);
+        this.dataReferenceSynchronizer = new HealthDataSynchronizer(this.getDataReference(), this);
+        this.dataReferenceSynchronizer.add(new TimeStampListener(), HEALTH_DATA_CHILD_TIMESTAMP);
+        this.dataReferenceSynchronizer.add(new DataValueListener(), HEALTH_DATA_CHILD_VALUE);
+        this.dataReferenceSynchronizer.add(new ParentSensorListener(), HEALTH_DATA_CHILD_PARENTSENSOR);
 
 
     }
 
-    public HealthData(SensorData sensorData){
-        this("",sensorData);
+    public HealthData(SensorData sensorData) {
+        this("", sensorData);
     }
 
     public Date getTimeStamp() {
@@ -75,9 +74,10 @@ public class HealthData {
     }
 
     public void setTimeStamp(Date timeStamp) {
-        this.timeStamp=timeStamp;
-        String timeStampText=String.valueOf(this.timeStamp.getTime());
-        this.dataReferenceSynchronizer.changeVariable(timeStampText);
+        this.timeStamp = timeStamp;
+        String timeStampText = String.valueOf(this.timeStamp.getTime());
+        if(this.isValid())
+            this.syncToFirebase();
     }
 
     public String getValues() {
@@ -85,16 +85,11 @@ public class HealthData {
     }
 
     public void setValues(String values) {
-        if(!this.getParentSensor().getLatestData().getValues().equals(values)) {
-            if(this.getValues().equals("-1")) {
-                this.values = values;
-                this.syncToFirebase();
-                return;
-            }
-            this.values=values;
-            this.dataReferenceSynchronizer.changeVariable(this.values);
-        }
-        else {
+        if (!this.getParentSensor().getLatestData().getValues().equals(values)) {
+            this.values = values;
+            this.getParentSensor().setLatestData(this);
+            this.syncToFirebase();
+        } else {
             this.delete();
         }
     }
@@ -104,9 +99,10 @@ public class HealthData {
     }
 
     public void setParentSensor(SensorData parentSensor) {
-        this.parentSensor=parentSensor;
-        String parentSensorId=this.parentSensor.getSensorInformation().getSensorId();
-        this.dataReferenceSynchronizer.changeVariable(parentSensorId);
+        this.parentSensor = parentSensor;
+        String parentSensorId = this.parentSensor.getSensorInformation().getSensorId();
+        if(this.isValid())
+            this.syncToFirebase();
     }
 
     private DatabaseReference getDataReference() {
@@ -121,42 +117,41 @@ public class HealthData {
         return healthDataId;
     }
 
-    private void setHealthDataId(String healthDataId) {
-        this.healthDataId = healthDataId;
 
-    }
-
-    public Boolean isReady()
-    {
-        if(this.getValues()==null){
+    public Boolean isReady() {
+        if (this.getValues() == null) {
             return false;
         }
-        if(this.getTimeStamp()==null){
+        if (this.getTimeStamp() == null) {
             return false;
         }
-        if(this.getParentSensor()==null){
+        if (this.getParentSensor() == null) {
             return false;
         }
-        if(this.getValues().equals("-1")){
+        if (this.isValid()) {
             return false;
         }
 
         return true;
     }
 
-    public void delete(){
+    public Boolean isValid(){
+        if (this.getValues().equals("-1")) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    public void delete() {
         this.getDataReference().removeValue();
         this.getParentSensor().deleteData(this);
     }
 
-    public void syncToFirebase(){
-        HashMap<String,String> temporaryPayload=new HashMap<>();
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_PARENTSENSOR,parentSensor.getSensorInformation().getSensorName());
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_VALUE,values);
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP,String.valueOf(timeStamp.getTime()));
+    public void syncToFirebase() {
+        HashMap<String, Object> temporaryPayload = new HashMap<>();
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_PARENTSENSOR, parentSensor.getSensorInformation().getSensorId());
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_VALUE, values);
+        temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP, String.valueOf(timeStamp.getTime()));
         this.dataReferenceSynchronizer.changeVariable(temporaryPayload);
-        //this.setParentSensor(parentSensor);
-        //this.setTimeStamp(this.timeStamp);
-        //this.setValues(this.values);
     }
 }

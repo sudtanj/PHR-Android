@@ -12,7 +12,6 @@ import com.google.firebase.database.DataSnapshot;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorInformation;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 
@@ -28,15 +27,15 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.H
 public class ParentSensorListener implements HealthDataSyncable {
     @Override
     public void updateData(HealthData healthData, DataSnapshot dataSnapshot) {
-        SensorData healthDataParentSensor=healthData.getParentSensor();
-        String value= DatabaseUtility.convertToString(dataSnapshot);
-        if(!healthDataParentSensor.getSensorInformation().getSensorName().equals(value))
+        SensorData healthDataParentSensor = healthData.getParentSensor();
+        String value = DatabaseUtility.convertToString(dataSnapshot);
+        if (!healthDataParentSensor.getSensorInformation().getSensorName().equals(value))
             healthData.setParentSensor(Global.getSensorGateway().getSensorData(value));
     }
 
     @Override
     public Boolean isEqual(HealthData healthData, String other) {
-        if(healthData.getParentSensor().getSensorInformation().getSensorId().equals(other))
+        if (healthData.getParentSensor().getSensorInformation().getSensorId().equals(other))
             return Boolean.TRUE;
         return Boolean.FALSE;
     }

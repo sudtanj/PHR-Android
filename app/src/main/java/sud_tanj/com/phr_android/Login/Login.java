@@ -8,9 +8,9 @@
 package sud_tanj.com.phr_android.Login;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -86,7 +86,7 @@ public class Login extends AppCompatActivity {
         //and take the user to profile activity
         if (Global.getFireBaseAuth().getCurrentUser() != null) {
             finish();
-            Toast.makeText(getApplicationContext(), "Welcome back,"+Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Welcome back," + Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
     }
@@ -125,7 +125,7 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             startActivity(new Intent(Login.this, MainActivity.class));
-                            Toast.makeText(getApplicationContext(), "Welcome, "+ Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Welcome, " + Global.getFireBaseUser().getDisplayName(), Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Authentication failed. Please contact customer support.",

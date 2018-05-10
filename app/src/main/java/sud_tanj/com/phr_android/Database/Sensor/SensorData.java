@@ -7,15 +7,15 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
+import android.widget.ProgressBar;
+
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Date;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataListener;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseSynchronizer;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
-import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 
 /**
  * This class is part of PHRAndroid Project
@@ -31,19 +31,24 @@ public class SensorData {
     private SensorInformation sensorInformation = null;
     private ArrayList<String> sensorData = null;
     private SensorEmbeddedScript backgroundJob = null;
-    private HealthData latestData=null;
+
+    public void setLatestData(HealthData latestData) {
+        this.latestData = latestData;
+    }
+
+    private HealthData latestData = null;
 
     public SensorData(String sensorId) {
         this.sensorInformation = new SensorInformation(sensorId, this);
         this.sensorData = new ArrayList<>();
-        this.backgroundJob=new SensorEmbeddedScript(new String(),this);
+        this.backgroundJob = new SensorEmbeddedScript(new String(), this);
 
         //firebase sync
         SensorSynchronizer healthDataManager = new SensorSynchronizer(Global.getUserDatabase(), this);
         healthDataManager.add(new HealthDataListener(), "Health_Data");
     }
 
-    public Boolean isHealthIdExist(String healthId){
+    public Boolean isHealthIdExist(String healthId) {
         return this.sensorData.contains(healthId);
     }
 
@@ -55,9 +60,9 @@ public class SensorData {
         return sensorData;
     }
 
-    public HealthData getLatestData(){
-        if(this.latestData==null) {
-            if(this.getSensorData().size()>0) {
+    public HealthData getLatestData() {
+        if (this.latestData == null) {
+            if (this.getSensorData().size() > 0) {
                 String healthDataId = this.sensorData.get(this.sensorData.size() - 1);
                 this.latestData = new HealthData(healthDataId, this);
             }
@@ -70,7 +75,7 @@ public class SensorData {
     }
 
     public Boolean isReady() {
-        if(this.sensorData!=null)
+        if (this.sensorData != null)
             return Boolean.TRUE;
         return Boolean.FALSE;
     }
@@ -89,5 +94,26 @@ public class SensorData {
 
     public void setBackgroundJob(SensorEmbeddedScript backgroundJob) {
         this.backgroundJob = backgroundJob;
+    }
+
+    public ArrayList<String> getAvailableTimestamp(){
+        ArrayList<String> temp=new ArrayList<>();
+        for(String healthId:this.sensorData){
+            String tempHealthId=healthId.replace(this.getSensorInformation().getSensorId(),"");
+            temp.add(tempHealthId);
+        }
+        return temp;
+    }
+
+    public ArrayList<HealthData> getHealthDataBetween (Date start, Date end){
+        ArrayList<HealthData> healthDataTemp=new ArrayList<>();
+        for(String healthIdTime:this.getAvailableTimestamp()){
+            Date healthDataTimestamp=new Date();
+            healthDataTimestamp.setTime(Long.parseLong(healthIdTime));
+            if(healthDataTimestamp.after(start) && healthDataTimestamp.before(end)){
+                healthDataTemp.add(new HealthData(healthIdTime,this));
+            }
+        }
+        return healthDataTemp;
     }
 }

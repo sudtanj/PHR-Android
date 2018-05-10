@@ -14,7 +14,6 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorListener.EmbeddedScriptLis
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.NameListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.OwnerListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.StatusListener;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseSynchronizer;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 
 /**
@@ -27,12 +26,12 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSync
  * This class last modified by User
  */
 public class SensorInformation {
-    public static final String SENSOR_DATA_CHILD_NAME="sensor";
+    public static final String SENSOR_DATA_CHILD_NAME = "sensor";
     private String sensorId = null, sensorName = null, sensorOwner = null;
     private Boolean sensorActive = null;
     private SensorData sensorData = null;
     private DatabaseReference dataReference = null, userDataReference = null;
-    private SensorSynchronizer sensorInformation,sensorStatus;
+    private SensorSynchronizer sensorInformation, sensorStatus;
 
     public SensorInformation(String sensorId, SensorData sensorData) {
         this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(sensorId));
@@ -41,11 +40,11 @@ public class SensorInformation {
         sensorInformation = new SensorSynchronizer(this.getDataReference(), sensorData);
         sensorStatus = new SensorSynchronizer(this.getUserDataReference(), sensorData);
 
-        this.sensorId=sensorId;
+        this.sensorId = sensorId;
         this.sensorData = sensorData;
         this.sensorActive = false;
-        this.sensorName=new String();
-        this.sensorOwner=new String();
+        this.sensorName = new String();
+        this.sensorOwner = new String();
 
         //firebase sync
         sensorInformation.add(new NameListener(), "Name");
@@ -63,8 +62,8 @@ public class SensorInformation {
         return sensorId;
     }
 
-    private void setSensorId(String sensorId){
-        this.sensorId=sensorId;
+    private void setSensorId(String sensorId) {
+        this.sensorId = sensorId;
         sensorInformation.changeVariable(this.sensorId);
     }
 

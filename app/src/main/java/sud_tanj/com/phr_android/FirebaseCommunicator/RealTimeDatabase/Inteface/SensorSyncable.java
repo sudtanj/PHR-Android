@@ -22,5 +22,6 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
  */
 public interface SensorSyncable extends DatabaseSyncable {
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot);
-    public Boolean isEqual(SensorData sensor,String other);
+
+    public Boolean isEqual(SensorData sensor, String other);
 }

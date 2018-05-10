@@ -7,16 +7,12 @@
 
 package sud_tanj.com.phr_android.Settings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -61,20 +57,19 @@ public class MyPreferencesActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment
-    {
+    public static class MyPreferenceFragment extends PreferenceFragment {
         private static ListPreference langListPreferences;
         private static EditTextPreference agePreferences;
+
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
         }
@@ -84,9 +79,9 @@ public class MyPreferencesActivity extends AppCompatActivity {
             super.onActivityCreated(savedInstanceState);
             // run the code making use of getActivity() from here
             //initialized
-            String appLangPref= Global.getSettings().getString("app_lang_settings","");
-            langListPreferences = (ListPreference)findPreference("app_lang_settings");
-            agePreferences = (EditTextPreference)findPreference("age_key");
+            String appLangPref = Global.getSettings().getString("app_lang_settings", "");
+            langListPreferences = (ListPreference) findPreference("app_lang_settings");
+            agePreferences = (EditTextPreference) findPreference("age_key");
 
             //Gson gson = new Gson();
             //String json = settings.getString("MyObject", "");
@@ -95,22 +90,22 @@ public class MyPreferencesActivity extends AppCompatActivity {
             //Language Option
             List<String> langList = Arrays.asList(Locale.getISOLanguages());
             ArrayList<SuperString> langListName = new ArrayList<>();
-            int defaultValue=0;
-            for (int i=0;i<langList.size();i++) {
+            int defaultValue = 0;
+            for (int i = 0; i < langList.size(); i++) {
                 Locale loc = new Locale(langList.get(i));
-                if (loc.getDisplayLanguage().trim().length()>0 && !langListName.contains(loc.getDisplayLanguage())) {
-                    if(loc.getDisplayLanguage().matches(appLangPref.toString())) {
-                        Global.getSettings().edit().putString(getString(R.string.settings_lang_loc),new Gson().toJson(loc)).commit();
-                        defaultValue=i;
+                if (loc.getDisplayLanguage().trim().length() > 0 && !langListName.contains(loc.getDisplayLanguage())) {
+                    if (loc.getDisplayLanguage().matches(appLangPref.toString())) {
+                        Global.getSettings().edit().putString(getString(R.string.settings_lang_loc), new Gson().toJson(loc)).commit();
+                        defaultValue = i;
                     }
                     langListName.add(new SuperString(loc.getDisplayLanguage()));
                 }
             }
-            langList=null;
+            langList = null;
             Collections.sort(langListName);
             CharSequence entries[] = new String[langListName.size()];
             CharSequence entryValues[] = new String[langListName.size()];
-            for(int i=0;i<langListName.size();i++){
+            for (int i = 0; i < langListName.size(); i++) {
                 entries[i] = langListName.get(i).toString();
                 entryValues[i] = Integer.toString(i);
             }

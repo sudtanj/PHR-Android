@@ -7,13 +7,10 @@
 
 package sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 
@@ -31,19 +28,16 @@ public class HealthDataSynchronizer extends DatabaseSynchronizer {
 
     public HealthDataSynchronizer(DatabaseReference database, HealthData healthData) {
         super(database);
-        this.healthData=healthData;
+        this.healthData = healthData;
     }
 
     @Override
     protected void runDataChange(DataSnapshot dataSnapshot, DatabaseSyncable listener) {
-        ((HealthDataSyncable)listener).updateData(this.healthData,dataSnapshot);
-        //if(this.isDataCorrupt()){
-          //      this.healthData.delete();
-        //}
+        ((HealthDataSyncable) listener).updateData(this.healthData, dataSnapshot);
     }
 
     @Override
     protected Boolean equals(String value, DatabaseSyncable listener) {
-        return ((HealthDataSyncable)listener).isEqual(this.healthData,value);
+        return ((HealthDataSyncable) listener).isEqual(this.healthData, value);
     }
 }

@@ -7,13 +7,10 @@
 
 package sud_tanj.com.phr_android.Health_Data.HealthDataListLayout;
 
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -42,13 +39,13 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
 
     public HealthDataListRecyclerViewAdapter(HealthDataListActivity healthDataListActivity) {
         mDataset = Global.getSensorGateway().getSensorObject();
-        this.healthDataListActivity=healthDataListActivity;
-        this.dataChanged=Boolean.FALSE;
+        this.healthDataListActivity = healthDataListActivity;
+        this.dataChanged = Boolean.FALSE;
     }
 
     @Override
     public HealthDataListHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
+                                                   int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view_row, parent, false);
 
@@ -58,16 +55,16 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(HealthDataListHolder holder, int position) {
-        if(Global.getSensorGateway().isReady()) {
-            if(this.lastValue.size()==0){
-                for(SensorData tempDataset:Global.getSensorGateway().getSensorObject()){
+        if (Global.getSensorGateway().isReady()) {
+            if (this.lastValue.size() == 0) {
+                for (SensorData tempDataset : Global.getSensorGateway().getSensorObject()) {
                     lastValue.add("0");
                 }
             }
             holder.updateOnClick();
             holder.getTitle().setText(mDataset.get(position).getSensorInformation().getSensorName());
-            HealthData latestHealthData=mDataset.get(position).getLatestData();
-            if(latestHealthData!=null) {
+            HealthData latestHealthData = mDataset.get(position).getLatestData();
+            if (latestHealthData != null) {
                 Double temp = new Double(latestHealthData.getValues());
                 if (temp > 0) {
                     String result = String.valueOf(latestHealthData.getValues());
@@ -86,14 +83,14 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
         }
     }
 
-    public Boolean isDataChanged(){
-        if(Global.getSensorGateway().getSensorObject().size()!=this.mDataset.size()){
-            this.mDataset=Global.getSensorGateway().getSensorObject();
+    public Boolean isDataChanged() {
+        if (Global.getSensorGateway().getSensorObject().size() != this.mDataset.size()) {
+            this.mDataset = Global.getSensorGateway().getSensorObject();
         }
-        for(int i=0;i<this.getItemCount();i++){
+        for (int i = 0; i < this.getItemCount(); i++) {
             try {
-                HealthData latestHealthData=this.mDataset.get(i).getLatestData();
-                if(latestHealthData!=null) {
+                HealthData latestHealthData = this.mDataset.get(i).getLatestData();
+                if (latestHealthData != null) {
                     String mDatasetValue = this.mDataset.get(i).getLatestData().getValues(),
                             lastValue = this.lastValue.get(i);
                     if (!mDatasetValue.equals(lastValue)) {
@@ -101,7 +98,7 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
                         return Boolean.TRUE;
                     }
                 }
-            } catch ( IndexOutOfBoundsException e ) {
+            } catch (IndexOutOfBoundsException e) {
                 this.lastValue.add(new String("0"));
             }
         }
@@ -110,7 +107,7 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
 
     @Override
     public int getItemCount() {
-        if(!Global.getSensorGateway().isReady())
+        if (!Global.getSensorGateway().isReady())
             return new Integer(0);
         return Global.getSensorGateway().getSensorObject().size();
     }

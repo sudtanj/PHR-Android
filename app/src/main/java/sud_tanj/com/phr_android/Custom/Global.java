@@ -44,7 +44,7 @@ public class Global {
     private static NavigationView navigationView = null;
     private static SensorGateway sensorGateway = null;
     private static FloatingActionButton floatingButton = null;
-    private static CH34xUARTDriver driver=null;
+    private static CH34xUARTDriver driver = null;
 
     public static Context getContext() {
         return context;
@@ -134,11 +134,11 @@ public class Global {
     }
 
     public static CH34xUARTDriver getCH340Driver() {
-        if(driver==null)
-            driver=new CH34xUARTDriver(
+        if (driver == null)
+            driver = new CH34xUARTDriver(
                     (UsbManager) getContext().getSystemService(Context.USB_SERVICE), getContext(),
                     "cn.wch.wchusbdriver.USB_PERMISSION");
-        if(driver.UsbFeatureSupported())
+        if (driver.UsbFeatureSupported())
             return driver;
         else
             return null;

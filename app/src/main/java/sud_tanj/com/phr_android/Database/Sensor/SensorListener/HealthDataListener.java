@@ -11,10 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.Collections;
 
-import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.SensorSyncable;
 
 /**
@@ -30,13 +27,12 @@ public class HealthDataListener implements SensorSyncable {
 
     @Override
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
-        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-            String healthId=childSnapshot.getKey();
-            if(healthId.contains(sensor.getSensorInformation().getSensorId()))
-                if(!sensor.isHealthIdExist(healthId))
+        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+            String healthId = childSnapshot.getKey();
+            if (healthId.contains(sensor.getSensorInformation().getSensorId()))
+                if (!sensor.isHealthIdExist(healthId))
                     sensor.addHealthData(healthId);
         }
-        Collections.sort(sensor.getSensorData());
     }
 
     @Override

@@ -12,7 +12,6 @@ import com.google.firebase.database.DataSnapshot;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorInformation;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.SensorSyncable;
 
 /**
@@ -28,15 +27,15 @@ public class OwnerListener implements SensorSyncable {
 
     @Override
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
-        SensorInformation sensorInformation=sensor.getSensorInformation();
-        String value=DatabaseUtility.convertToString(dataSnapshot);
-        if(!sensorInformation.getSensorOwner().equals(value))
+        SensorInformation sensorInformation = sensor.getSensorInformation();
+        String value = DatabaseUtility.convertToString(dataSnapshot);
+        if (!sensorInformation.getSensorOwner().equals(value))
             sensorInformation.setSensorOwner(value);
     }
 
     @Override
     public Boolean isEqual(SensorData sensor, String other) {
-        if(sensor.getSensorInformation().getSensorOwner().equals(other))
+        if (sensor.getSensorInformation().getSensorOwner().equals(other))
             return true;
         return false;
     }

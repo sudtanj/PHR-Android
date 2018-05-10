@@ -7,8 +7,8 @@
 
 package sud_tanj.com.phr_android.Hardware_Driver;
 
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 
 /**
  * This class is part of PHRAndroid Project
@@ -22,14 +22,14 @@ import sud_tanj.com.phr_android.Custom.Global;
 public abstract class ArduinoUnoCH340 implements EmbeddedScript {
     private int baudRate = 9600;
     private byte stopBit = 1;
-    private byte dataBit= 8;
-    private byte parity= 0;
-    private byte flowControl= 0;
-    private int retval=0;
+    private byte dataBit = 8;
+    private byte parity = 0;
+    private byte flowControl = 0;
+    private int retval = 0;
 
-    public Boolean openConnection(){
+    public Boolean openConnection() {
 
-        if(!Global.getCH340Driver().isConnected()) {
+        if (!Global.getCH340Driver().isConnected()) {
             retval = Global.getCH340Driver().ResumeUsbList();
             if (retval == -1)
                 Global.getCH340Driver().CloseDevice();
@@ -43,15 +43,15 @@ public abstract class ArduinoUnoCH340 implements EmbeddedScript {
         return true;
     }
 
-    public void closeConnection(){
+    public void closeConnection() {
         Global.getCH340Driver().CloseDevice();
     }
 
-    public void setConfig(){
-        Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity,flowControl);
+    public void setConfig() {
+        Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
     }
 
-    public String getDataAtCurrent(){
+    public String getDataAtCurrent() {
         byte[] buffer = new byte[4096];
         int length = Global.getCH340Driver().ReadData(buffer, 4096);
         if (length > 0) {

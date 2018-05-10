@@ -12,7 +12,6 @@ import com.google.firebase.database.DataSnapshot;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorEmbeddedScript;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.DatabaseSyncable;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.SensorSyncable;
 
 /**
@@ -28,9 +27,9 @@ public class EmbeddedScriptListener implements SensorSyncable {
 
     @Override
     public void updateData(SensorData sensor, DataSnapshot dataSnapshot) {
-        String scriptName=DatabaseUtility.convertToString(dataSnapshot);
-        if(sensor.getBackgroundJob()==null)
-            sensor.setBackgroundJob(new SensorEmbeddedScript(scriptName,sensor));
+        String scriptName = DatabaseUtility.convertToString(dataSnapshot);
+        if (sensor.getBackgroundJob() == null)
+            sensor.setBackgroundJob(new SensorEmbeddedScript(scriptName, sensor));
         else {
             if (!sensor.getBackgroundJob().getName().equals(scriptName))
                 sensor.getBackgroundJob().setName(scriptName);
@@ -39,7 +38,7 @@ public class EmbeddedScriptListener implements SensorSyncable {
 
     @Override
     public Boolean isEqual(SensorData sensor, String other) {
-        if(sensor.getBackgroundJob().getName().equals(other))
+        if (sensor.getBackgroundJob().getName().equals(other))
             return true;
         return false;
     }

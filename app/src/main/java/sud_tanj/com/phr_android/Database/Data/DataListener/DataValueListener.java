@@ -10,7 +10,6 @@ package sud_tanj.com.phr_android.Database.Data.DataListener;
 import com.google.firebase.database.DataSnapshot;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorInformation;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 
@@ -26,15 +25,16 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.H
 public class DataValueListener implements HealthDataSyncable {
     @Override
     public void updateData(HealthData healthData, DataSnapshot dataSnapshot) {
-        String dataValue=healthData.getValues();
-        String value= DatabaseUtility.convertToString(dataSnapshot);
-        if(!dataValue.equals(value))
-            healthData.setValues(value);
+        String dataValue = healthData.getValues();
+        String value = DatabaseUtility.convertToString(dataSnapshot);
+        if (!dataValue.equals(value))
+            if(!value.equals("-1"))
+                healthData.setValues(value);
     }
 
     @Override
     public Boolean isEqual(HealthData healthData, String other) {
-        if(healthData.getValues().equals(other))
+        if (healthData.getValues().equals(other))
             return Boolean.TRUE;
         return Boolean.FALSE;
     }

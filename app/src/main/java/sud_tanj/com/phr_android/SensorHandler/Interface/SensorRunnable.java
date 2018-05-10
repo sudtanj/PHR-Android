@@ -9,6 +9,8 @@ package sud_tanj.com.phr_android.SensorHandler.Interface;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 
 /**
  * This class is part of PHRAndroid Project
@@ -19,13 +21,18 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
  * <p>
  * This class last modified by User
  */
-public class SensorRunnable implements Runnable {
+public class SensorRunnable implements HandlerLoopRunnable {
     @Override
     public void run() {
-        if(Global.getSensorGateway().isReady()) {
+        if (Global.getSensorGateway().isReady()) {
             for (SensorData temp : Global.getSensorGateway().getSensorObject())
                 temp.getBackgroundJob().run();
         }
 
+    }
+
+    @Override
+    public Boolean isHandlerExpired() {
+        return Boolean.FALSE;
     }
 }

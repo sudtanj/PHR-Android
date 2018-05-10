@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.view.View;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 
 /**
@@ -27,7 +26,7 @@ public class HealthDataListRecyclerViewListener implements View.OnClickListener 
     private Integer sensorPosition;
 
     public HealthDataListRecyclerViewListener(Integer sensorPosition) {
-        this.sensorPosition=sensorPosition;
+        this.sensorPosition = sensorPosition;
     }
 
     public Integer getSensorPosition() {
@@ -42,7 +41,7 @@ public class HealthDataListRecyclerViewListener implements View.OnClickListener 
     public void onClick(View view) {
         System.out.println(sensorPosition);
         Intent i = new Intent(Global.getContext(), HealthDataList.class);
-        i.putExtra("sensorposition",sensorPosition.intValue());
+        i.putExtra("sensorposition", sensorPosition.intValue());
         Global.getContext().startActivity(i);
     }
 }

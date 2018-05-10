@@ -10,7 +10,6 @@ package sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface;
 import com.google.firebase.database.DataSnapshot;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 /**
  * This class is part of PHRAndroid Project

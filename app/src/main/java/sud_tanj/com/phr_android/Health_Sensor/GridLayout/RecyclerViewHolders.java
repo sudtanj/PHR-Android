@@ -6,6 +6,7 @@
  */
 
 package sud_tanj.com.phr_android.Health_Sensor.GridLayout;
+
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,8 +17,8 @@ import android.widget.Toast;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.R;
 import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
+import sud_tanj.com.phr_android.R;
 
 /**
  * This class is part of PHRAndroid Project
@@ -29,7 +30,7 @@ import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
  * This class last modified by User
  */
 
-public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView countryName;
     public ImageView countryPhoto;
@@ -38,21 +39,20 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
     public RecyclerViewHolders(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
-        countryName = (TextView)itemView.findViewById(R.id.sensor_name);
-        countryPhoto = (ImageView)itemView.findViewById(R.id.sensor_picture);
+        countryName = (TextView) itemView.findViewById(R.id.sensor_name);
+        countryPhoto = (ImageView) itemView.findViewById(R.id.sensor_picture);
         sensorSwitch = (Switch) itemView.findViewById(R.id.switch1);
     }
 
     @Override
     public void onClick(View view) {
-        SensorData sensor=Global.getSensorGateway().getSensorDataByName(countryName.getText().toString());
-        if(sensor.getSensorInformation().getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
+        SensorData sensor = Global.getSensorGateway().getSensorDataByName(countryName.getText().toString());
+        if (sensor.getSensorInformation().getSensorOwner().contains(Global.getFireBaseUser().getUid())) {
             Intent modifySensor = new Intent(Global.getContext(), ModifySensor.class);
             modifySensor.putExtra("modifySensor", true);
             modifySensor.putExtra("sensorName", countryName.getText());
             Global.getContext().startActivity(modifySensor);
-        }
-        else {
+        } else {
             Toast.makeText(view.getContext(), "You can't modify sensor that you don't own!", Toast.LENGTH_SHORT).show();
         }
         //Toast.makeText(view.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
