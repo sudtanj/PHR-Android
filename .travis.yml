@@ -9,11 +9,11 @@ addons:
 env:
   matrix:
     - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
-    #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
+    - ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    - ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    - ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    - ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 before_deploy:
   # Set up git user name and tag this commit
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
@@ -53,7 +53,6 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 script:
-  - ./gradlew connectedCheck
   - ./gradlew assembleRelease 
   - ./gradlew generateReleaseJavadoc
   - adb push ./app/build/outputs/apk/release/app-release.apk /data/local/tmp/sud_tanj.com.phr_android
