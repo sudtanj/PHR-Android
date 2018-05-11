@@ -36,11 +36,13 @@ import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
+import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListener;
 import sud_tanj.com.phr_android.MainActivity;
 import sud_tanj.com.phr_android.R;
 
-public class HealthDataList extends AppCompatActivity implements com.tsongkha.spinnerdatepicker.DatePickerDialog.OnDateSetListener {
+public class HealthDataList extends AppCompatActivity {
     private SensorData sensorData;
     private TextView sensorName;
     private  SimpleDateFormat simpleDateFormat;
@@ -64,22 +66,12 @@ public class HealthDataList extends AppCompatActivity implements com.tsongkha.sp
         GraphView graph = (GraphView) findViewById(R.id.health_data_graph);
         Button date=(Button) findViewById(R.id.choose_date);
 
-        ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
-        simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
 
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDate(1980, 0, 1, R.style.NumberPickerStyle);
-            }
-        });
+        date.setOnClickListener(new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph)));
 
-
-        Date start = new Date();
-        start.setTime(Long.parseLong("1525919698899"));
-        Date end = new Date();
-        end.setTime(Long.parseLong("1525919717094"));
-        ArrayList<HealthData> healthData=this.sensorData.getHealthDataBetween(start,end);
+        Date dateNow = new Date();
+        ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
         HandlerLoop handlerLoop=new HandlerLoop(5,new HealthDataListGraphListener(graph,healthData));
     }
 
@@ -102,20 +94,4 @@ public class HealthDataList extends AppCompatActivity implements com.tsongkha.sp
 
     }
 
-
-    void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
-        new SpinnerDatePickerDialogBuilder()
-                .context(HealthDataList.this).callback(HealthDataList.this)
-                .spinnerTheme(spinnerTheme)
-                .defaultDate(year, monthOfYear, dayOfMonth)
-                .build()
-                .show();
-    }
-
-    @Override
-    public void onDateSet(com.tsongkha.spinnerdatepicker.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        //dateTextView.setText(simpleDateFormat.format(calendar.getTime()));
-        System.out.println(simpleDateFormat.format(calendar.getTime()));
-    }
 }

@@ -48,7 +48,10 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
             }
         }
         if(this.handlerExpired){
+            this.graphView.removeAllSeries();
+            System.out.println("Graph run succesfully");
             ArrayList<DataPoint> dataPointsHealth=new ArrayList<>();
+            System.out.println("GraphListener :"+ this.healthData.size());
             for(int i=0;i<healthData.size();i++) {
                 dataPointsHealth.add(new DataPoint(i,Double.parseDouble(healthData.get(i).getValues())));
             }

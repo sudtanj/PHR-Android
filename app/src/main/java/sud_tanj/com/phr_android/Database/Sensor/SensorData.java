@@ -9,8 +9,10 @@ package sud_tanj.com.phr_android.Database.Sensor;
 
 import android.widget.ProgressBar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
@@ -103,6 +105,23 @@ public class SensorData {
             temp.add(tempHealthId);
         }
         return temp;
+    }
+
+    public ArrayList<HealthData> getHealthDataOn(Date date){
+        ArrayList<HealthData> healthDataTemp=new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate,targetDate;
+        for(String healthIdTime:this.getAvailableTimestamp()){
+            Date tempDate=new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate=simpleDateFormat.format(tempDate);
+            targetDate=simpleDateFormat.format(date);
+            if(targetDate.equals(healthIdDate)){
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId()+healthIdTime),this));
+            }
+        }
+        return healthDataTemp;
     }
 
     public ArrayList<HealthData> getHealthDataBetween (Date start, Date end){
