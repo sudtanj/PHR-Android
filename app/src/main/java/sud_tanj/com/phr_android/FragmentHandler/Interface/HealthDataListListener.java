@@ -10,6 +10,7 @@ package sud_tanj.com.phr_android.FragmentHandler.Interface;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.R;
@@ -38,7 +39,7 @@ public class HealthDataListListener implements HandlerLoopRunnable {
                 this.progressBar = (ProgressBar) this.healthDataListActivity.getActivity().findViewById(R.id.health_data_list_progress_bar);
                 this.progressBar.setVisibility(View.VISIBLE);
             }
-            if (this.healthDataListActivity.getmAdapter().isDataChanged()) {
+            if (this.healthDataListActivity.getmAdapter().isDataChanged() || Global.getSensorGateway().isReady()) {
                 this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
                 this.progressBar.setVisibility(View.GONE);
             }

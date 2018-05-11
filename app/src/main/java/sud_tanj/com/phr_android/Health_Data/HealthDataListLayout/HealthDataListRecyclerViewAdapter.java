@@ -55,15 +55,15 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(HealthDataListHolder holder, int position) {
-        if (Global.getSensorGateway().isReady()) {
+        if (Global.getSensorGateway().isReady() && Global.getSensorGateway().getSensorObject().size()>position) {
             if (this.lastValue.size() == 0) {
                 for (SensorData tempDataset : Global.getSensorGateway().getSensorObject()) {
                     lastValue.add("0");
                 }
             }
             holder.updateOnClick();
-            holder.getTitle().setText(mDataset.get(position).getSensorInformation().getSensorName());
-            HealthData latestHealthData = mDataset.get(position).getLatestData();
+            holder.getTitle().setText(Global.getSensorGateway().getSensorObject().get(position).getSensorInformation().getSensorName());
+            HealthData latestHealthData = Global.getSensorGateway().getSensorObject().get(position).getLatestData();
             if (latestHealthData != null) {
                 Double temp = new Double(latestHealthData.getValues());
                 if (temp > 0) {
