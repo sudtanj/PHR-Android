@@ -69,9 +69,11 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
                 if (temp > 0) {
                     String result = String.valueOf(latestHealthData.getValues());
                     holder.getValue().setText(result);
-                    if (!lastValue.get(position).equals(result)) {
-                        lastValue.set(position, result);
-                        this.dataChanged = Boolean.TRUE;
+                    if(lastValue.size()>position) {
+                        if (!lastValue.get(position).equals(result)) {
+                            lastValue.set(position, result);
+                            this.dataChanged = Boolean.TRUE;
+                        }
                     }
                 }
             }

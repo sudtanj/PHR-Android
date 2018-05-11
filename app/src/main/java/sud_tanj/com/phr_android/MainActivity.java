@@ -134,12 +134,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Global.getCH340Driver().CloseDevice();
+   //     Global.getCH340Driver().CloseDevice();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        /**
         BroadcastReceiver receiver = new BroadcastReceiver() {
 
             @Override
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         filter.addAction("android.hardware.usb.action.USB_STATE");
 
         registerReceiver(receiver, filter);
-
+        */
     }
 
     @Override

@@ -34,6 +34,7 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
 
     public DatabaseSynchronizer(DatabaseReference database) {
         this.database = database;
+        this.database.keepSynced(Boolean.TRUE);
         this.referenceName = new ArrayList<>();
         this.syncStatus = new ArrayList<>();
         this.databaseSyncables = new ArrayList<>();

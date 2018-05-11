@@ -10,6 +10,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
+    testBuildType "debug"
     defaultConfig {
         applicationId "sud_tanj.com.phr_android"
         minSdkVersion 16
@@ -51,20 +52,29 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.google.firebase:firebase-auth:12.0.1'
-    implementation 'com.google.firebase:firebase-database:12.0.1'
+    // App's dependencies, including test
+    implementation 'com.android.support:support-annotations:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.google.firebase:firebase-auth:15.1.0'
+    implementation 'com.google.firebase:firebase-database:15.0.1'
+    //Espresso test start
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    //Espresso test end
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.google.android.gms:play-services-auth:12.0.1'
+    //GooglePlay
+    //implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-plus:15.0.1'
+    //GooglePlay
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
-    implementation 'com.android.support:cardview-v7:27.1.0'
-    implementation 'com.android.support:recyclerview-v7:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.github.sudtanj:PhysicaloidLibrary:09eaf0a2a3'
     implementation 'com.jjoe64:graphview:4.2.1'
     implementation 'com.github.sudtanj:Android-AES:2c07733a39'
@@ -73,6 +83,12 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.github.drawers:SpinnerDatePicker:1.0.6'
     implementation files('libs/CH34xUARTDriver.jar')
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
 }
 
 apply plugin: "com.vanniktech.android.javadoc"

@@ -111,7 +111,7 @@ public class SensorData {
             Date healthDataTimestamp=new Date();
             healthDataTimestamp.setTime(Long.parseLong(healthIdTime));
             if(healthDataTimestamp.after(start) && healthDataTimestamp.before(end)){
-                healthDataTemp.add(new HealthData(healthIdTime,this));
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId()+healthIdTime),this));
             }
         }
         return healthDataTemp;
