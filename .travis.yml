@@ -61,7 +61,7 @@ script:
   - adb push ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk /data/local/tmp/app-debug-androidTest.apk
   - adb shell pm install -t -r "/data/local/tmp/app-debug.apk"
   - adb shell pm install -t -r "/data/local/tmp/app-debug-androidTest.apk"
-  - adb shell am instrument -w sud_tanj.com.phr_android.test/android.support.test.runner.AndroidJUnitRunner
+  #- adb shell am instrument -w sud_tanj.com.phr_android.test/android.support.test.runner.AndroidJUnitRunner
   - adb shell monkey -p sud_tanj.com.phr_android -c android.intent.category.LAUNCHER 1
   #- adb shell pm install -t -r "/data/local/tmp/sud_tanj.com.phr_android"
   #- adb shell am start -n "sud_tanj.com.phr_android/sud_tanj.com.phr_android.GPlusLogin.Login" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -D
