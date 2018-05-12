@@ -42,7 +42,7 @@ public class SensorInformation {
 
         this.sensorId = sensorId;
         this.sensorData = sensorData;
-        this.sensorActive = false;
+        this.sensorActive = true;
         this.sensorName = new String();
         this.sensorOwner = new String();
 
@@ -50,7 +50,7 @@ public class SensorInformation {
         sensorInformation.add(new NameListener(), "Name");
         sensorInformation.add(new OwnerListener(), "Owner");
         sensorInformation.add(new EmbeddedScriptListener(), "EmbeddedScript");
-        sensorStatus.add(new StatusListener(), "SensorActive");
+        //sensorStatus.add(new StatusListener(), "SensorActive");
     }
 
     public void setSensorActive(Boolean sensorActive) {

@@ -32,31 +32,34 @@ import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 public class PedometerSensor implements EmbeddedScript {
     private SensorData pedometer;
     private String sensorId = "pedometer03102";
+    private Boolean firstTime=Boolean.TRUE;
 
     @Override
     public Boolean run() {
-        pedometer = Global.getSensorGateway().getSensorData(sensorId);
-        PackageManager packageManager = Global.getContext().getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
-            SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
-            Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            if (countSensor != null) {
-                sensorManager.registerListener(new SensorEventListener() {
-                    @Override
-                    public void onSensorChanged(SensorEvent sensorEvent) {
-                        HealthData healthData = new HealthData(pedometer);
-                        healthData.setValues(String.valueOf(sensorEvent.values[0]));
-                    }
+        if(this.firstTime) {
+            pedometer = Global.getSensorGateway().getSensorData(sensorId);
+            PackageManager packageManager = Global.getContext().getPackageManager();
+            if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
+                SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
+                Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+                if (countSensor != null) {
+                    sensorManager.registerListener(new SensorEventListener() {
+                        @Override
+                        public void onSensorChanged(SensorEvent sensorEvent) {
+                            HealthData healthData = new HealthData(pedometer);
+                            healthData.setValues(String.valueOf(sensorEvent.values[0]));
+                        }
 
-                    @Override
-                    public void onAccuracyChanged(Sensor sensor, int i) {
+                        @Override
+                        public void onAccuracyChanged(Sensor sensor, int i) {
 
-                    }
-                }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                        }
+                    }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                }
             }
-            return true;
+            this.firstTime=Boolean.FALSE;
         }
-        return false;
+        return Boolean.TRUE;
     }
 
     @Override

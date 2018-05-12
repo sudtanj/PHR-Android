@@ -55,6 +55,8 @@ public class GridViewActivity extends Fragment {
         RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), rowListItem);
         rView.setAdapter(rcAdapter);
 
+        this.getActivity().setTitle(R.string.sensor_data_list_title);
+
     }
 
     @Override

@@ -110,6 +110,8 @@ public class HealthDataListActivity extends Fragment {
         mAdapter = new HealthDataListRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        this.getActivity().setTitle(R.string.health_data_list_title);
+
 
     }
 

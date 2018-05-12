@@ -30,10 +30,15 @@ import sud_tanj.com.phr_android.R;
 public class DatePickerListener implements View.OnClickListener {
     private Context healthDataContext;
     private DatePickerDataChangeListener dateSetListener;
+    private SpinnerDatePickerDialogBuilder spinnerDatePickerDialogBuilder;
+    private DatePickerDialog datePickerDialog;
+    private Boolean firstTime;
 
     public DatePickerListener(Context healthDataContext, DatePickerDataChangeListener dateSetListener) {
         this.healthDataContext = healthDataContext;
         this.dateSetListener=dateSetListener;
+        this.spinnerDatePickerDialogBuilder=new SpinnerDatePickerDialogBuilder();
+        this.firstTime=Boolean.TRUE;
     }
 
     public DatePickerDataChangeListener getDateSetListener() {
@@ -46,15 +51,19 @@ public class DatePickerListener implements View.OnClickListener {
         Integer year=calendar.get(Calendar.YEAR);
         Integer monthOfYear=calendar.get(Calendar.MONTH);
         Integer dayOfMonth=calendar.get(Calendar.DATE);
-        showDate(year, monthOfYear, dayOfMonth, R.style.NumberPickerStyle);
+        if(this.firstTime) {
+            showDate(year, monthOfYear, dayOfMonth, R.style.NumberPickerStyle);
+        } else {
+            this.datePickerDialog.show();
+        }
     }
 
     void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
-        new SpinnerDatePickerDialogBuilder()
+        this.datePickerDialog=this.spinnerDatePickerDialogBuilder
                 .context(this.healthDataContext).callback(this.dateSetListener)
                 .spinnerTheme(spinnerTheme)
                 .defaultDate(year, monthOfYear, dayOfMonth)
-                .build()
-                .show();
+                .build();
+        this.datePickerDialog.show();
     }
 }

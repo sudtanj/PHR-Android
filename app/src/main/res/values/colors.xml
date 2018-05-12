@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2018. All rights reserved.
+  ~
+  ~ Last Modified by User on 5/12/18 3:23 PM
+  -->
+
+<resources>
+    <color name="colorPrimary">#b8e2eb</color>
+    <color name="primary_text_material_dark">#ffffff</color>
+</resources>
