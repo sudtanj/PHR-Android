@@ -29,11 +29,15 @@ import sud_tanj.com.phr_android.R;
  */
 public class DatePickerListener implements View.OnClickListener {
     private Context healthDataContext;
-    private DatePickerDialog.OnDateSetListener dateSetListener;
+    private DatePickerDataChangeListener dateSetListener;
 
-    public DatePickerListener(Context healthDataContext, DatePickerDialog.OnDateSetListener dateSetListener) {
+    public DatePickerListener(Context healthDataContext, DatePickerDataChangeListener dateSetListener) {
         this.healthDataContext = healthDataContext;
         this.dateSetListener=dateSetListener;
+    }
+
+    public DatePickerDataChangeListener getDateSetListener() {
+        return dateSetListener;
     }
 
     @Override

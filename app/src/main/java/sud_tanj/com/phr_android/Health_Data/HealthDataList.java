@@ -67,12 +67,17 @@ public class HealthDataList extends AppCompatActivity {
         Button date=(Button) findViewById(R.id.choose_date);
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
-
-        date.setOnClickListener(new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph)));
+        DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
+        datePickerListener.getDateSetListener().setButton(date);
+        date.setOnClickListener(datePickerListener);
 
         Date dateNow = new Date();
         ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
-        HandlerLoop handlerLoop=new HandlerLoop(5,new HealthDataListGraphListener(graph,healthData));
+        ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
+        date.setText(simpleDateFormat.format(dateNow));
+        HealthDataListGraphListener healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData);
+        HandlerLoop handlerLoop=new HandlerLoop(5,healthDataListGraphListener);
     }
 
     @Override

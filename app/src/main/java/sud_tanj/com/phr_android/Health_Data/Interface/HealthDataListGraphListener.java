@@ -31,11 +31,13 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     private GraphView graphView;
     private ArrayList<HealthData> healthData;
     private Boolean handlerExpired;
+    private ArrayList<String> hourData;
 
-    public HealthDataListGraphListener(GraphView graph, ArrayList<HealthData> healthData) {
+    public HealthDataListGraphListener(GraphView graph, ArrayList<HealthData> healthData, ArrayList<String> hourData) {
         this.graphView=graph;
         this.healthData=healthData;
         this.handlerExpired=Boolean.FALSE;
+        this.hourData=hourData;
     }
 
     @Override
@@ -49,11 +51,9 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         }
         if(this.handlerExpired){
             this.graphView.removeAllSeries();
-            System.out.println("Graph run succesfully");
             ArrayList<DataPoint> dataPointsHealth=new ArrayList<>();
-            System.out.println("GraphListener :"+ this.healthData.size());
             for(int i=0;i<healthData.size();i++) {
-                dataPointsHealth.add(new DataPoint(i,Double.parseDouble(healthData.get(i).getValues())));
+                dataPointsHealth.add(new DataPoint(Integer.parseInt(this.hourData.get(i)),Double.parseDouble(healthData.get(i).getValues())));
             }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsHealth.toArray(new DataPoint[dataPointsHealth.size()]));

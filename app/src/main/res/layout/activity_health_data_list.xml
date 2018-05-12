@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="@string/choose_health_data_list_date" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/health_data_graph"

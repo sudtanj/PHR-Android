@@ -107,6 +107,25 @@ public class SensorData {
         return temp;
     }
 
+    public ArrayList<String> getAvailableTimeOn(Date date){
+        ArrayList<String> availableTimeTemp=new ArrayList<String>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US),
+                hourDateFormat=new SimpleDateFormat("HH", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate,targetDate;
+        Date tempDate;
+        for(String healthIdTime:this.getAvailableTimestamp()){
+            tempDate=new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate=simpleDateFormat.format(tempDate);
+            targetDate=simpleDateFormat.format(date);
+            if(targetDate.equals(healthIdDate)){
+                availableTimeTemp.add(hourDateFormat.format(tempDate));
+            }
+        }
+        return availableTimeTemp;
+    }
+
     public ArrayList<HealthData> getHealthDataOn(Date date){
         ArrayList<HealthData> healthDataTemp=new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);

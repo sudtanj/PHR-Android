@@ -37,5 +37,6 @@
     <string name="health_comment">Comment</string>
 
     <string name="sensor_save">Save</string>
+    <string name="choose_health_data_list_date">Choose Date for Graph</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

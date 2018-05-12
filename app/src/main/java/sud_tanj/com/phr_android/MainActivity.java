@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -27,9 +28,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
@@ -104,6 +111,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         Global.setNavigationView(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
+        /**
+        Glide.with(this).asGif().apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)).load(R.drawable.nav_bar_background).into(new SimpleTarget<GifDrawable>() {
+            @Override
+            public void onResourceReady(GifDrawable resource, Transition<? super GifDrawable> transition) {
+                LinearLayout linearLayout=(LinearLayout) findViewById(R.id.nav_bar_layout);
+                linearLayout.setBackground(resource);
+            }
+        });
+         */
 
         //init navigation drawer
 
@@ -231,8 +247,6 @@ public class MainActivity extends AppCompatActivity
             currentFragment = new GridViewActivity();
             transaction.replace(R.id.fragment_container, currentFragment);
             transaction.commit();
-
-        } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
             Intent i = new Intent(getApplicationContext(), MyPreferencesActivity.class);

@@ -82,6 +82,7 @@ dependencies {
     implementation 'com.github.sudtanj:android-issue-reporter:b5579f5df3'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.github.drawers:SpinnerDatePicker:1.0.6'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.9'
     implementation files('libs/CH34xUARTDriver.jar')
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
