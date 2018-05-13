@@ -9,7 +9,7 @@ addons:
 env:
   matrix:
     - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
-    - ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+    #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     - ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     - ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     - ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
@@ -54,13 +54,13 @@ cache:
     - $HOME/.android/build-cache
 script:
   - ./gradlew assembleDebug
-  #- ./gradlew assembleAndroidTest
+  - ./gradlew assembleAndroidTest
   - ./gradlew assembleRelease 
   - ./gradlew generateReleaseJavadoc
-  - adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
+  #- adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
   #- adb push ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk /data/local/tmp/app-debug-androidTest.apk
-  - adb install /data/local/tmp/app-debug.apk
-  #- adb install /data/local/tmp/app-debug-androidTest.apk
+  - adb install ./app/build/outputs/apk/debug/app-debug.apk
+  - adb install ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
   #- adb shell am instrument -w sud_tanj.com.phr_android.test/android.support.test.runner.AndroidJUnitRunner
   - adb shell monkey -p sud_tanj.com.phr_android -c android.intent.category.LAUNCHER 1
   #- adb shell pm install -t -r "/data/local/tmp/sud_tanj.com.phr_android"
