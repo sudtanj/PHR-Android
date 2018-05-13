@@ -34,14 +34,14 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
 
     public TextView countryName;
     public ImageView countryPhoto;
-    public Switch sensorSwitch;
+    //public Switch sensorSwitch;
 
     public RecyclerViewHolders(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
         countryName = (TextView) itemView.findViewById(R.id.sensor_name);
         countryPhoto = (ImageView) itemView.findViewById(R.id.sensor_picture);
-        sensorSwitch = (Switch) itemView.findViewById(R.id.switch1);
+        //sensorSwitch = (Switch) itemView.findViewById(R.id.switch1);
     }
 
     @Override

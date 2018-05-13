@@ -17,8 +17,7 @@ package sud_tanj.com.phr_android.Interface.Sensor;
  * This class last modified by User
  */
 
-public interface EmbeddedScript {
-    public Boolean run();
+public interface EmbeddedScript extends Runnable{
 
     public String getSensorId();
 

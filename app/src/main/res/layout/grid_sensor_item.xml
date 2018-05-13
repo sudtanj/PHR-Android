@@ -42,13 +42,6 @@
             android:text="@string/country_name"
             android:textSize="13sp"></TextView>
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/sensor_name"
-            android:text="Switch" />
     </RelativeLayout>
 
 

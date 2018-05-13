@@ -52,7 +52,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
         this.positionLocal = position;
         holder.countryName.setText(itemList.get(position).getSensorInformation().getSensorName());
-        holder.sensorSwitch.setChecked(itemList.get(position).getSensorInformation().isSensorActive());
+        //holder.sensorSwitch.setChecked(itemList.get(position).getSensorInformation().isSensorActive());
+        /**
         holder.sensorSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             int position = positionLocal;
 
@@ -61,6 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
                 itemList.get(position).getSensorInformation().setSensorActive(b);
             }
         });
+            */
         // holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
     }
 

@@ -7,7 +7,10 @@
 
 package sud_tanj.com.phr_android.Hardware_Driver;
 
+import android.content.IntentFilter;
+
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
 
 /**
@@ -25,41 +28,57 @@ public abstract class ArduinoUnoCH340 implements EmbeddedScript {
     private byte dataBit = 8;
     private byte parity = 0;
     private byte flowControl = 0;
-    private int retval = 0;
+    private Boolean configSet=Boolean.FALSE;
 
-    public Boolean openConnection() {
-
-        if (!Global.getCH340Driver().isConnected()) {
-            retval = Global.getCH340Driver().ResumeUsbList();
-            if (retval == -1)
-                Global.getCH340Driver().CloseDevice();
-            else if (retval == 0) {
-                if (Global.getCH340Driver().UartInit())
-                    return true;
-                else
-                    return false;
-            }
-        }
-        return true;
+    public void setAsDefaultConfig(){
+        setConfig(baudRate, dataBit, stopBit, parity, flowControl);
     }
 
-    public void closeConnection() {
-        Global.getCH340Driver().CloseDevice();
-    }
-
-    public void setConfig() {
+    public void setConfig(Integer baudRate,Byte dataBit,Byte stopBit,Byte parity,Byte flowControl) {
         Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
     }
 
-    public String getDataAtCurrent() {
+    public String getLatestDataFromArduino() {
         byte[] buffer = new byte[4096];
         int length = Global.getCH340Driver().ReadData(buffer, 4096);
         if (length > 0) {
             //String recv = toHexString(buffer, length);
             String recv = new String(buffer, 0, length);
             //String recv = String.valueOf(totalrecv);
-            return recv;
+            String[] temp = recv.split("\n");
+            String result = "";
+            if (temp.length > 0)
+                result = temp[temp.length - 1];
+            if (this.isNumeric(result)){
+                return result;
+            }
+            return "";
         }
-        return "no message";
+        return new String("");
+    }
+
+    public Boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
+
+    public abstract void postDataReceived(String data);
+
+    @Override
+    public void run() {
+        try {
+            if (!this.configSet) {
+                this.setAsDefaultConfig();
+                this.configSet = Boolean.TRUE;
+            }
+        } catch (Exception e){
+
+        }
+        if (Global.getCH340Driver() != null) {
+            if (Global.getCH340Driver().isConnected()) {
+                String result=this.getLatestDataFromArduino();
+                if(!result.isEmpty())
+                    this.postDataReceived(result);
+            }
+        }
     }
 }

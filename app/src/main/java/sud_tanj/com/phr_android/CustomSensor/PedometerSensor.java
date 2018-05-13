@@ -35,7 +35,7 @@ public class PedometerSensor implements EmbeddedScript {
     private Boolean firstTime=Boolean.TRUE;
 
     @Override
-    public Boolean run() {
+    public void run() {
         if(this.firstTime) {
             pedometer = Global.getSensorGateway().getSensorData(sensorId);
             PackageManager packageManager = Global.getContext().getPackageManager();
@@ -59,7 +59,6 @@ public class PedometerSensor implements EmbeddedScript {
             }
             this.firstTime=Boolean.FALSE;
         }
-        return Boolean.TRUE;
     }
 
     @Override

@@ -7,6 +7,6 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#b8e2eb</color>
+    <color name="colorPrimary">#3F51B5</color>
     <color name="primary_text_material_dark">#ffffff</color>
 </resources>

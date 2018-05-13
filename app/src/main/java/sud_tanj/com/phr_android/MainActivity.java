@@ -7,6 +7,7 @@
 
 package sud_tanj.com.phr_android;
 
+import android.app.ActionBar;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -15,7 +16,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -42,6 +46,7 @@ import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Hardware_Driver.Interface.ArduinoReceiver;
 import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Health_Sensor.GridLayout.GridViewActivity;
 import sud_tanj.com.phr_android.Health_Sensor.ModifySensor;
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private SensorGateway gate;
     private int delay = 5 * 1000;
     private HandlerLoop sensorBackgroundHandler;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +144,14 @@ public class MainActivity extends AppCompatActivity
         age = (TextView) navigationView.getHeaderView(0).findViewById(R.id.age);
         age.setText(Global.getSettings().getString("age_key", "") + " Years old");
 
+        this.intentFilter = new IntentFilter();
+        this.intentFilter.addAction("android.hardware.usb.action.USB_STATE");
+
+        registerReceiver(new ArduinoReceiver(), this.intentFilter);
+
+        android.support.v7.app.ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#b8e2eb")));
+
     }
 
     @Override
@@ -156,26 +170,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        /**
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getExtras().getBoolean("connected")) {
-                    //start doing something for state - connected
-                    if (!Global.getCH340Driver().isConnected())
-                        Global.getCH340Driver().ResumeUsbPermission();
-                } else {
-                    //start doing something for state - disconnected
-                }
-            }
-        };
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.hardware.usb.action.USB_STATE");
-
-        registerReceiver(receiver, filter);
-        */
     }
 
     @Override
