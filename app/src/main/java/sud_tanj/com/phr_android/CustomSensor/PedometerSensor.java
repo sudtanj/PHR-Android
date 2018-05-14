@@ -17,7 +17,7 @@ import android.hardware.SensorManager;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
 
 /**
  * This class is part of PHRAndroid Project
@@ -29,40 +29,45 @@ import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
  * This class last modified by User
  */
 
-public class PedometerSensor implements EmbeddedScript {
+public class PedometerSensor extends sud_tanj.com.phr_android.Sensor.Sensor {
     private SensorData pedometer;
     private String sensorId = "pedometer03102";
-    private Boolean firstTime=Boolean.TRUE;
+    private PackageManager packageManager=null;
 
     @Override
     public void run() {
-        if(this.firstTime) {
             pedometer = Global.getSensorGateway().getSensorData(sensorId);
-            PackageManager packageManager = Global.getContext().getPackageManager();
-            if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
-                SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
-                Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-                if (countSensor != null) {
-                    sensorManager.registerListener(new SensorEventListener() {
-                        @Override
-                        public void onSensorChanged(SensorEvent sensorEvent) {
-                            HealthData healthData = new HealthData(pedometer);
-                            healthData.setValues(String.valueOf(sensorEvent.values[0]));
-                        }
+            if(this.packageManager==null) {
+                this.packageManager = Global.getContext().getPackageManager();
+                System.out.println("init listenre pedometer");
+                if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
+                    SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
+                    Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+                    if (countSensor != null) {
+                        sensorManager.registerListener(new SensorEventListener() {
+                            @Override
+                            public void onSensorChanged(SensorEvent sensorEvent) {
+                                HealthData healthData = new HealthData(pedometer);
+                                healthData.setValues(String.valueOf(sensorEvent.values[0]));
+                            }
 
-                        @Override
-                        public void onAccuracyChanged(Sensor sensor, int i) {
+                            @Override
+                            public void onAccuracyChanged(Sensor sensor, int i) {
 
-                        }
-                    }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                            }
+                        }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                    }
                 }
             }
-            this.firstTime=Boolean.FALSE;
-        }
     }
 
     @Override
     public String getSensorId() {
         return sensorId;
+    }
+
+    @Override
+    public Boolean isScriptRunOnce() {
+        return Boolean.TRUE;
     }
 }

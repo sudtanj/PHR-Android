@@ -7,7 +7,7 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
 
 /**
  * This class is part of PHRAndroid Project
@@ -38,12 +38,14 @@ public class SensorEmbeddedScript implements Runnable {
     }
 
     private void findScript() {
-        try {
-            Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
-            script = (EmbeddedScript) (listener.newInstance());
-            this.scriptExist = true;
-        } catch (Exception e) {
-            this.scriptExist = false;
+        if(this.script==null) {
+            try {
+                Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
+                script = (EmbeddedScript) (listener.newInstance());
+                this.scriptExist = true;
+            } catch (Exception e) {
+                this.scriptExist = false;
+            }
         }
     }
 

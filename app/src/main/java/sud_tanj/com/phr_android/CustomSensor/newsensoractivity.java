@@ -10,7 +10,7 @@ package sud_tanj.com.phr_android.CustomSensor;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Hardware_Driver.ArduinoUnoCH340;
+import sud_tanj.com.phr_android.Sensor.HardwareDriver.ArduinoUnoCH340;
 
 /**
  * This class is part of PHRAndroid Project
@@ -33,5 +33,10 @@ public class newsensoractivity extends ArduinoUnoCH340 {
     @Override
     public String getSensorId() {
         return "NewSensor148";
+    }
+
+    @Override
+    public Boolean isScriptRunOnce() {
+        return Boolean.FALSE;
     }
 }

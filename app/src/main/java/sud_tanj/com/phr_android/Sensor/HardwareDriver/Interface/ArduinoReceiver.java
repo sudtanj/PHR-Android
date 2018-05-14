@@ -5,7 +5,7 @@
  * Last Modified by User on 5/13/18 4:21 PM
  */
 
-package sud_tanj.com.phr_android.Hardware_Driver.Interface;
+package sud_tanj.com.phr_android.Sensor.HardwareDriver.Interface;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

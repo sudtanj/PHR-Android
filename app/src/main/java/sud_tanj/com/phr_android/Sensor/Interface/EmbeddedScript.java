@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 5/6/18 5:47 PM
+ * Last Modified by User on 5/14/18 3:44 PM
  */
 
-package sud_tanj.com.phr_android.Interface.Sensor;
+package sud_tanj.com.phr_android.Sensor.Interface;
 
 /**
  * This class is part of PHRAndroid Project
@@ -19,6 +19,8 @@ package sud_tanj.com.phr_android.Interface.Sensor;
 
 public interface EmbeddedScript extends Runnable{
 
-    public String getSensorId();
+    String getSensorId();
+
+    Boolean isScriptRunOnce();
 
 }

@@ -5,12 +5,12 @@
  * Last Modified by User on 5/6/18 5:49 PM
  */
 
-package sud_tanj.com.phr_android.Hardware_Driver;
+package sud_tanj.com.phr_android.Sensor.HardwareDriver;
 
 import com.physicaloid.lib.Physicaloid;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
 
 /**
  * This class is part of PHRAndroid Project

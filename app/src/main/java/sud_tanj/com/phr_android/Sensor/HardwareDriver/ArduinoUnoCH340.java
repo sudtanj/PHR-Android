@@ -5,13 +5,11 @@
  * Last Modified by User on 5/6/18 5:49 PM
  */
 
-package sud_tanj.com.phr_android.Hardware_Driver;
-
-import android.content.IntentFilter;
+package sud_tanj.com.phr_android.Sensor.HardwareDriver;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.Sensor;
 
 /**
  * This class is part of PHRAndroid Project
@@ -22,7 +20,7 @@ import sud_tanj.com.phr_android.Interface.Sensor.EmbeddedScript;
  * <p>
  * This class last modified by User
  */
-public abstract class ArduinoUnoCH340 implements EmbeddedScript {
+public abstract class ArduinoUnoCH340 extends Sensor {
     private int baudRate = 9600;
     private byte stopBit = 1;
     private byte dataBit = 8;
@@ -65,6 +63,7 @@ public abstract class ArduinoUnoCH340 implements EmbeddedScript {
 
     @Override
     public void run() {
+        super.run();
         try {
             if (!this.configSet) {
                 this.setAsDefaultConfig();
