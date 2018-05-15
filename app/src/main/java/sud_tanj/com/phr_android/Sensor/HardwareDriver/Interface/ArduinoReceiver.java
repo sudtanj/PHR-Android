@@ -29,10 +29,12 @@ public class ArduinoReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(!this.usbManager.getDeviceList().isEmpty()) {
-            this.openConnection();
-        }else {
-            this.closeConnection();
+        if(Global.getCH340Driver()!=null) {
+            if (!this.usbManager.getDeviceList().isEmpty()) {
+                this.openConnection();
+            } else {
+                this.closeConnection();
+            }
         }
     }
 
