@@ -93,7 +93,7 @@ public class SensorInformation {
         this.userDataReference = userDataReference;
     }
 
-    private DatabaseReference getDataReference() {
+    public DatabaseReference getDataReference() {
         return dataReference;
     }
 

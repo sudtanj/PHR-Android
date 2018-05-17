@@ -27,7 +27,7 @@ public class SensorInitializerListener implements SensorGatewaySyncable {
     public void updateData(SensorGateway sensorGateway, DataSnapshot dataSnapshot) {
         sensorGateway.resetSensorList();
         for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-            sensorGateway.getSensorObject().add(new SensorData(childSnapshot.getValue().toString()));
+            sensorGateway.getSensorObject().add(new SensorData(childSnapshot.getKey()));
         }
     }
 

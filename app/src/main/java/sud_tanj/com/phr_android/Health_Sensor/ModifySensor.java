@@ -51,11 +51,6 @@ public class ModifySensor extends AppCompatActivity {
         elementName = FormElementTextSingleLine.createInstance().setTitle("Sensor Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
 
-        if (data.getBoolean("modifySensor")) {
-            currentSensor = Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
-            elementName.setValue(currentSensor.getSensorInformation().getSensorName());
-            elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
-        }
 
         List<BaseFormElement> formItems = new ArrayList<>();
         formItems.add(header);
@@ -63,6 +58,12 @@ public class ModifySensor extends AppCompatActivity {
         formItems.add(elementEmbedded);
 
         mFormBuilder.addFormElements(formItems);
+
+        if (data.getBoolean("modifySensor")) {
+            currentSensor = Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
+            elementName.setValue(currentSensor.getSensorInformation().getSensorName());
+            elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
+        }
 
     }
 
@@ -78,16 +79,28 @@ public class ModifySensor extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         menu.clear();
         getMenuInflater().inflate(R.menu.right_menu, menu);
+        if (data.getBoolean("modifySensor")) {
+            MenuItem deleteButton = menu.findItem(R.id.sensor_edit_delete);
+            deleteButton.setVisible(Boolean.TRUE);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
 
         switch (id) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.sensor_edit_delete:
+                if (data.getBoolean("modifySensor")) {
+                    currentSensor.delete();
+                    finish();
+                    return true;
+                }
                 return true;
             case R.id.action_save:
                 //Do Whatever you want to do here.

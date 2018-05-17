@@ -40,9 +40,14 @@ public class SensorEmbeddedScript implements Runnable {
     private void findScript() {
         if(this.script==null) {
             try {
-                Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
-                script = (EmbeddedScript) (listener.newInstance());
-                this.scriptExist = true;
+                if(!name.isEmpty()) {
+                    Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
+                    script = (EmbeddedScript) (listener.newInstance());
+                    this.scriptExist = true;
+                }
+                else {
+                    this.scriptExist=false;
+                }
             } catch (Exception e) {
                 this.scriptExist = false;
             }

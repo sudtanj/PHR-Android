@@ -154,4 +154,9 @@ public class SensorData {
         }
         return healthDataTemp;
     }
+
+    public void delete(){
+        Global.getSensorGateway().deleteSensorObject(this);
+        this.getSensorInformation().getDataReference().removeValue();
+    }
 }

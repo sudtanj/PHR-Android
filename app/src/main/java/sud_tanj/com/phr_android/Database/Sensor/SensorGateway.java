@@ -33,12 +33,12 @@ public class SensorGateway {
     private SensorGatewaySynchronizer sensorGatewaySynchronizer=null;
 
     public SensorGateway(){
-        this.setDataReference(Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME));
+        this.setDataReference(Global.getMainDatabase());
 
         this.sensorObject=new ArrayList<>();
 
         this.sensorGatewaySynchronizer=new SensorGatewaySynchronizer(this.getDataReference(),this);
-        this.sensorGatewaySynchronizer.add(new SensorInitializerListener(),SENSOR_COLLECTION_KEY);
+        this.sensorGatewaySynchronizer.add(new SensorInitializerListener(),SENSOR_DATA_CHILD_NAME);
     }
 
     public SensorData createSensorDataObject(String sensorId){
@@ -109,6 +109,10 @@ public class SensorGateway {
 
     public void resetSensorList(){
         this.sensorObject=new ArrayList<>();
+    }
+
+    public void deleteSensorObject(SensorData sensorData){
+        this.sensorObject.remove(sensorData);
     }
 
 }

@@ -41,5 +41,6 @@
     <string name="health_data_list_title">Health Data List</string>
     <string name="sensor_data_list_title">Sensor List</string>
     <string name="login_with">Login</string>
+    <string name="sensor_edit_delete">Delete</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
