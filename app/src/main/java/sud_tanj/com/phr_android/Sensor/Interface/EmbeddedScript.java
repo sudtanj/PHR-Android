@@ -7,6 +7,8 @@
 
 package sud_tanj.com.phr_android.Sensor.Interface;
 
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+
 /**
  * This class is part of PHRAndroid Project
  * Any modified within this class without reading the
@@ -18,8 +20,6 @@ package sud_tanj.com.phr_android.Sensor.Interface;
  */
 
 public interface EmbeddedScript extends Runnable{
-
-    String getSensorId();
 
     Boolean isScriptRunOnce();
 

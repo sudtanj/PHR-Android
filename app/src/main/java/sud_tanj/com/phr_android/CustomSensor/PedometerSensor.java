@@ -17,7 +17,7 @@ import android.hardware.SensorManager;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.SensorListener;
 
 /**
  * This class is part of PHRAndroid Project
@@ -29,17 +29,13 @@ import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
  * This class last modified by User
  */
 
-public class PedometerSensor extends sud_tanj.com.phr_android.Sensor.Sensor {
-    private SensorData pedometer;
-    private String sensorId = "pedometer03102";
+public class PedometerSensor extends SensorListener {
     private PackageManager packageManager=null;
 
     @Override
     public void run() {
-            pedometer = Global.getSensorGateway().getSensorData(sensorId);
             if(this.packageManager==null) {
                 this.packageManager = Global.getContext().getPackageManager();
-                System.out.println("init listenre pedometer");
                 if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
                     SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
                     Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -47,7 +43,7 @@ public class PedometerSensor extends sud_tanj.com.phr_android.Sensor.Sensor {
                         sensorManager.registerListener(new SensorEventListener() {
                             @Override
                             public void onSensorChanged(SensorEvent sensorEvent) {
-                                HealthData healthData = new HealthData(pedometer);
+                                HealthData healthData = new HealthData(getSensorData());
                                 healthData.setValues(String.valueOf(sensorEvent.values[0]));
                             }
 
@@ -62,10 +58,9 @@ public class PedometerSensor extends sud_tanj.com.phr_android.Sensor.Sensor {
     }
 
     @Override
-    public String getSensorId() {
-        return sensorId;
-    }
+    public void syncData() {
 
+    }
     @Override
     public Boolean isScriptRunOnce() {
         return Boolean.TRUE;

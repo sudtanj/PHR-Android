@@ -10,6 +10,7 @@ package sud_tanj.com.phr_android.Database.Data;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -64,6 +65,7 @@ public class HealthData {
 
 
     }
+
 
     public HealthData(SensorData sensorData) {
         this("", sensorData);

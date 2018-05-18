@@ -65,6 +65,9 @@ public class HealthDataList extends AppCompatActivity {
 
         GraphView graph = (GraphView) findViewById(R.id.health_data_graph);
         Button date=(Button) findViewById(R.id.choose_date);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(24);
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
         DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));

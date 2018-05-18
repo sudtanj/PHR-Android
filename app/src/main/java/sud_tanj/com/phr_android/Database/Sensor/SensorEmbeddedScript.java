@@ -8,6 +8,7 @@
 package sud_tanj.com.phr_android.Database.Sensor;
 
 import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
+import sud_tanj.com.phr_android.Sensor.SensorListener;
 
 /**
  * This class is part of PHRAndroid Project
@@ -20,7 +21,7 @@ import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
  */
 public class SensorEmbeddedScript implements Runnable {
     private String name = null;
-    private EmbeddedScript script = null;
+    private SensorListener script = null;
     private SensorData sensorData = null;
     private Boolean scriptExist;
 
@@ -42,7 +43,8 @@ public class SensorEmbeddedScript implements Runnable {
             try {
                 if(!name.isEmpty()) {
                     Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
-                    script = (EmbeddedScript) (listener.newInstance());
+                    script = (SensorListener) (listener.newInstance());
+                    script.setSensorData(this.sensorData);
                     this.scriptExist = true;
                 }
                 else {

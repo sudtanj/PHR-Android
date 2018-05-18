@@ -48,7 +48,7 @@ public class ModifySensor extends AppCompatActivity {
         mFormBuilder = new FormBuilder(getApplicationContext(), mRecyclerView);
 
         FormHeader header = FormHeader.createInstance("Adding new sensor");
-        elementName = FormElementTextSingleLine.createInstance().setTitle("Sensor Name").setValue("").setHint("Enter the name of the sensor");
+        elementName = FormElementTextSingleLine.createInstance().setTitle("SensorListener Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
 
 
@@ -117,10 +117,10 @@ public class ModifySensor extends AppCompatActivity {
                     temp.getSensorInformation().setSensorName(elementName.getValue());
                     temp.getBackgroundJob().setName(elementEmbedded.getValue());
                     temp.getSensorInformation().setSensorOwner(Global.getFireBaseUser().getUid());
-                    Toast.makeText(getApplicationContext(), "Sensor added succesfully!", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "SensorListener added succesfully!", Toast.LENGTH_SHORT);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Sensor failed to be added! please change to other name", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "SensorListener failed to be added! please change to other name", Toast.LENGTH_SHORT);
                 }
                 return true;
         }

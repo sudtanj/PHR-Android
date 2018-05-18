@@ -22,17 +22,13 @@ import sud_tanj.com.phr_android.Sensor.HardwareDriver.ArduinoUnoCH340;
  * This class last modified by User
  */
 public class newsensoractivity extends ArduinoUnoCH340 {
-    private SensorData sensor = Global.getSensorGateway().getSensorData(this.getSensorId());
 
     @Override
     public void postDataReceived(String data) {
-        HealthData healthData = new HealthData(sensor);
-        healthData.setValues(data);
-    }
-
-    @Override
-    public String getSensorId() {
-        return "NewSensor148";
+        if(this.isNumeric(data)) {
+            HealthData healthData = new HealthData(getSensorData());
+            healthData.setValues(data);
+        }
     }
 
     @Override
