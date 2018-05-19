@@ -12,11 +12,6 @@
         android:orderInCategory="103"
         android:title="Report Error" />
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="101"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_logout"
         android:orderInCategory="104"
         android:title="@string/action_logout"

@@ -7,6 +7,7 @@
 
 package sud_tanj.com.phr_android;
 
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     private SensorGateway gate;
     private int delay = 5 * 1000;
     private HandlerLoop sensorBackgroundHandler;
+    private SensorRunnable sensorRunnable;
     private IntentFilter intentFilter;
 
     @Override
@@ -144,26 +147,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        this.sensorBackgroundHandler = new HandlerLoop(3, new SensorRunnable());
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HealthDataListActivity()).commit();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-   //     Global.getCH340Driver().CloseDevice();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        this.sensorRunnable=new SensorRunnable();
+        this.sensorBackgroundHandler = new HandlerLoop(3, this.sensorRunnable);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HealthDataListActivity()).commit();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        this.sensorBackgroundHandler.removeCallbacks(this.sensorRunnable);
+        this.sensorBackgroundHandler.removeCallbacksAndMessages(null);
+        this.sensorBackgroundHandler=null;
+        this.sensorRunnable=null;
     }
 
     @Override
@@ -193,21 +190,17 @@ public class MainActivity extends AppCompatActivity
         Integer id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id.equals(R.id.action_settings)) {
-            //getSupportFragmentManager().beginTransaction().replace(R.id.content_main,new SettingsFragment()).commit();
-            Intent i = new Intent(getApplicationContext(), MyPreferencesActivity.class);
-            ActivityOptions options = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                options = ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.fade_in, android.R.anim.fade_out);
-                startActivity(i, options.toBundle());
-            }
-            return true;
-        } else if (id.equals(R.id.action_report)) {
+      if (id.equals(R.id.action_report)) {
             ReportView.launch(this);
         } else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();
-            finish();
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            this.onPause();
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+              ((ActivityManager)this.getSystemService(ACTIVITY_SERVICE))
+                      .clearApplicationUserData(); // note: it has a return value!
+          }
+          finish();
+            //startActivity(new Intent(getApplicationContext(), Login.class));
         }
 
         return super.onOptionsItemSelected(item);

@@ -39,13 +39,38 @@ import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListener;
+import sud_tanj.com.phr_android.Health_Data.Interface.SortByDayListener;
+import sud_tanj.com.phr_android.Health_Data.Interface.SortByMonthListener;
+import sud_tanj.com.phr_android.Health_Data.Interface.SortByYearListener;
 import sud_tanj.com.phr_android.MainActivity;
 import sud_tanj.com.phr_android.R;
 
 public class HealthDataList extends AppCompatActivity {
+    public SensorData getSensorData() {
+        return sensorData;
+    }
+
     private SensorData sensorData;
     private TextView sensorName;
+
+    public GraphView getGraph() {
+        return graph;
+    }
+
+    private GraphView graph;
     private  SimpleDateFormat simpleDateFormat;
+    private HealthDataListGraphListener healthDataListGraphListener;
+
+    public void setHandlerLoop(ArrayList<HealthData> healthData,ArrayList<String> hourData) {
+        if(this.handlerLoop!=null){
+            this.handlerLoop.removeCallbacks(healthDataListGraphListener);
+            this.handlerLoop.removeCallbacksAndMessages(null);
+        }
+        healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData);
+        this.handlerLoop = new HandlerLoop(5, healthDataListGraphListener);
+    }
+
+    private HandlerLoop handlerLoop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,24 +88,37 @@ public class HealthDataList extends AppCompatActivity {
         this.sensorName = (TextView) findViewById(R.id.health_data_title);
         this.sensorName.setText(this.sensorData.getSensorInformation().getSensorName());
 
-        GraphView graph = (GraphView) findViewById(R.id.health_data_graph);
-        Button date=(Button) findViewById(R.id.choose_date);
+        graph = (GraphView) findViewById(R.id.health_data_graph);
+
+        DatePicker datePicker = (DatePicker) findViewById(R.id.date_picker);
+        Calendar calendar= Calendar.getInstance();
+        Integer year=calendar.get(Calendar.YEAR);
+        Integer monthOfYear=calendar.get(Calendar.MONTH);
+        Integer dayOfMonth=calendar.get(Calendar.DATE);
+        datePicker.init(year, monthOfYear, dayOfMonth, new DatePickerDataChangeListener(this));
+
+        Button sortByYear=(Button) findViewById(R.id.sort_by_year);
+        sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph));
+        Button sortByMonth=(Button) findViewById(R.id.sort_by_month);
+        sortByMonth.setOnClickListener(new SortByMonthListener(datePicker,graph));
+        Button sortByDay=(Button) findViewById(R.id.sort_by_day);
+        sortByDay.setOnClickListener(new SortByDayListener(datePicker,graph));
+
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(24);
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
-        DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
-        datePickerListener.getDateSetListener().setButton(date);
-        date.setOnClickListener(datePickerListener);
+        //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
+        //datePickerListener.getDateSetListener().setButton(date);
+        //date.setOnClickListener(datePickerListener);
 
         Date dateNow = new Date();
         ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
         ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
-        date.setText(simpleDateFormat.format(dateNow));
-        HealthDataListGraphListener healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData);
-        HandlerLoop handlerLoop=new HandlerLoop(5,healthDataListGraphListener);
+        //date.setText(simpleDateFormat.format(dateNow));
+        this.setHandlerLoop(healthData,hourData);
     }
 
     @Override
@@ -97,6 +135,11 @@ public class HealthDataList extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if(this.handlerLoop!=null){
+            this.handlerLoop.removeCallbacks(healthDataListGraphListener);
+            this.handlerLoop.removeCallbacksAndMessages(null);
+            this.handlerLoop=null;
+        }
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 

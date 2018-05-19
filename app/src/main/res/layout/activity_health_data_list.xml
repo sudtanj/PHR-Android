@@ -29,12 +29,42 @@
                 android:text="@string/health_title"
                 android:textSize="24sp" />
 
-            <Button
-                android:id="@+id/choose_date"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/choose_health_data_list_date" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/sort_by_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sort_by_year" />
+
+                <Button
+                    android:id="@+id/sort_by_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sort_by_month" />
+
+                <Button
+                    android:id="@+id/sort_by_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/sort_by_day" />
+            </LinearLayout>
+
+            <DatePicker
+                android:id="@+id/date_picker"
+                android:layout_width="match_parent"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:layout_weight="4"
+                android:layout_height="0dp"
+                />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/health_data_graph"

@@ -62,13 +62,17 @@ public class GridViewActivity extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Global.getFloatingButton().hide();
+        if(Global.isAdmin()) {
+            Global.getFloatingButton().hide();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Global.getFloatingButton().show();
+        if(Global.isAdmin()) {
+            Global.getFloatingButton().show();
+        }
     }
 
     private List<ItemObject> getAllItemList() {

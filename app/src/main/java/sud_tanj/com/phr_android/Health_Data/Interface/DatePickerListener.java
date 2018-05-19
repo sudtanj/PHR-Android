@@ -9,6 +9,8 @@ package sud_tanj.com.phr_android.Health_Data.Interface;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -33,12 +35,15 @@ public class DatePickerListener implements View.OnClickListener {
     private SpinnerDatePickerDialogBuilder spinnerDatePickerDialogBuilder;
     private DatePickerDialog datePickerDialog;
     private Boolean firstTime;
+    private DatePicker datePicker;
 
     public DatePickerListener(Context healthDataContext, DatePickerDataChangeListener dateSetListener) {
         this.healthDataContext = healthDataContext;
         this.dateSetListener=dateSetListener;
         this.spinnerDatePickerDialogBuilder=new SpinnerDatePickerDialogBuilder();
         this.firstTime=Boolean.TRUE;
+        this.datePicker = (DatePicker) ((HealthDataList)this.healthDataContext).findViewById(R.id.date_picker);
+
     }
 
     public DatePickerDataChangeListener getDateSetListener() {
@@ -52,18 +57,25 @@ public class DatePickerListener implements View.OnClickListener {
         Integer monthOfYear=calendar.get(Calendar.MONTH);
         Integer dayOfMonth=calendar.get(Calendar.DATE);
         if(this.firstTime) {
-            showDate(year, monthOfYear, dayOfMonth, R.style.NumberPickerStyle);
+            datePicker.init(year, monthOfYear, dayOfMonth, this.dateSetListener);
+            //LinearLayout ll = (LinearLayout)datePicker.getChildAt(0);
+            //LinearLayout ll2 = (LinearLayout)ll.getChildAt(0);
+            //ll2.getChildAt(0).setVisibility(View.INVISIBLE);
+            //showDate(year, monthOfYear, dayOfMonth, R.style.NumberPickerStyle);
+            this.firstTime=Boolean.FALSE;
         } else {
-            this.datePickerDialog.show();
+           // this.datePickerDialog.show();
         }
     }
 
     void showDate(int year, int monthOfYear, int dayOfMonth, int spinnerTheme) {
+       /**
         this.datePickerDialog=this.spinnerDatePickerDialogBuilder
                 .context(this.healthDataContext).callback(this.dateSetListener)
                 .spinnerTheme(spinnerTheme)
                 .defaultDate(year, monthOfYear, dayOfMonth)
                 .build();
         this.datePickerDialog.show();
+    */
     }
 }

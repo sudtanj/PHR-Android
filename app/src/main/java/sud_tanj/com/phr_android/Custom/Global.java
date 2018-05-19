@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
+import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.UserDataSynchronizer;
+import sud_tanj.com.phr_android.User.Interface.IsAdminListener;
 
 /**
  * This class is part of PHRAndroid Project
@@ -45,6 +47,8 @@ public class Global {
     private static SensorGateway sensorGateway = null;
     private static FloatingActionButton floatingButton = null;
     private static CH34xUARTDriver driver = null;
+    private static Boolean admin=false;
+    private static UserDataSynchronizer userDataSynchronizer;
 
     public static Context getContext() {
         return context;
@@ -123,6 +127,8 @@ public class Global {
 
     public static void setSensorGateway(SensorGateway sensorGateway) {
         Global.sensorGateway = sensorGateway;
+        userDataSynchronizer=new UserDataSynchronizer(getUserDatabase());
+        userDataSynchronizer.add(new IsAdminListener(admin),"admin");
     }
 
     public static FloatingActionButton getFloatingButton() {
@@ -142,6 +148,14 @@ public class Global {
             return driver;
         else
             return null;
+    }
+
+    public static void setAdmin(Boolean admin) {
+        Global.admin = admin;
+    }
+
+    public static Boolean isAdmin(){
+        return admin;
     }
 
 }
