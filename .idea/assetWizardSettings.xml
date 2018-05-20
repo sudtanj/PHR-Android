@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="145" />
+                                                <entry key="scalingPercent" value="151" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -36,7 +36,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="71c4de" />
-                                      <entry key="foregroundImage" value="D:\personal_health_light_blue_icon.png" />
+                                      <entry key="foregroundImage" value="D:\Kuliah\TA\images\new_logo.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

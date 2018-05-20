@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Create by Sudono Tanjung
-  ~ Copyright (c) 2018. All rights reserved.
-  ~
-  ~ Last Modified by User on 5/12/18 3:19 PM
-  -->
-
 <resources>
     <color name="ic_launcher_background">#71C4DE</color>
 </resources>
