@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -69,7 +70,7 @@ public class HealthDataList extends AppCompatActivity {
             this.handlerLoop.removeCallbacks(healthDataListGraphListener);
             this.handlerLoop.removeCallbacksAndMessages(null);
         }
-        healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData);
+        healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData,sensorData);
         this.handlerLoop = new HandlerLoop(5, healthDataListGraphListener);
     }
 
@@ -114,6 +115,7 @@ public class HealthDataList extends AppCompatActivity {
         graph.getViewport().setScalableY(true);
 
         graph.getViewport().setScrollable(true);
+
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
         //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));

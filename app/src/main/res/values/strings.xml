@@ -46,5 +46,6 @@
     <string name="sort_by_month">Show by month</string>
     <string name="sort_by_day">Show by day</string>
     <string name="health_data_analyst">Analysis</string>
+    <string name="health_data_choose_date">Choose Health Data Date</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

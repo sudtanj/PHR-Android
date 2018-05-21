@@ -11,6 +11,7 @@ import android.graphics.Color;
 
 import com.google.firebase.database.Transaction;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 
@@ -33,19 +35,22 @@ import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 public class HealthDataListGraphListener implements HandlerLoopRunnable {
     private GraphView graphView;
     private ArrayList<HealthData> healthData;
+    private SensorData sensorData;
     private Boolean handlerExpired;
     private ArrayList<String> hourData;
 
-    public HealthDataListGraphListener(GraphView graph, ArrayList<HealthData> healthData, ArrayList<String> hourData) {
+    public HealthDataListGraphListener(GraphView graph, ArrayList<HealthData> healthData, ArrayList<String> hourData,SensorData sensorData) {
         this.graphView=graph;
         this.healthData=healthData;
         this.handlerExpired=Boolean.FALSE;
         this.hourData=hourData;
+        this.sensorData=sensorData;
     }
 
     @Override
     public void run() {
         this.handlerExpired=Boolean.TRUE;
+        /**
         for(HealthData temp:this.healthData){
             if(!temp.isValid()){
                 this.handlerExpired=Boolean.FALSE;
@@ -53,6 +58,7 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
             }
         }
         if(this.handlerExpired){
+         */
             this.graphView.removeAllSeries();
             ArrayList<LineGraphSeries<DataPoint>> healthDataSeries=new ArrayList<LineGraphSeries<DataPoint>>();
             ArrayList<ArrayList<DataPoint>> healthDataPoint=new ArrayList<ArrayList<DataPoint>>();
@@ -87,9 +93,16 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
                 ArrayList<DataPoint> healthTemp=healthDataPoint.get(i);
                 LineGraphSeries<DataPoint> seriesTemp=healthDataSeries.get(i);
                 seriesTemp.resetData(healthTemp.toArray(new DataPoint[healthTemp.size()]));
+                try {
+                    seriesTemp.setTitle(this.sensorData.getSensorInformation().getGraphLegend().get(i));
+                    this.graphView.getLegendRenderer().setVisible(true);
+                    this.graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                } catch (Exception e){
+
+                }
                 this.graphView.addSeries(seriesTemp);
             }
-        }
+        //}
     }
 
     @Override

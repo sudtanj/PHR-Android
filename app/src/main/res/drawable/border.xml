@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by Sudono Tanjung
+  ~ Copyright (c) 2018. All rights reserved.
+  ~
+  ~ Last Modified by User on 5/21/18 8:23 PM
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <stroke
+        android:width="3dip"
+        android:color="@color/appHeader" />
+</shape>

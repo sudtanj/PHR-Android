@@ -129,11 +129,11 @@ public class ModifySensor extends AppCompatActivity {
                     currentSensor.getSensorInformation().setSensorName(elementName.getValue());
                     currentSensor.getBackgroundJob().setName(elementEmbedded.getValue());
                     String[] graphLegend = elementGraphLegend.getValue().split(",");
+                    ArrayList<String> temp=new ArrayList<>();
                     for(int i=0;i<graphLegend.length;i++){
-                        if(!currentSensor.getSensorInformation().getGraphLegend().contains(graphLegend[i])) {
-                            currentSensor.getSensorInformation().addGraphLegend(graphLegend[i]);
-                        }
+                        temp.add(graphLegend[i]);
                     }
+                    currentSensor.getSensorInformation().setGraphLegend(temp);
                     finish();
                     return true;
                 }
