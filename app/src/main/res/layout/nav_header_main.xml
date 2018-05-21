@@ -41,7 +41,7 @@
             android:id="@+id/fullname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#A7FFFFFF"
+            android:background="#37FFFFFF"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="Android Studio"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -51,7 +51,7 @@
             android:id="@+id/age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#A7FFFFFF"
+            android:background="#37FFFFFF"
             android:text="android.studio@android.com"
             android:textColor="#000000" />
 

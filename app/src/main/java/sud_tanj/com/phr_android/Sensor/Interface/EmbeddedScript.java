@@ -7,6 +7,8 @@
 
 package sud_tanj.com.phr_android.Sensor.Interface;
 
+import java.util.ArrayList;
+
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 
 /**
@@ -22,5 +24,9 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public interface EmbeddedScript extends Runnable{
 
     Boolean isScriptRunOnce();
+
+    String analyzeData(ArrayList<String> healthData);
+
+
 
 }

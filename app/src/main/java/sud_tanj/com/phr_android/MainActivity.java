@@ -151,7 +151,10 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         this.sensorRunnable=new SensorRunnable();
         this.sensorBackgroundHandler = new HandlerLoop(3, this.sensorRunnable);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HealthDataListActivity()).commit();
+        if(currentFragment==null) {
+            currentFragment = new HealthDataListActivity();
+        }
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
     }
 
     @Override

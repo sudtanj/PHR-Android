@@ -7,8 +7,6 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
-import android.widget.ProgressBar;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,11 +31,6 @@ public class SensorData {
     private SensorInformation sensorInformation = null;
     private ArrayList<String> sensorData = null;
     private SensorEmbeddedScript backgroundJob = null;
-
-    public void setLatestData(HealthData latestData) {
-        this.latestData = latestData;
-    }
-
     private HealthData latestData = null;
 
     public SensorData(String sensorId) {
@@ -72,6 +65,10 @@ public class SensorData {
         return this.latestData;
     }
 
+    public void setLatestData(HealthData latestData) {
+        this.latestData = latestData;
+    }
+
     public void addHealthData(String values) {
         this.getSensorData().add(values);
     }
@@ -98,64 +95,64 @@ public class SensorData {
         this.backgroundJob = backgroundJob;
     }
 
-    public ArrayList<String> getAvailableTimestamp(){
-        ArrayList<String> temp=new ArrayList<>();
-        for(String healthId:this.sensorData){
-            String tempHealthId=healthId.replace(this.getSensorInformation().getSensorId(),"");
+    public ArrayList<String> getAvailableTimestamp() {
+        ArrayList<String> temp = new ArrayList<>();
+        for (String healthId : this.sensorData) {
+            String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
             temp.add(tempHealthId);
         }
         return temp;
     }
 
-    public ArrayList<String> getAvailableTimeOn(Date date){
-        ArrayList<String> availableTimeTemp=new ArrayList<String>();
+    public ArrayList<String> getAvailableTimeOn(Date date) {
+        ArrayList<String> availableTimeTemp = new ArrayList<String>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US),
-                hourDateFormat=new SimpleDateFormat("HH", Locale.US);
+                hourDateFormat = new SimpleDateFormat("HH", Locale.US);
         simpleDateFormat.format(date);
-        String healthIdDate,targetDate;
+        String healthIdDate, targetDate;
         Date tempDate;
-        for(String healthIdTime:this.getAvailableTimestamp()){
-            tempDate=new Date();
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            tempDate = new Date();
             tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate=simpleDateFormat.format(tempDate);
-            targetDate=simpleDateFormat.format(date);
-            if(targetDate.equals(healthIdDate)){
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
                 availableTimeTemp.add(hourDateFormat.format(tempDate));
             }
         }
         return availableTimeTemp;
     }
 
-    public ArrayList<HealthData> getHealthDataOn(Date date){
-        ArrayList<HealthData> healthDataTemp=new ArrayList<>();
+    public ArrayList<HealthData> getHealthDataOn(Date date) {
+        ArrayList<HealthData> healthDataTemp = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
         simpleDateFormat.format(date);
-        String healthIdDate,targetDate;
-        for(String healthIdTime:this.getAvailableTimestamp()){
-            Date tempDate=new Date();
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            Date tempDate = new Date();
             tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate=simpleDateFormat.format(tempDate);
-            targetDate=simpleDateFormat.format(date);
-            if(targetDate.equals(healthIdDate)){
-                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId()+healthIdTime),this));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
             }
         }
         return healthDataTemp;
     }
 
-    public ArrayList<HealthData> getHealthDataBetween (Date start, Date end){
-        ArrayList<HealthData> healthDataTemp=new ArrayList<>();
-        for(String healthIdTime:this.getAvailableTimestamp()){
-            Date healthDataTimestamp=new Date();
+    public ArrayList<HealthData> getHealthDataBetween(Date start, Date end) {
+        ArrayList<HealthData> healthDataTemp = new ArrayList<>();
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            Date healthDataTimestamp = new Date();
             healthDataTimestamp.setTime(Long.parseLong(healthIdTime));
-            if(healthDataTimestamp.after(start) && healthDataTimestamp.before(end)){
-                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId()+healthIdTime),this));
+            if (healthDataTimestamp.after(start) && healthDataTimestamp.before(end)) {
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
             }
         }
         return healthDataTemp;
     }
 
-    public void delete(){
+    public void delete() {
         Global.getSensorGateway().deleteSensorObject(this);
         this.getSensorInformation().getDataReference().removeValue();
     }

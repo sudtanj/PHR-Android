@@ -7,7 +7,9 @@
 
 package sud_tanj.com.phr_android.Health_Sensor;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -30,6 +32,7 @@ public class ModifySensor extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private FormBuilder mFormBuilder;
+    private FormElementTextSingleLine elementSensorId;
     private FormElementTextSingleLine elementName;
     private FormElementTextSingleLine elementEmbedded;
     private Bundle data;
@@ -43,24 +46,37 @@ public class ModifySensor extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.appHeader)));
+
         data = getIntent().getExtras();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mFormBuilder = new FormBuilder(getApplicationContext(), mRecyclerView);
 
-        FormHeader header = FormHeader.createInstance("Adding new sensor");
+        FormHeader header=null;
+        if (data.getBoolean("modifySensor")){
+            header = FormHeader.createInstance("Editing Existing Sensor");
+            currentSensor = Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
+            elementSensorId = FormElementTextSingleLine.createInstance().setTitle("Sensor ID").setValue(currentSensor.getSensorInformation().getSensorId()).setHint("Sensor Id");
+            this.getSupportActionBar().setTitle(currentSensor.getSensorInformation().getSensorName()+"'s Information");
+        }
+        if( header ==null ) {
+            header = FormHeader.createInstance("Adding New Sensor");
+        }
         elementName = FormElementTextSingleLine.createInstance().setTitle("SensorListener Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
 
 
         List<BaseFormElement> formItems = new ArrayList<>();
         formItems.add(header);
+        if (data.getBoolean("modifySensor")) {
+            formItems.add(elementSensorId);
+        }
         formItems.add(elementName);
         formItems.add(elementEmbedded);
 
         mFormBuilder.addFormElements(formItems);
 
         if (data.getBoolean("modifySensor")) {
-            currentSensor = Global.getSensorGateway().getSensorDataByName(data.getString("sensorName"));
             elementName.setValue(currentSensor.getSensorInformation().getSensorName());
             elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
         }

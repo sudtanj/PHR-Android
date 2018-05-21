@@ -14,6 +14,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.ArrayList;
+
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
@@ -44,7 +46,7 @@ public class PedometerSensor extends SensorListener {
                             @Override
                             public void onSensorChanged(SensorEvent sensorEvent) {
                                 HealthData healthData = new HealthData(getSensorData());
-                                healthData.setValues(String.valueOf(sensorEvent.values[0]));
+                                healthData.addValues(String.valueOf(sensorEvent.values[0]));
                             }
 
                             @Override
@@ -64,5 +66,10 @@ public class PedometerSensor extends SensorListener {
     @Override
     public Boolean isScriptRunOnce() {
         return Boolean.TRUE;
+    }
+
+    @Override
+    public String analyzeData(ArrayList<String> healthData) {
+        return null;
     }
 }

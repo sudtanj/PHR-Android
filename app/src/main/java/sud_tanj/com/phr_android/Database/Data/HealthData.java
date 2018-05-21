@@ -36,16 +36,16 @@ public class HealthData {
     public static final String HEALTH_DATA_CHILD_TIMESTAMP = "TimeStamp";
     public static final String HEALTH_DATA_CHILD_VALUE = "Values";
     public static final String HEALTH_DATA_CHILD_PARENTSENSOR = "ParentSensor";
+    protected ArrayList<String> values = null;
     private String healthDataId = null;
-    protected String values = null;
     private Date timeStamp = null;
     private SensorData parentSensor = null;
     private DatabaseReference dataReference = null;
     private HealthDataSynchronizer dataReferenceSynchronizer = null;
-
     public HealthData(String healthDataId, SensorData parentSensor) {
         this.timeStamp = new Date();
-        this.values = "-1";
+        this.values = new ArrayList<>();
+        this.values.add("-1");
         this.parentSensor = parentSensor;
 
         if (healthDataId.isEmpty()) {
@@ -66,7 +66,6 @@ public class HealthData {
 
     }
 
-
     public HealthData(SensorData sensorData) {
         this("", sensorData);
     }
@@ -82,14 +81,27 @@ public class HealthData {
             this.syncToFirebase();
     }
 
-    public String getValues() {
-        return values;
+    public ArrayList<String> getValues() {return values;}
+
+    public void setValues(ArrayList<String> values) {
+        this.values = values;
+        if(!this.getParentSensor().getLatestData().equals(this))
+            this.getParentSensor().setLatestData(this);
+        this.syncToFirebase();
     }
 
-    public void setValues(String values) {
-        if (!this.getParentSensor().getLatestData().getValues().equals(values)) {
-            this.values = values;
-            this.getParentSensor().setLatestData(this);
+    public String getValue() {
+        return values.get(0);
+    }
+
+    public void addValues(String values) {
+        if (!this.getParentSensor().getLatestData().getValue().equals(values)) {
+            if(this.getValue()=="-1"){
+                this.values=new ArrayList<>();
+            }
+            this.values.add(values);
+            if(!this.getParentSensor().getLatestData().equals(this))
+                this.getParentSensor().setLatestData(this);
             this.syncToFirebase();
         } else {
             this.delete();
@@ -121,7 +133,7 @@ public class HealthData {
 
 
     public Boolean isReady() {
-        if (this.getValues() == null) {
+        if (this.getValue() == null) {
             return false;
         }
         if (this.getTimeStamp() == null) {
@@ -138,7 +150,7 @@ public class HealthData {
     }
 
     public Boolean isValid(){
-        if (this.getValues().equals("-1")) {
+        if (this.getValue().equals("-1")) {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
@@ -156,4 +168,5 @@ public class HealthData {
         temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP, String.valueOf(timeStamp.getTime()));
         this.dataReferenceSynchronizer.changeVariable(temporaryPayload);
     }
+
 }

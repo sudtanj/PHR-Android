@@ -8,6 +8,10 @@
 package sud_tanj.com.phr_android.Database.Data.DataListener;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.GenericTypeIndicator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
@@ -25,11 +29,20 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.H
 public class DataValueListener implements HealthDataSyncable {
     @Override
     public void updateData(HealthData healthData, DataSnapshot dataSnapshot) {
-        String dataValue = healthData.getValues();
-        String value = DatabaseUtility.convertToString(dataSnapshot);
-        if (!dataValue.equals(value))
-            if(!value.equals("-1"))
-                healthData.setValues(value);
+        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+        try {
+            List<String> value = dataSnapshot.getValue(t);
+            if (!healthData.getValues().equals(value))
+                healthData.setValues((ArrayList<String>) value);
+        } catch (Exception e){
+            String value = DatabaseUtility.convertToString(dataSnapshot);
+            if(!healthData.getValue().equals(value)){
+                ArrayList<String> temp=new ArrayList<>();
+                temp.add(value);
+                healthData.setValues(temp);
+            }
+        }
+
     }
 
     @Override

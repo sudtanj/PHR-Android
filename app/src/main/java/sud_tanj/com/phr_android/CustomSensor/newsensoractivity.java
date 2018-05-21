@@ -7,6 +7,8 @@
 
 package sud_tanj.com.phr_android.CustomSensor;
 
+import java.util.ArrayList;
+
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
@@ -27,12 +29,17 @@ public class newsensoractivity extends ArduinoUnoCH340 {
     public void postDataReceived(String data) {
         if(this.isNumeric(data)) {
             HealthData healthData = new HealthData(getSensorData());
-            healthData.setValues(data);
+            healthData.addValues(data);
         }
     }
 
     @Override
     public Boolean isScriptRunOnce() {
         return Boolean.FALSE;
+    }
+
+    @Override
+    public String analyzeData(ArrayList<String> healthData) {
+        return null;
     }
 }

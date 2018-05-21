@@ -55,6 +55,7 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(HealthDataListHolder holder, int position) {
+        holder.setIsRecyclable(Boolean.FALSE);
         if (Global.getSensorGateway().isReady() && Global.getSensorGateway().getSensorObject().size()>position) {
             if (this.lastValue.size() == 0) {
                 for (SensorData tempDataset : Global.getSensorGateway().getSensorObject()) {
@@ -65,7 +66,7 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
             holder.getTitle().setText(Global.getSensorGateway().getSensorObject().get(position).getSensorInformation().getSensorName());
             HealthData latestHealthData = Global.getSensorGateway().getSensorObject().get(position).getLatestData();
             if (latestHealthData != null) {
-                Double temp = new Double(latestHealthData.getValues());
+                Double temp = new Double(latestHealthData.getValue());
                 if (temp > 0) {
                     String result = String.valueOf(latestHealthData.getValues());
                     holder.getValue().setText(result);
@@ -93,7 +94,7 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
             try {
                 HealthData latestHealthData = this.mDataset.get(i).getLatestData();
                 if (latestHealthData != null) {
-                    String mDatasetValue = this.mDataset.get(i).getLatestData().getValues(),
+                    String mDatasetValue = this.mDataset.get(i).getLatestData().getValue(),
                             lastValue = this.lastValue.get(i);
                     if (!mDatasetValue.equals(lastValue)) {
                         this.lastValue.set(i, mDatasetValue);

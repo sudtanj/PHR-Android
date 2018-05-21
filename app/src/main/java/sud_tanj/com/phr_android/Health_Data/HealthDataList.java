@@ -9,7 +9,9 @@ package sud_tanj.com.phr_android.Health_Data;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,20 +48,21 @@ import sud_tanj.com.phr_android.MainActivity;
 import sud_tanj.com.phr_android.R;
 
 public class HealthDataList extends AppCompatActivity {
+    private SensorData sensorData;
+    private TextView sensorName;
+    private GraphView graph;
+    private TextView sensorAnalysis;
+    private SimpleDateFormat simpleDateFormat;
+    private HealthDataListGraphListener healthDataListGraphListener;
+    private HandlerLoop handlerLoop;
+
     public SensorData getSensorData() {
         return sensorData;
     }
 
-    private SensorData sensorData;
-    private TextView sensorName;
-
     public GraphView getGraph() {
         return graph;
     }
-
-    private GraphView graph;
-    private  SimpleDateFormat simpleDateFormat;
-    private HealthDataListGraphListener healthDataListGraphListener;
 
     public void setHandlerLoop(ArrayList<HealthData> healthData,ArrayList<String> hourData) {
         if(this.handlerLoop!=null){
@@ -69,8 +72,6 @@ public class HealthDataList extends AppCompatActivity {
         healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData);
         this.handlerLoop = new HandlerLoop(5, healthDataListGraphListener);
     }
-
-    private HandlerLoop handlerLoop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +85,12 @@ public class HealthDataList extends AppCompatActivity {
 
         setTitle(this.sensorData.getSensorInformation().getSensorName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.appHeader)));
 
         this.sensorName = (TextView) findViewById(R.id.health_data_title);
         this.sensorName.setText(this.sensorData.getSensorInformation().getSensorName());
-
         graph = (GraphView) findViewById(R.id.health_data_graph);
+        this.sensorAnalysis = (TextView) findViewById(R.id.health_data_analysist);
 
         DatePicker datePicker = (DatePicker) findViewById(R.id.date_picker);
         Calendar calendar= Calendar.getInstance();
@@ -107,6 +109,11 @@ public class HealthDataList extends AppCompatActivity {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(24);
+
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScalableY(true);
+
+        graph.getViewport().setScrollable(true);
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
         //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));

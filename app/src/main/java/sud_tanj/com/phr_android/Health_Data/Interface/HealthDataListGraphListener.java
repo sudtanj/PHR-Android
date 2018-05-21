@@ -7,12 +7,15 @@
 
 package sud_tanj.com.phr_android.Health_Data.Interface;
 
+import android.graphics.Color;
+
 import com.google.firebase.database.Transaction;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
@@ -51,13 +54,41 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         }
         if(this.handlerExpired){
             this.graphView.removeAllSeries();
-            ArrayList<DataPoint> dataPointsHealth=new ArrayList<>();
-            for(int i=0;i<healthData.size();i++) {
-                dataPointsHealth.add(new DataPoint(Integer.parseInt(this.hourData.get(i)),Double.parseDouble(healthData.get(i).getValues())));
-            }
+            ArrayList<LineGraphSeries<DataPoint>> healthDataSeries=new ArrayList<LineGraphSeries<DataPoint>>();
+            ArrayList<ArrayList<DataPoint>> healthDataPoint=new ArrayList<ArrayList<DataPoint>>();
+            for (int i = 0; i < healthData.size(); i++) {
+                ArrayList<String> healthDataList=healthData.get(i).getValues();
+                try{
+                    healthDataSeries.get(healthDataList.size()-1);
+                } catch (Exception e){
+                    LineGraphSeries<DataPoint> lineGraphSeries=new LineGraphSeries<DataPoint>();
+                    lineGraphSeries.setDrawDataPoints(true);
+                    Random rnd = new Random();
+                    lineGraphSeries.setColor(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+                    healthDataSeries.add(lineGraphSeries);
+                }
 
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointsHealth.toArray(new DataPoint[dataPointsHealth.size()]));
-            this.graphView.addSeries(series);
+                for (int j = 0; j < healthDataList.size(); j++) {
+                    try {
+                        healthDataPoint.get(j);
+                    } catch (Exception e){
+                        healthDataPoint.add(new ArrayList<DataPoint>());
+                    }
+                    DataPoint newData=new DataPoint(Integer.parseInt(this.hourData.get(i)), Double.parseDouble(healthDataList.get(j)));
+                    healthDataPoint.get(j).add(newData);
+                    //ArrayList<DataPoint> dataPointsHealth = new ArrayList<>();
+                    //dataPointsHealth.add(new DataPoint(Integer.parseInt(this.hourData.get(i)), Double.parseDouble(healthDataList.get(j))));
+                }
+
+               // LineGraphSeries<DataPoint> series1 = new LineGraphSeries<>(dataPointsHealth.toArray(new DataPoint[dataPointsHealth.size()]));
+                //this.graphView.addSeries(series);
+            }
+            for(int i=0;i<healthDataSeries.size();i++){
+                ArrayList<DataPoint> healthTemp=healthDataPoint.get(i);
+                LineGraphSeries<DataPoint> seriesTemp=healthDataSeries.get(i);
+                seriesTemp.resetData(healthTemp.toArray(new DataPoint[healthTemp.size()]));
+                this.graphView.addSeries(seriesTemp);
+            }
         }
     }
 
