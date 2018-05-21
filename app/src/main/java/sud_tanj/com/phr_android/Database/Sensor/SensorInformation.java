@@ -9,8 +9,11 @@ package sud_tanj.com.phr_android.Database.Sensor;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.EmbeddedScriptListener;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.GraphLegendListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.NameListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.OwnerListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.StatusListener;
@@ -31,6 +34,7 @@ public class SensorInformation {
     private Boolean sensorActive = null;
     private SensorData sensorData = null;
     private DatabaseReference dataReference = null, userDataReference = null;
+    private ArrayList<String> graphLegend;
     private SensorSynchronizer sensorInformation, sensorStatus;
 
     public SensorInformation(String sensorId, SensorData sensorData) {
@@ -45,12 +49,30 @@ public class SensorInformation {
         this.sensorActive = true;
         this.sensorName = new String();
         this.sensorOwner = new String();
+        this.graphLegend = new ArrayList<>();
 
         //firebase sync
         sensorInformation.add(new NameListener(), "Name");
         sensorInformation.add(new OwnerListener(), "Owner");
         sensorInformation.add(new EmbeddedScriptListener(), "EmbeddedScript");
+        sensorInformation.add(new GraphLegendListener(),"GraphLegend");
+
         //sensorStatus.add(new StatusListener(), "SensorActive");
+    }
+
+    public ArrayList<String> getGraphLegend() {
+        return graphLegend;
+    }
+
+    public void setGraphLegend(ArrayList<String> graphLegend) {
+        this.graphLegend = graphLegend;
+        this.sensorInformation.changeVariable(graphLegend);
+        //this.getDataReference().child("GraphLegend").setValue(this.graphLegend);
+    }
+
+    public void addGraphLegend(String graphLegend){
+        this.graphLegend.add(graphLegend);
+        this.sensorInformation.changeVariable(this.graphLegend);
     }
 
     public void setSensorActive(Boolean sensorActive) {

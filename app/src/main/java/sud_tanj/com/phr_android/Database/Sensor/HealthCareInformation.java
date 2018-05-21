@@ -7,6 +7,7 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -19,8 +20,9 @@ import java.util.Date;
  * This class last modified by User
  */
 public class HealthCareInformation {
-    private String healthCareAnalysis;
+    private ArrayList<String> healthCareAnalysis;
     private Date healthCareDate;
+
 
 
 }

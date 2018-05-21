@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class ModifySensor extends AppCompatActivity {
     private FormElementTextSingleLine elementSensorId;
     private FormElementTextSingleLine elementName;
     private FormElementTextSingleLine elementEmbedded;
+    private FormElementTextSingleLine elementGraphLegend;
     private Bundle data;
     private SensorData currentSensor = null;
 
@@ -64,7 +66,7 @@ public class ModifySensor extends AppCompatActivity {
         }
         elementName = FormElementTextSingleLine.createInstance().setTitle("SensorListener Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
-
+        elementGraphLegend = FormElementTextSingleLine.createInstance().setTitle("Graph Legend").setValue("").setHint("Seperate with ,. example=systolic,diastolic ");
 
         List<BaseFormElement> formItems = new ArrayList<>();
         formItems.add(header);
@@ -73,12 +75,15 @@ public class ModifySensor extends AppCompatActivity {
         }
         formItems.add(elementName);
         formItems.add(elementEmbedded);
+        formItems.add(elementGraphLegend);
 
         mFormBuilder.addFormElements(formItems);
 
         if (data.getBoolean("modifySensor")) {
             elementName.setValue(currentSensor.getSensorInformation().getSensorName());
             elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
+            ArrayList<String> graphLegend=currentSensor.getSensorInformation().getGraphLegend();
+            elementGraphLegend.setValue(TextUtils.join(",",graphLegend));
         }
 
     }
@@ -123,6 +128,12 @@ public class ModifySensor extends AppCompatActivity {
                 if (data.getBoolean("modifySensor")) {
                     currentSensor.getSensorInformation().setSensorName(elementName.getValue());
                     currentSensor.getBackgroundJob().setName(elementEmbedded.getValue());
+                    String[] graphLegend = elementGraphLegend.getValue().split(",");
+                    for(int i=0;i<graphLegend.length;i++){
+                        if(!currentSensor.getSensorInformation().getGraphLegend().contains(graphLegend[i])) {
+                            currentSensor.getSensorInformation().addGraphLegend(graphLegend[i]);
+                        }
+                    }
                     finish();
                     return true;
                 }
@@ -133,6 +144,10 @@ public class ModifySensor extends AppCompatActivity {
                     temp.getSensorInformation().setSensorName(elementName.getValue());
                     temp.getBackgroundJob().setName(elementEmbedded.getValue());
                     temp.getSensorInformation().setSensorOwner(Global.getFireBaseUser().getUid());
+                    String[] graphLegend = elementGraphLegend.getValue().split(",");
+                    for(int i=0;i<graphLegend.length;i++){
+                        temp.getSensorInformation().addGraphLegend(graphLegend[i]);
+                    }
                     Toast.makeText(getApplicationContext(), "SensorListener added succesfully!", Toast.LENGTH_SHORT);
                     finish();
                 } else {

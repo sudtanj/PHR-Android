@@ -66,6 +66,15 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
         this.database.updateChildren(value);
     }
 
+    public void changeVariable(ArrayList<String> value) {
+        for (int i = 0; i < this.databaseSyncables.size(); i++) {
+            if (this.equals(value.toString(), this.databaseSyncables.get(i))) {
+                this.database.child(this.referenceName.get(i)).setValue(value);
+                break;
+            }
+        }
+    }
+
     public Boolean isDataCorrupt() {
         for (Boolean statusTemp : this.syncStatus) {
             if (!statusTemp)

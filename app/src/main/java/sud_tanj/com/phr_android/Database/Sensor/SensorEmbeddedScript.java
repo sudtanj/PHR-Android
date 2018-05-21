@@ -7,6 +7,11 @@
 
 package sud_tanj.com.phr_android.Database.Sensor;
 
+import com.google.firebase.database.DatabaseReference;
+
+import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.EmbeddedScriptListener;
+import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
 import sud_tanj.com.phr_android.Sensor.SensorListener;
 
@@ -20,14 +25,23 @@ import sud_tanj.com.phr_android.Sensor.SensorListener;
  * This class last modified by User
  */
 public class SensorEmbeddedScript implements Runnable {
+    public static final String SENSOR_DATA_CHILD_NAME = "sensor";
     private String name = null;
     private SensorListener script = null;
     private SensorData sensorData = null;
     private Boolean scriptExist;
+    private SensorSynchronizer sensorInformation;
+    private DatabaseReference dataReference = null;
 
     public SensorEmbeddedScript(String name, SensorData sensorData) {
         this.name = name;
         this.sensorData = sensorData;
+        this.dataReference= Global.getMainDatabase().child(SENSOR_DATA_CHILD_NAME).child(sensorData.getSensorInformation().getSensorId());
+
+        sensorInformation = new SensorSynchronizer(this.dataReference, sensorData);
+
+        sensorInformation.add(new EmbeddedScriptListener(),"EmbeddedScript");
+
     }
 
     public String getName() {
@@ -36,6 +50,7 @@ public class SensorEmbeddedScript implements Runnable {
 
     public void setName(String name) {
         this.name = name;
+        this.sensorInformation.changeVariable(name);
     }
 
     private void findScript() {
