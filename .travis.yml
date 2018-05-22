@@ -54,7 +54,7 @@ cache:
     - $HOME/.android/build-cache
 script:
   - ./gradlew assembleDebug
-  - ./gradlew assembleAndroidTest
+  #- ./gradlew assembleAndroidTest
   - ./gradlew assembleRelease 
   - ./gradlew generateReleaseJavadoc
   #- adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
