@@ -1,5 +1,6 @@
 language: android
 sudo: required
+dist: precise
 jdk:
   - oraclejdk8
 install: true
@@ -30,6 +31,8 @@ deploy:
     file: "./app/build/outputs/apk/release/app-release.apk"
     skip_cleanup: true
     prerelease: true
+after_script:
+  - ./gradlew crashlyticsUploadDistributionRelease
 after_success: 
   #- find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
