@@ -3,10 +3,10 @@ sudo: required
 dist: precise
 jdk:
   - oraclejdk8
-install: true
 addons:
   apt:
     packages:
+        - yarn
 env:
   matrix:
     - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
