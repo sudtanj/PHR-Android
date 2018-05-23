@@ -1,16 +1,16 @@
 language: android
-sudo: required
+sudo: false
 dist: precise
 jdk:
   - oraclejdk8
 env:
   matrix:
-    - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
+    # ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
     #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
+    - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 deploy:
   #- provider: pages
    # skip-cleanup: true
@@ -29,8 +29,7 @@ after_script:
 after_success: 
     - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
-  #- yes | sdkmanager "platforms;android-27"
-    - yes | sdkmanager "platforms;android-$ANDROID_API"
+    #- yes | sdkmanager "platforms;android-27"
 before_script:
     - git tag "1.0.$TRAVIS_BUILD_NUMBER"
     - chmod u+x gradlew
@@ -45,6 +44,7 @@ before_cache:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
+  apt: true
   directories:
       - $HOME/.gradle/caches/
       - $HOME/.gradle/wrapper/
@@ -67,7 +67,7 @@ android:
       - $ANDROID_TOOLS
       - $ANDROID_TOOLS
       - extra
-      - android-$ANDROID_API
+      - android-27
       - sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
       - build-tools-27.0.3
       - $ANDROID_PLATFORM_TOOLS
