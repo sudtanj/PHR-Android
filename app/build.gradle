@@ -28,7 +28,9 @@ androidGitVersion {
 android {
     compileSdkVersion 27
     testBuildType "debug"
-
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         applicationId "sud_tanj.com.phr_android"
         minSdkVersion 16
