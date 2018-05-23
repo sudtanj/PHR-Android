@@ -27,7 +27,7 @@ deploy:
       file: "./app/build/outputs/apk/release/app-release.apk"
       skip_cleanup: true
       prerelease: true
-after_script:
+before_deploy:
     - ./gradlew crashlyticsUploadDistributionRelease
     - ./gradlew generateReleaseJavadoc
 after_success: 
