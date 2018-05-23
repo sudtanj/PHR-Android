@@ -47,6 +47,7 @@ public abstract class SensorListener implements EmbeddedScript {
             runOnce=Boolean.TRUE;
         }
         this.syncData();
+        this.clearRemainingData();
     }
 
     public Boolean isNumeric(String str) {
@@ -60,6 +61,17 @@ public abstract class SensorListener implements EmbeddedScript {
             this.healthData.remove(0);
         }
         return result;
+    }
+
+    public void clearRemainingData(){
+        String result=new String();
+        if(this.isDataAvailable()) {
+            result = this.healthData.get(0);
+            while (!Global.getSensorGateway().isSensorIdExist(result)) {
+                result = this.healthData.get(0);
+                this.healthData.remove(0);
+            }
+        }
     }
 
     public Boolean isDataAvailable(){

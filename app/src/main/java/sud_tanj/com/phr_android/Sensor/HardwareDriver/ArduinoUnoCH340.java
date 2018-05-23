@@ -35,7 +35,7 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
         Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
     }
 
-    public abstract void postDataReceived(String data);
+    public abstract void postDataReceived();
 
     @Override
     public void run() {
@@ -50,9 +50,7 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
         }
         if (Global.getCH340Driver() != null) {
             if (Global.getCH340Driver().isConnected()) {
-                String result=this.getData();
-                if(!result.isEmpty())
-                    this.postDataReceived(result);
+                this.postDataReceived();
             }
         }
     }
