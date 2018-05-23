@@ -6,6 +6,7 @@ jdk:
 env:
   global:
       - SDK_VERSION=27
+      - GRADLE_USER_HOME=$HOME/.gradle
   matrix:
     # ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
     #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
@@ -17,7 +18,7 @@ deploy:
     - provider: pages
       skip-cleanup: true
       github-token: $GH_TOKEN
-      keep-history: false
+      keep-history: true
       local-dir: "./app/build/docs/javadoc/Release"
       target-branch: "gh-pages"
     - provider: releases
