@@ -1,7 +1,6 @@
 language: android
 sudo: required
 dist: precise
-install: yarn --ignore-optional --pure-lockfile --production
 jdk:
   - oraclejdk8
 addons:
@@ -9,39 +8,45 @@ addons:
     packages:
 env:
   matrix:
-    - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
+    #- ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
     #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
     #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 before_deploy:
+    - echo $(TRAVIS_BUILD_NUMBER)
   # Set up git user name and tag this commit
   #- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
    #- git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
 deploy:
+    -echo $(TRAVIS_BUILD_NUMBER)
   #- provider: pages
    # skip-cleanup: true
     #github-token: $GH_TOKEN
     #keep-history: false
     #local-dir: "./app/build/docs/javadoc/Release"
     #target-branch: "gh-pages"
-  - provider: releases
-    api_key: 
-      secure: "gv8odqUMRDLyQvuGAjOagQOxRcc2+8eN5BsQnuQwDlH86IOvQc4yFP9n/BPQ1HMIAbLpwVKofvy/2I4xZSIeSmmVxXBQp7NIVF+R7jsHurSubDRKoGQfE8UV+D15+8eFzHTXIcqWH3IL1WjfgLy7CVOJyl2a31Jibdqdr6nCQHs3nuvAi3OMUxVn04XKoZgLvGLPnz0Hogjt8bUVIHb+ZX2T+UJq4a4aoZj2l9mVTZGny/EMxoKjD884EphhLwWxSprgdk0OHP3SqqmoGbHYQCBP63kkfWSpIbsnzwYCdtqFaAU9hZM18ZDcLpVL8AuR0GIhaRpFe269KBXz8codOdCntMRwg+2/VZmOo7z8xm7MPyPhBxkv1BnhpmB4Mnpq2SjZ59pjW/X+oavF4Y2HFpIuI45ESx8Xj0dbf8RgMVNsIWwbzjJvhHklyTYFlhbYUkJ41j7wx9ju4SK8G9VjopxZwpnr4xfzFU+27SzuopJVXCx/iYxI8+Y4mNJ8KnQcFNDpGyXIzq1gMtLhvoHCqBLG/Np0wA1m4G6CG7FwLYgY3kiiS2dBuhgTyCFjPcf357Md9FmF+1Hn9k0B+se4M3g38tPOxbsconnXna0E98dxO1RSMuomJ873/JnMRbsiT5EDglSzn907ly8nyNEmW6M1NMkH422m9awHbeF4vwk="
-    file: "./app/build/outputs/apk/release/app-release.apk"
-    skip_cleanup: true
-    prerelease: true
+  #- provider: releases
+   # api_key: 
+   #   secure: "gv8odqUMRDLyQvuGAjOagQOxRcc2+8eN5BsQnuQwDlH86IOvQc4yFP9n/BPQ1HMIAbLpwVKofvy/2I4xZSIeSmmVxXBQp7NIVF+R7jsHurSubDRKoGQfE8UV+D15+8eFzHTXIcqWH3IL1WjfgLy7CVOJyl2a31Jibdqdr6nCQHs3nuvAi3OMUxVn04XKoZgLvGLPnz0Hogjt8bUVIHb+ZX2T+UJq4a4aoZj2l9mVTZGny/EMxoKjD884EphhLwWxSprgdk0OHP3SqqmoGbHYQCBP63kkfWSpIbsnzwYCdtqFaAU9hZM18ZDcLpVL8AuR0GIhaRpFe269KBXz8codOdCntMRwg+2/VZmOo7z8xm7MPyPhBxkv1BnhpmB4Mnpq2SjZ59pjW/X+oavF4Y2HFpIuI45ESx8Xj0dbf8RgMVNsIWwbzjJvhHklyTYFlhbYUkJ41j7wx9ju4SK8G9VjopxZwpnr4xfzFU+27SzuopJVXCx/iYxI8+Y4mNJ8KnQcFNDpGyXIzq1gMtLhvoHCqBLG/Np0wA1m4G6CG7FwLYgY3kiiS2dBuhgTyCFjPcf357Md9FmF+1Hn9k0B+se4M3g38tPOxbsconnXna0E98dxO1RSMuomJ873/JnMRbsiT5EDglSzn907ly8nyNEmW6M1NMkH422m9awHbeF4vwk="
+   # file: "./app/build/outputs/apk/release/app-release.apk"
+   # skip_cleanup: true
+   # prerelease: true
 after_script:
-  - ./gradlew crashlyticsUploadDistributionRelease
+    - echo $(TRAVIS_BUILD_NUMBER)
+ # - ./gradlew crashlyticsUploadDistributionRelease
 after_success: 
+    - echo $(TRAVIS_BUILD_NUMBER)
   #- find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_install:
-  - yes | sdkmanager "platforms;android-27"
-  - yes | sdkmanager "platforms;android-$ANDROID_API"
+    - echo $(TRAVIS_BUILD_NUMBER)
+  #- yes | sdkmanager "platforms;android-27"
+  #- yes | sdkmanager "platforms;android-$ANDROID_API"
 before_script:
-  - chmod u+x gradlew
-  - git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
+    - echo $(TRAVIS_BUILD_NUMBER)
+  #- chmod u+x gradlew
+ # - git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
   #- android list sdk --no-ui --all --extended
   #- sdkmanager --list --verbose
   #- android list targets
@@ -50,17 +55,17 @@ before_script:
   #- android-wait-for-emulator
   #- adb shell input keyevent 82 &
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  #- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  #- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
+    #- $HOME/.gradle/caches/
+    #- $HOME/.gradle/wrapper/
+    #- $HOME/.android/build-cache
 script:
   #- ./gradlew assembleDebug
   #- ./gradlew assembleAndroidTest
-  - ./gradlew assembleRelease 
+  #- ./gradlew assembleRelease 
   #- ./gradlew generateReleaseJavadoc
   #- adb push ./app/build/outputs/apk/debug/app-debug.apk /data/local/tmp/app-debug.apk
   #- adb push ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk /data/local/tmp/app-debug-androidTest.apk
@@ -72,14 +77,14 @@ script:
   #- adb shell am start -n "sud_tanj.com.phr_android/sud_tanj.com.phr_android.GPlusLogin.Login" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -D
 android:
   components:
-    - $ANDROID_TOOLS
-    - $ANDROID_TOOLS
-    - extra
-    - android-$ANDROID_API
-    - sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
-    - build-tools-27.0.3
-    - $ANDROID_PLATFORM_TOOLS
+    #- $ANDROID_TOOLS
+    #- $ANDROID_TOOLS
+    #- extra
+    #- android-$ANDROID_API
+    #- sys-img-$ANDROID_ABI-$ANDROID_TAG_COMPONENT-$ANDROID_API
+    #- build-tools-27.0.3
+    #- $ANDROID_PLATFORM_TOOLS
   licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+    #- 'android-sdk-preview-license-52d11cd2'
+    #- 'android-sdk-license-.+'
+    #- 'google-gdk-license-.+'
