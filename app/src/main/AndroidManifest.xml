@@ -41,9 +41,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ReportView"></activity>
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="14ffcf0e310f5a941f13de9cd71b5084067e19f0" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

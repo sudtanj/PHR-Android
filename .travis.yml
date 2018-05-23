@@ -17,7 +17,8 @@ env:
     #- ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 before_deploy:
   # Set up git user name and tag this commit
-  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+  #- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+   - git tag "$(TRAVIS_JOB_NUMBER)"
 deploy:
   #- provider: pages
    # skip-cleanup: true

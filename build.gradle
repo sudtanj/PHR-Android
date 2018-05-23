@@ -30,6 +30,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.gladed.androidgitversion" version "0.4.3"
+}
+
 allprojects {
     repositories {
         google()
@@ -41,4 +45,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
 
