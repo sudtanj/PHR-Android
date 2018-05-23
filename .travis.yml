@@ -8,11 +8,11 @@ env:
       - SDK_VERSION=27
       - GRADLE_USER_HOME=$HOME/.gradle
   matrix:
-    # ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
-    #- ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
-    #- ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+      - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
+      - ANDROID_API=21 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+      - ANDROID_API=19 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+      - ANDROID_API=18 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
+      - ANDROID_API=17 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR
       - ANDROID_API=16 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=default ANDROID_TAG_COMPONENT=android
 deploy:
     - provider: pages
@@ -27,11 +27,10 @@ deploy:
       file: "./app/build/outputs/apk/release/app-release.apk"
       skip_cleanup: true
       prerelease: true
-before_deploy:
+after_success: 
+    #- find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
     - ./gradlew crashlyticsUploadDistributionRelease
     - ./gradlew generateReleaseJavadoc
-after_success: 
-    - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_script:
     - git tag "1.0.$TRAVIS_BUILD_NUMBER"
     - chmod u+x gradlew
