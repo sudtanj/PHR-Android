@@ -31,7 +31,7 @@ before_deploy:
     - ./gradlew crashlyticsUploadDistributionRelease
     - ./gradlew generateReleaseJavadoc
 after_success: 
-    #- find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
+    - find . -type f -printf "%T@ %p\n" | sort -nr | cut -d\  -f2-
 before_script:
     - git tag "1.0.$TRAVIS_BUILD_NUMBER"
     - chmod u+x gradlew
