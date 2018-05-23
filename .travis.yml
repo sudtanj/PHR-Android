@@ -1,12 +1,12 @@
 language: android
 sudo: required
 dist: precise
+install: yarn --ignore-optional --pure-lockfile --production
 jdk:
   - oraclejdk8
 addons:
   apt:
     packages:
-        - yarn
 env:
   matrix:
     - ANDROID_API=22 ANDROID_ABI=armeabi-v7a ANDROID_TAG_EMULATOR=google_apis ANDROID_TAG_COMPONENT=$ANDROID_TAG_EMULATOR ANDROID_TOOLS=tools ANDROID_PLATFORM_TOOLS=platform-tools
