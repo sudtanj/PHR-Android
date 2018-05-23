@@ -26,10 +26,11 @@ import sud_tanj.com.phr_android.Sensor.HardwareDriver.ArduinoUnoCH340;
 public class newsensoractivity extends ArduinoUnoCH340 {
 
     @Override
-    public void postDataReceived(String data) {
-        if(this.isNumeric(data)) {
+    public void postDataReceived() {
+        String result=this.getData();
+        if(this.isNumeric(result)) {
             HealthData healthData = new HealthData(getSensorData());
-            healthData.addValues(data);
+            healthData.addValues(result);
         }
     }
 
