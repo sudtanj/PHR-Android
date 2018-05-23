@@ -18,7 +18,7 @@ env:
 before_deploy:
   # Set up git user name and tag this commit
   #- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-   - git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
+   #- git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
 deploy:
   #- provider: pages
    # skip-cleanup: true
@@ -41,6 +41,7 @@ before_install:
   - yes | sdkmanager "platforms;android-$ANDROID_API"
 before_script:
   - chmod u+x gradlew
+  - git tag "1.0.$(TRAVIS_BUILD_NUMBER)"
   #- android list sdk --no-ui --all --extended
   #- sdkmanager --list --verbose
   #- android list targets
