@@ -15,6 +15,7 @@ buildscript {
         maven {
             url 'https://maven.fabric.io/public'
         }
+        maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {

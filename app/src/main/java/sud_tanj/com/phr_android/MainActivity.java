@@ -32,7 +32,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.zendesk.logger.Logger;
+import com.zendesk.sdk.model.access.AnonymousIdentity;
+import com.zendesk.sdk.network.impl.ZendeskConfig;
+import com.zendesk.sdk.support.SupportActivity;
 
+import io.fabric.sdk.android.Fabric;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Fabric.with(this);
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
         //Init
@@ -144,7 +150,29 @@ public class MainActivity extends AppCompatActivity
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#b8e2eb")));
 
+        Logger.setLoggable(BuildConfig.DEBUG);
+        initializeZendesk();
+
+
     }
+
+    private void initializeZendesk() {
+        // Initialize the Support SDK with your Zendesk Support subdomain, mobile SDK app ID, and client ID.
+        // Get these details from your Zendesk Support dashboard: Admin -> Channels -> Mobile SDK
+        ZendeskConfig.INSTANCE.init(getApplicationContext(),
+                "https://phrandroid.zendesk.com",
+                "80db5b254444525b4a13539167547cda78f8fd2a95651a8f",
+                "mobile_sdk_client_979f19dfd85d2f193b39");
+
+
+        // Authenticate anonymously as a Zendesk Support user
+        ZendeskConfig.INSTANCE.setIdentity(
+                new AnonymousIdentity.Builder()
+                        .withNameIdentifier(Global.getFireBaseUser().getDisplayName())
+                        .build()
+        );
+    }
+
 
     @Override
     protected void onResume() {
@@ -194,8 +222,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
       if (id.equals(R.id.action_report)) {
-            ReportView.launch(this);
-        } else if (id.equals(R.id.action_logout)) {
+          new SupportActivity.Builder().show(MainActivity.this);
+      } else if (id.equals(R.id.action_logout)) {
             Global.getFireBaseAuth().signOut();
             this.onPause();
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -32,7 +32,11 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
     }
 
     public void setConfig(Integer baudRate,Byte dataBit,Byte stopBit,Byte parity,Byte flowControl) {
-        Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
+        try {
+            Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
+        } catch (Exception e){
+
+        }
     }
 
     public abstract void postDataReceived();
@@ -57,20 +61,24 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
 
     @Override
     public void syncData() {
-        byte[] buffer = new byte[4096];
-        int length = Global.getCH340Driver().ReadData(buffer, 4096);
-        if (length > 0) {
-            //String recv = toHexString(buffer, length);
-            String recv = new String(buffer, 0, length);
-            //String recv = String.valueOf(totalrecv);
-            //String[] temp = recv.split("\n");
-            //String result = "";
-            this.addData(recv,"\n");
-         //   if (temp.length > 0)
-           //     result = temp[temp.length - 1];
-           // if (this.isNumeric(result)){
-             //   return result;
-           // }
+        try {
+            byte[] buffer = new byte[4096];
+            int length = Global.getCH340Driver().ReadData(buffer, 4096);
+            if (length > 0) {
+                //String recv = toHexString(buffer, length);
+                String recv = new String(buffer, 0, length);
+                //String recv = String.valueOf(totalrecv);
+                //String[] temp = recv.split("\n");
+                //String result = "";
+                this.addData(recv, "\n");
+                //   if (temp.length > 0)
+                //     result = temp[temp.length - 1];
+                // if (this.isNumeric(result)){
+                //   return result;
+                // }
+            }
+        } catch (Exception e){
+
         }
     }
 }
