@@ -29,7 +29,7 @@ after_success:
 - "./gradlew crashlyticsUploadDistributionRelease"
 - "./gradlew generateReleaseJavadoc"
 before_script:
-- git tag "1.0.$TRAVIS_BUILD_NUMBER"
+- git tag "1.0.$TRAVIS_JOB_NUMBER"
 - chmod u+x gradlew
 - echo no | android create avd --force -n test -t android-$ANDROID_API --abi $ANDROID_ABI
   --tag $ANDROID_TAG_EMULATOR
