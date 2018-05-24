@@ -9,9 +9,7 @@ package sud_tanj.com.phr_android.CustomSensor;
 
 import java.util.ArrayList;
 
-import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Sensor.HardwareDriver.ArduinoUnoCH340;
 
 /**
@@ -26,11 +24,12 @@ import sud_tanj.com.phr_android.Sensor.HardwareDriver.ArduinoUnoCH340;
 public class newsensoractivity extends ArduinoUnoCH340 {
 
     @Override
-    public void postDataReceived() {
-        String result=this.getData();
-        if(this.isNumeric(result)) {
+    public void postDataReceived(ArrayList<String> receivedDataInOneLoop) {
+
+        if (this.isNumeric(receivedDataInOneLoop.get(0))) {
             HealthData healthData = new HealthData(getSensorData());
-            healthData.addValues(result);
+            healthData.addValues(receivedDataInOneLoop.get(0));
+            healthData.addValues(receivedDataInOneLoop.get(1));
         }
     }
 

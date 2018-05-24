@@ -7,6 +7,10 @@
 
 package sud_tanj.com.phr_android.Sensor.HardwareDriver;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Sensor.SensorListener;
 
@@ -39,22 +43,24 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
         }
     }
 
-    public abstract void postDataReceived();
+    public abstract void postDataReceived(ArrayList<String> receivedDataInOneLoop);
+
 
     @Override
     public void run() {
         super.run();
-        try {
+        if(Global.getCH340Driver().isConnected()) {
             if (!this.configSet) {
                 this.setAsDefaultConfig();
                 this.configSet = Boolean.TRUE;
             }
-        } catch (Exception e){
-
-        }
-        if (Global.getCH340Driver() != null) {
-            if (Global.getCH340Driver().isConnected()) {
-                this.postDataReceived();
+            if (Global.getCH340Driver() != null) {
+                if (Global.getCH340Driver().isConnected()) {
+                    ArrayList<String> dataReceivedInOneLoop=this.getData();
+                    if(dataReceivedInOneLoop.size()>0) {
+                        this.postDataReceived(dataReceivedInOneLoop);
+                    }
+                }
             }
         }
     }
@@ -66,11 +72,11 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
             int length = Global.getCH340Driver().ReadData(buffer, 4096);
             if (length > 0) {
                 //String recv = toHexString(buffer, length);
-                String recv = new String(buffer, 0, length);
+                String recv = new String(buffer, 0, length, Charset.forName("US-ASCII"));
                 //String recv = String.valueOf(totalrecv);
                 //String[] temp = recv.split("\n");
                 //String result = "";
-                this.addData(recv, "\n");
+                this.addData(recv, ",");
                 //   if (temp.length > 0)
                 //     result = temp[temp.length - 1];
                 // if (this.isNumeric(result)){

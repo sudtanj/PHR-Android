@@ -7,8 +7,13 @@
 
 package sud_tanj.com.phr_android.Sensor;
 
+import android.icu.text.Collator;
+import android.os.Build;
+
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
@@ -24,9 +29,9 @@ import sud_tanj.com.phr_android.Sensor.Interface.EmbeddedScript;
  * This class last modified by User
  */
 public abstract class SensorListener implements EmbeddedScript {
-    private Boolean runOnce=Boolean.FALSE;
-    private ArrayList<String> healthData=new ArrayList<>();
-    private Boolean openDataStream=Boolean.FALSE;
+    private Boolean runOnce = Boolean.FALSE;
+    private ArrayList<String> healthData = new ArrayList<>();
+    private Boolean openDataStream = Boolean.FALSE;
 
     public SensorData getSensorData() {
         return sensorData;
@@ -36,15 +41,15 @@ public abstract class SensorListener implements EmbeddedScript {
         this.sensorData = sensorData;
     }
 
-    private SensorData sensorData=null;
+    private SensorData sensorData = null;
 
     @Override
     public void run() {
-        if(runOnce){
+        if (runOnce) {
             return;
         }
-        if(this.isScriptRunOnce()){
-            runOnce=Boolean.TRUE;
+        if (this.isScriptRunOnce()) {
+            runOnce = Boolean.TRUE;
         }
         this.syncData();
         this.clearRemainingData();
@@ -54,18 +59,27 @@ public abstract class SensorListener implements EmbeddedScript {
         return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 
-    public String getData(){
-        String result=new String();
-        if(this.isDataAvailable()) {
-            result=this.healthData.get(0);
-            this.healthData.remove(0);
+    protected ArrayList<String> getData() {
+        ArrayList<String> result = new ArrayList<>();
+        if (this.isDataAvailable()) {
+            try {
+                if(this.healthData.get(0).equals(this.sensorData.getSensorInformation().getSensorId())) {
+                    this.healthData.remove(0);
+                }
+            } catch (Exception e){
+
+            }
+            while(!this.healthData.get(0).equals(this.getSensorData().getSensorInformation().getSensorId())){
+                result.add(this.healthData.get(0));
+                this.healthData.remove(0);
+            }
         }
         return result;
     }
 
-    public void clearRemainingData(){
-        String result=new String();
-        if(this.isDataAvailable()) {
+    public void clearRemainingData() {
+        String result = new String();
+        if (this.isDataAvailable()) {
             result = this.healthData.get(0);
             while (!Global.getSensorGateway().isSensorIdExist(result)) {
                 result = this.healthData.get(0);
@@ -74,36 +88,36 @@ public abstract class SensorListener implements EmbeddedScript {
         }
     }
 
-    public Boolean isDataAvailable(){
-        return (this.healthData.size()>0);
+    public Boolean isDataAvailable() {
+        return (this.healthData.size() > 0);
     }
 
-    public void addData(String data){
-        if(Global.getSensorGateway().isSensorIdExist(data) ) {
-            if(this.sensorData.getSensorInformation().getSensorId().equals(data)){
-                this.openDataStream=Boolean.TRUE;
-            }
-            else {
-                this.openDataStream=Boolean.FALSE;
+    public void addData(String data) {
+        if (Global.getSensorGateway().isSensorIdExist(data)) {
+            if (this.sensorData.getSensorInformation().getSensorId().equals(data)) {
+                this.openDataStream = Boolean.TRUE;
+                //this.healthData.add(this.sensorData.getSensorInformation().getSensorId());
+            } else {
+                this.openDataStream = Boolean.FALSE;
             }
         }
-            if (this.openDataStream) {
-                if (this.isAsciiPrintable(data)) {
-                    this.healthData.add(data);
-                }
+        if (this.openDataStream) {
+            if (this.isAsciiPrintable(data) || this.isNumeric(data)) {
+                this.healthData.add(data);
             }
+        }
     }
 
-    public void addData(String data,String dataSplitterRegex){
-        String[] temp=data.split(dataSplitterRegex);
-        for(int i=0;i<temp.length;i++){
+    public void addData(String data, String dataSplitterRegex) {
+        String[] temp = data.split(dataSplitterRegex);
+        for (int i = 0; i < temp.length; i++) {
             this.addData(temp[i]);
         }
     }
 
-    public void addData(String[] data){
-        ArrayList<String> temp=new ArrayList<>(Arrays.asList(data));
-        for(String dataTemp:temp){
+    public void addData(String[] data) {
+        ArrayList<String> temp = new ArrayList<>(Arrays.asList(data));
+        for (String dataTemp : temp) {
             this.addData(dataTemp);
         }
     }
@@ -120,6 +134,7 @@ public abstract class SensorListener implements EmbeddedScript {
         }
         return Boolean.TRUE;
     }
+
     private Boolean isAsciiPrintable(char ch) {
         return ch >= 32 && ch < 127;
     }

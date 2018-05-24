@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
-import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.DatabaseUtility;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.HealthDataSyncable;
 
 /**
@@ -29,26 +28,16 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.H
 public class DataValueListener implements HealthDataSyncable {
     @Override
     public void updateData(HealthData healthData, DataSnapshot dataSnapshot) {
-        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-        try {
-            List<String> value = dataSnapshot.getValue(t);
-            if (!healthData.getValues().equals(value))
-                healthData.setValues((ArrayList<String>) value);
-        } catch (Exception e){
-            String value = DatabaseUtility.convertToString(dataSnapshot);
-            if(!healthData.getValue().equals(value)){
-                ArrayList<String> temp=new ArrayList<>();
-                temp.add(value);
-                healthData.setValues(temp);
-            }
-        }
+        GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {
+        };
+        List<String> value = dataSnapshot.getValue(t);
+        if (!healthData.getValues().toString().equals(value.toString()))
+            healthData.setValues((ArrayList<String>) value);
 
     }
 
     @Override
     public Boolean isEqual(HealthData healthData, String other) {
-        if (healthData.getValues().equals(other))
-            return Boolean.TRUE;
-        return Boolean.FALSE;
+        return healthData.getValues().toString().equals(other);
     }
 }

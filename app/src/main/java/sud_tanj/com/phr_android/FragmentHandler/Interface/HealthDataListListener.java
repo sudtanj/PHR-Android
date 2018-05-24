@@ -40,7 +40,7 @@ public class HealthDataListListener implements HandlerLoopRunnable {
                 this.progressBar.setVisibility(View.VISIBLE);
             }
             if (this.healthDataListActivity.getmAdapter().isDataChanged() || Global.getSensorGateway().isReady()) {
-                this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
+                //this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
                 this.progressBar.setVisibility(View.GONE);
             }
             //System.out.println("Health data list="+this.healthDataListActivity.getmAdapter().getItemCount());

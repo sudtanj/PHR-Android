@@ -84,10 +84,14 @@ public class HealthData {
     public ArrayList<String> getValues() {return values;}
 
     public void setValues(ArrayList<String> values) {
-        this.values = values;
-        if(!this.getParentSensor().getLatestData().equals(this))
+        if(this.getParentSensor().getLatestData()!=null) {
+            if (!this.getParentSensor().getLatestData().equals(this))
+                this.getParentSensor().setLatestData(this);
+            this.dataReferenceSynchronizer.changeVariable(values);
+        }else {
             this.getParentSensor().setLatestData(this);
-        this.syncToFirebase();
+            this.dataReferenceSynchronizer.changeVariable(values);
+        }
     }
 
     public String getValue() {
@@ -102,7 +106,7 @@ public class HealthData {
             this.values.add(values);
             if(!this.getParentSensor().getLatestData().equals(this))
                 this.getParentSensor().setLatestData(this);
-            this.syncToFirebase();
+            this.dataReferenceSynchronizer.changeVariable(this.values);
         } else {
             this.delete();
         }

@@ -17,6 +17,7 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorListener.GraphLegendListen
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.NameListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.OwnerListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.StatusListener;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.UnitListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 
 /**
@@ -35,6 +36,7 @@ public class SensorInformation {
     private SensorData sensorData = null;
     private DatabaseReference dataReference = null, userDataReference = null;
     private ArrayList<String> graphLegend;
+    private ArrayList<String> unit;
     private SensorSynchronizer sensorInformation, sensorStatus;
 
     public SensorInformation(String sensorId, SensorData sensorData) {
@@ -50,14 +52,25 @@ public class SensorInformation {
         this.sensorName = new String();
         this.sensorOwner = new String();
         this.graphLegend = new ArrayList<>();
+        this.unit = new ArrayList<>();
 
         //firebase sync
         sensorInformation.add(new NameListener(), "Name");
         sensorInformation.add(new OwnerListener(), "Owner");
         sensorInformation.add(new EmbeddedScriptListener(), "EmbeddedScript");
         sensorInformation.add(new GraphLegendListener(),"GraphLegend");
+        sensorInformation.add(new UnitListener(),"Unit");
 
         //sensorStatus.add(new StatusListener(), "SensorActive");
+    }
+
+    public ArrayList<String> getUnit() {
+        return unit;
+    }
+
+    public void setUnit(ArrayList<String> unit) {
+        this.unit = unit;
+        this.sensorInformation.changeVariable(unit);
     }
 
     public ArrayList<String> getGraphLegend() {
