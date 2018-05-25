@@ -27,9 +27,13 @@ import sud_tanj.com.phr_android.R;
 public class HealthDataListListener implements HandlerLoopRunnable {
     private HealthDataListActivity healthDataListActivity;
     private ProgressBar progressBar;
+    private Integer timeToUpdateGui;
+    private Boolean firstTime;
 
     public HealthDataListListener(HealthDataListActivity healthDataListActivity) {
         this.healthDataListActivity = healthDataListActivity;
+        this.timeToUpdateGui=5;
+        firstTime=Boolean.TRUE;
     }
 
     @Override
@@ -37,13 +41,31 @@ public class HealthDataListListener implements HandlerLoopRunnable {
         if (this.healthDataListActivity.getActivity() != null) {
             if (progressBar == null) {
                 this.progressBar = (ProgressBar) this.healthDataListActivity.getActivity().findViewById(R.id.health_data_list_progress_bar);
-                this.progressBar.setVisibility(View.VISIBLE);
-            }
-            if (this.healthDataListActivity.getmAdapter().isDataChanged() || Global.getSensorGateway().isReady()) {
-                //this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
                 this.progressBar.setVisibility(View.GONE);
             }
-            //System.out.println("Health data list="+this.healthDataListActivity.getmAdapter().getItemCount());
+            if (this.healthDataListActivity.getmAdapter().isDataChanged() || Global.getSensorGateway().isReady()) {
+                //if(this.firstTime) {
+                    this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
+                  //  this.firstTime=Boolean.FALSE;
+                //} else {
+                  //  if(this.timeToUpdateGui==0){
+                    //    this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
+                     //   this.timeToUpdateGui=5;
+                   // }
+                    //this.timeToUpdateGui=this.timeToUpdateGui-1;
+                    //System.out.println(this.timeToUpdateGui);
+              //  }
+            //   this.progressBar.setVisibility(View.GONE);
+            }
+            /**
+            if(timeToUpdateGui<0){
+                this.healthDataListActivity.getmAdapter().notifyDataSetChanged();
+                this.timeToUpdateGui=100;
+                System.out.println(this.timeToUpdateGui);
+            }
+            this.timeToUpdateGui--;
+            */
+             //System.out.println("Health data list="+this.healthDataListActivity.getmAdapter().getItemCount());
             //System.out.println("Health data list="+this.healthDataListActivity.getmAdapter().isDataChanged());
             //System.out.println("Health data list="+Global.getSensorGateway().isReady());
             /**

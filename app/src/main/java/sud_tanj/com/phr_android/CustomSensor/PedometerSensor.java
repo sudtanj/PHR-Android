@@ -33,6 +33,7 @@ import sud_tanj.com.phr_android.Sensor.SensorListener;
 
 public class PedometerSensor extends SensorListener {
     private PackageManager packageManager=null;
+    private SensorEvent sensorEventPedometer=null;
 
     @Override
     public void run() {
@@ -45,8 +46,8 @@ public class PedometerSensor extends SensorListener {
                         sensorManager.registerListener(new SensorEventListener() {
                             @Override
                             public void onSensorChanged(SensorEvent sensorEvent) {
-                                HealthData healthData = new HealthData(getSensorData());
-                                healthData.addValues(String.valueOf(sensorEvent.values[0]));
+                                sensorEventPedometer=sensorEvent;
+                                syncData();
                             }
 
                             @Override
@@ -60,9 +61,12 @@ public class PedometerSensor extends SensorListener {
     }
 
     @Override
-    public void syncData() {
-
+    protected void syncData() {
+        super.syncData();
+        HealthData healthData = new HealthData(getSensorData());
+        healthData.addValues(String.valueOf(this.sensorEventPedometer.values[0]));
     }
+
     @Override
     public Boolean isScriptRunOnce() {
         return Boolean.TRUE;

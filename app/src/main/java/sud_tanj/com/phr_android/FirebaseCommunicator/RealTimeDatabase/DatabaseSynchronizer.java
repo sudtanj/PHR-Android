@@ -27,6 +27,10 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.D
  * This class last modified by User
  */
 public abstract class DatabaseSynchronizer implements ValueEventListener {
+    public DatabaseReference getDatabase() {
+        return database;
+    }
+
     private DatabaseReference database;
     private ArrayList<String> referenceName;
     private ArrayList<DatabaseSyncable> databaseSyncables;
@@ -63,7 +67,30 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
     }
 
     public void changeVariable(HashMap<String, Object> value) {
-        this.database.updateChildren(value);
+        new DatabaseSyncOperation(this).execute(value);
+        /**
+        ArrayList<Boolean> syncData=new ArrayList<>();
+        Integer j=0;
+        Boolean updateData=Boolean.TRUE;
+        for (String key: value.keySet()) {
+            syncData.add(Boolean.FALSE);
+            for (int i = 0; i < this.databaseSyncables.size(); i++) {
+                if (this.equals(value.get(key).toString(), this.databaseSyncables.get(i))) {
+                    syncData.set(j,Boolean.TRUE);
+                    break;
+                }
+            }
+            j++;
+        }
+        for(Boolean temp:syncData){
+            if(!temp){
+                updateData=Boolean.FALSE;
+                break;
+            }
+        }
+        if(updateData)
+            this.database.setValue(value);
+         */
     }
 
     public void changeVariable(ArrayList<String> value) {

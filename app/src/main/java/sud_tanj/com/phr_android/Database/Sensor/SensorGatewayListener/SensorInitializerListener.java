@@ -25,9 +25,12 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.S
 public class SensorInitializerListener implements SensorGatewaySyncable {
     @Override
     public void updateData(SensorGateway sensorGateway, DataSnapshot dataSnapshot) {
-        sensorGateway.resetSensorList();
+        ///sensorGateway.resetSensorList();
         for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-            sensorGateway.getSensorObject().add(new SensorData(childSnapshot.getKey()));
+            String sensorId=childSnapshot.getKey();
+            if(!sensorGateway.isSensorIdExist(sensorId)) {
+                sensorGateway.getSensorObject().add(new SensorData(sensorId));
+            }
         }
     }
 

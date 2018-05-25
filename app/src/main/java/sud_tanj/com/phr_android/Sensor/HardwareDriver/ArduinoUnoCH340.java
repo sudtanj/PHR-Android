@@ -43,7 +43,11 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
         }
     }
 
-    public abstract void postDataReceived(ArrayList<String> receivedDataInOneLoop);
+    public void postDataReceived(ArrayList<String> receivedDataInOneLoop){
+        if(this.getCountDownTimer()!=0){
+            return;
+        }
+    }
 
 
     @Override
@@ -66,7 +70,8 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
     }
 
     @Override
-    public void syncData() {
+    protected void syncData() {
+        super.syncData();
         try {
             byte[] buffer = new byte[4096];
             int length = Global.getCH340Driver().ReadData(buffer, 4096);

@@ -83,33 +83,30 @@ public class HealthData {
 
     public ArrayList<String> getValues() {return values;}
 
+    /**
+     * This method is reserve for firebase to work
+     * @param values
+     */
     public void setValues(ArrayList<String> values) {
-        if(this.getParentSensor().getLatestData()!=null) {
-            if (!this.getParentSensor().getLatestData().equals(this))
-                this.getParentSensor().setLatestData(this);
-            this.dataReferenceSynchronizer.changeVariable(values);
-        }else {
-            this.getParentSensor().setLatestData(this);
-            this.dataReferenceSynchronizer.changeVariable(values);
-        }
+        this.values=values;
     }
 
     public String getValue() {
-        return values.get(0);
+        try {
+            return values.get(0);
+        } catch (Exception e){
+            return "-1";
+        }
     }
 
     public void addValues(String values) {
-        if (!this.getParentSensor().getLatestData().getValue().equals(values)) {
-            if(this.getValue()=="-1"){
-                this.values=new ArrayList<>();
-            }
-            this.values.add(values);
-            if(!this.getParentSensor().getLatestData().equals(this))
-                this.getParentSensor().setLatestData(this);
-            this.dataReferenceSynchronizer.changeVariable(this.values);
-        } else {
-            this.delete();
+        if(this.getValue()=="-1"){
+            this.values=new ArrayList<>();
         }
+        this.values.add(values);
+        if(!this.getParentSensor().getLatestData().equals(this))
+            this.getParentSensor().setLatestData(this);
+        this.syncToFirebase();
     }
 
     public SensorData getParentSensor() {
@@ -118,7 +115,7 @@ public class HealthData {
 
     public void setParentSensor(SensorData parentSensor) {
         this.parentSensor = parentSensor;
-        String parentSensorId = this.parentSensor.getSensorInformation().getSensorId();
+        //String parentSensorId = this.parentSensor.getSensorInformation().getSensorId();
         if(this.isValid())
             this.syncToFirebase();
     }
@@ -167,10 +164,17 @@ public class HealthData {
 
     public void syncToFirebase() {
         HashMap<String, Object> temporaryPayload = new HashMap<>();
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_PARENTSENSOR, parentSensor.getSensorInformation().getSensorId());
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_VALUE, values);
-        temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP, String.valueOf(timeStamp.getTime()));
-        this.dataReferenceSynchronizer.changeVariable(temporaryPayload);
+        if(!parentSensor.getSensorInformation().getSensorId().isEmpty()) {
+            temporaryPayload.put(this.HEALTH_DATA_CHILD_PARENTSENSOR, parentSensor.getSensorInformation().getSensorId());
+            if(!values.isEmpty()) {
+                temporaryPayload.put(this.HEALTH_DATA_CHILD_VALUE, values);
+                String timeStampString=String.valueOf(timeStamp.getTime());
+                if(!timeStampString.isEmpty()) {
+                    temporaryPayload.put(this.HEALTH_DATA_CHILD_TIMESTAMP, timeStampString);
+                    this.dataReferenceSynchronizer.changeVariable(temporaryPayload);
+                }
+            }
+        }
     }
 
 }

@@ -43,9 +43,6 @@ public class ArduinoReceiver extends BroadcastReceiver {
             retval = Global.getCH340Driver().ResumeUsbList();
             if (retval == -1)
                 Global.getCH340Driver().CloseDevice();
-            else if (retval == 0) {
-                System.out.println("Uart Init"+Global.getCH340Driver().UartInit());
-            }
         }
     }
 

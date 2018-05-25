@@ -32,6 +32,13 @@ public abstract class SensorListener implements EmbeddedScript {
     private Boolean runOnce = Boolean.FALSE;
     private ArrayList<String> healthData = new ArrayList<>();
     private Boolean openDataStream = Boolean.FALSE;
+    private Integer resetCountDownValue=3;
+
+    public Integer getCountDownTimer() {
+        return countDownTimer;
+    }
+
+    private Integer countDownTimer=resetCountDownValue;
 
     public SensorData getSensorData() {
         return sensorData;
@@ -139,5 +146,12 @@ public abstract class SensorListener implements EmbeddedScript {
         return ch >= 32 && ch < 127;
     }
 
-    public abstract void syncData();
+    protected void syncData(){
+        if(this.countDownTimer==0){
+            this.countDownTimer=resetCountDownValue;
+        } else {
+            this.countDownTimer--;
+            return;
+        }
+    }
 }
