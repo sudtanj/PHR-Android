@@ -59,7 +59,6 @@ public class SensorEmbeddedScript implements Runnable {
                 if(!name.isEmpty()) {
                     Class listener = Class.forName("sud_tanj.com.phr_android.CustomSensor." + name);
                     this.script = (SensorListener) (listener.newInstance());
-                    System.out.println(this.script);
                     this.script.setSensorData(this.sensorData);
                     this.scriptExist = true;
                 }

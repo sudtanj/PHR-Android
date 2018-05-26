@@ -37,6 +37,7 @@ public class ModifySensor extends AppCompatActivity {
     private FormElementTextSingleLine elementName;
     private FormElementTextSingleLine elementEmbedded;
     private FormElementTextSingleLine elementGraphLegend;
+    private FormElementTextSingleLine elementImage;
     private Bundle data;
     private SensorData currentSensor = null;
 
@@ -67,6 +68,7 @@ public class ModifySensor extends AppCompatActivity {
         elementName = FormElementTextSingleLine.createInstance().setTitle("SensorListener Name").setValue("").setHint("Enter the name of the sensor");
         elementEmbedded = FormElementTextSingleLine.createInstance().setTitle("Embeddedscript Name").setValue("").setHint("Tell the script name that use for the sensor loader");
         elementGraphLegend = FormElementTextSingleLine.createInstance().setTitle("Graph Legend").setValue("").setHint("Seperate with ,. example=systolic,diastolic ");
+        elementImage = FormElementTextSingleLine.createInstance().setTitle("Image Url").setValue("").setHint("Sensor image url hosted in another server");
 
         List<BaseFormElement> formItems = new ArrayList<>();
         formItems.add(header);
@@ -76,6 +78,7 @@ public class ModifySensor extends AppCompatActivity {
         formItems.add(elementName);
         formItems.add(elementEmbedded);
         formItems.add(elementGraphLegend);
+        formItems.add(elementImage);
 
         mFormBuilder.addFormElements(formItems);
 
@@ -84,6 +87,7 @@ public class ModifySensor extends AppCompatActivity {
             elementEmbedded.setValue(currentSensor.getBackgroundJob().getName());
             ArrayList<String> graphLegend=currentSensor.getSensorInformation().getGraphLegend();
             elementGraphLegend.setValue(TextUtils.join(",",graphLegend));
+            elementImage.setValue(currentSensor.getSensorInformation().getSensorImage());
         }
 
     }
@@ -128,6 +132,7 @@ public class ModifySensor extends AppCompatActivity {
                 if (data.getBoolean("modifySensor")) {
                     currentSensor.getSensorInformation().setSensorName(elementName.getValue());
                     currentSensor.getBackgroundJob().setName(elementEmbedded.getValue());
+                    currentSensor.getSensorInformation().setSensorImage(elementImage.getValue());
                     String[] graphLegend = elementGraphLegend.getValue().split(",");
                     ArrayList<String> temp=new ArrayList<>();
                     for(int i=0;i<graphLegend.length;i++){
@@ -144,6 +149,7 @@ public class ModifySensor extends AppCompatActivity {
                     temp.getSensorInformation().setSensorName(elementName.getValue());
                     temp.getBackgroundJob().setName(elementEmbedded.getValue());
                     temp.getSensorInformation().setSensorOwner(Global.getFireBaseUser().getUid());
+                    temp.getSensorInformation().setSensorImage(elementImage.getValue());
                     String[] graphLegend = elementGraphLegend.getValue().split(",");
                     for(int i=0;i<graphLegend.length;i++){
                         temp.getSensorInformation().addGraphLegend(graphLegend[i]);

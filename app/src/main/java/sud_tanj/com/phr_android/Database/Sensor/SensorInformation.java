@@ -16,8 +16,7 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorListener.EmbeddedScriptLis
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.GraphLegendListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.NameListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.OwnerListener;
-import sud_tanj.com.phr_android.Database.Sensor.SensorListener.StatusListener;
-import sud_tanj.com.phr_android.Database.Sensor.SensorListener.UnitListener;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.SensorImageListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 
 /**
@@ -31,12 +30,11 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSync
  */
 public class SensorInformation {
     public static final String SENSOR_DATA_CHILD_NAME = "sensor";
-    private String sensorId = null, sensorName = null, sensorOwner = null;
+    private String sensorId = null, sensorName = null, sensorOwner = null, sensorImage=null;
     private Boolean sensorActive = null;
     private SensorData sensorData = null;
     private DatabaseReference dataReference = null, userDataReference = null;
     private ArrayList<String> graphLegend;
-    private ArrayList<String> unit;
     private SensorSynchronizer sensorInformation, sensorStatus;
 
     public SensorInformation(String sensorId, SensorData sensorData) {
@@ -51,26 +49,17 @@ public class SensorInformation {
         this.sensorActive = true;
         this.sensorName = new String();
         this.sensorOwner = new String();
+        this.sensorImage=new String();
         this.graphLegend = new ArrayList<>();
-        this.unit = new ArrayList<>();
 
         //firebase sync
         sensorInformation.add(new NameListener(), "Name");
         sensorInformation.add(new OwnerListener(), "Owner");
         sensorInformation.add(new EmbeddedScriptListener(), "EmbeddedScript");
         sensorInformation.add(new GraphLegendListener(),"GraphLegend");
-        sensorInformation.add(new UnitListener(),"Unit");
+        sensorInformation.add(new SensorImageListener(),"Image");
 
         //sensorStatus.add(new StatusListener(), "SensorActive");
-    }
-
-    public ArrayList<String> getUnit() {
-        return unit;
-    }
-
-    public void setUnit(ArrayList<String> unit) {
-        this.unit = unit;
-        this.sensorInformation.changeVariable(unit);
     }
 
     public ArrayList<String> getGraphLegend() {
@@ -138,5 +127,14 @@ public class SensorInformation {
 
     public Boolean isSensorActive() {
         return this.sensorActive;
+    }
+
+    public String getSensorImage() {
+        return sensorImage;
+    }
+
+    public void setSensorImage(String sensorImage) {
+        this.sensorImage = sensorImage;
+        this.sensorInformation.changeVariable(sensorImage);
     }
 }

@@ -39,7 +39,6 @@ public class HealthDataListRecyclerViewListener implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        System.out.println(sensorPosition);
         Intent i = new Intent(Global.getContext(), HealthDataList.class);
         i.putExtra("sensorposition", sensorPosition.intValue());
         Global.getContext().startActivity(i);

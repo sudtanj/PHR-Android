@@ -68,11 +68,22 @@ public class HealthDataListRecyclerViewAdapter extends RecyclerView
             if (latestHealthData != null) {
                 Double temp = new Double(latestHealthData.getValue());
                 if (temp > 0) {
-                    String result = String.valueOf(latestHealthData.getValues());
-                    holder.getValue().setText(result);
+                    ArrayList<String> resultValue = latestHealthData.getValues();
+                    ArrayList<String> resultUnit= latestHealthData.getParentSensor().getSensorInformation().getGraphLegend();
+                    String putToGui=new String();
+                    for(int i=0;i<resultValue.size();i++) {
+                        putToGui += resultValue.get(i) + " ";
+                        try {
+                            putToGui += resultUnit.get(i);
+                        } catch (Exception e){
+
+                        }
+                        putToGui+="\n";
+                    }
+                    holder.getValue().setText(putToGui);
                     if(lastValue.size()>position) {
-                        if (!lastValue.get(position).equals(result)) {
-                            lastValue.set(position, result);
+                        if (!lastValue.get(position).equals(putToGui)) {
+                            lastValue.set(position, putToGui);
                             this.dataChanged = Boolean.TRUE;
                         }
                     }

@@ -14,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
+import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.R;
 
@@ -51,6 +55,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
         this.positionLocal = position;
+        String imgUrl=itemList.get(position).getSensorInformation().getSensorImage();
+        if(!imgUrl.isEmpty()) {
+            Glide.with(Global.getContext())
+                    .load(imgUrl).apply(new RequestOptions().override(80, 100))
+                    .into(holder.countryPhoto);
+        }
         holder.countryName.setText(itemList.get(position).getSensorInformation().getSensorName());
         //holder.sensorSwitch.setChecked(itemList.get(position).getSensorInformation().isSensorActive());
         /**
