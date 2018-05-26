@@ -42,6 +42,7 @@ android {
         multiDexEnabled true
 
         ext.betaDistributionGroupAliases = "medical-informatics"
+        ext.betaDistributionReleaseNotesFilePath = "../release_notes.txt"
     }
     signingConfigs {
         release {

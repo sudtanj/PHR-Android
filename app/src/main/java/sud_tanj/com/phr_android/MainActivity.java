@@ -42,6 +42,7 @@ import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Health_Data.ActiveHealthDataListLayout.ActiveHealthDataListActivity;
 import sud_tanj.com.phr_android.Sensor.HardwareDriver.Interface.ArduinoReceiver;
 import sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.HealthDataListActivity;
 import sud_tanj.com.phr_android.Health_Sensor.GridLayout.GridViewActivity;
@@ -249,7 +250,13 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.fragment_container, currentFragment);
             transaction.commit();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if(id == R.id.nav_active){
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            currentFragment = new ActiveHealthDataListActivity();
+            transaction.replace(R.id.fragment_container, currentFragment);
+            transaction.commit();
+        }
+        else if (id == R.id.nav_gallery) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             currentFragment = new GridViewActivity();
             transaction.replace(R.id.fragment_container, currentFragment);

@@ -11,6 +11,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_active"
+            android:icon="@drawable/ic_healthdata"
+            android:title="@string/active_health_data_list_menu" />
+        <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_healthdata"
             android:title="Health Data List" />

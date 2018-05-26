@@ -2,10 +2,10 @@
  * Create by Sudono Tanjung
  * Copyright (c) 2018. All rights reserved.
  *
- * Last Modified by User on 5/6/18 5:37 PM
+ * Last Modified by User on 5/26/18 4:49 PM
  */
 
-package sud_tanj.com.phr_android.Health_Data.HealthDataListLayout;
+package sud_tanj.com.phr_android.Health_Data.ActiveHealthDataListLayout;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -19,7 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
-import sud_tanj.com.phr_android.FragmentHandler.Interface.HealthDataListListener;
+import sud_tanj.com.phr_android.FragmentHandler.Interface.ActiveHealthDataListListener;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.R;
 
@@ -33,24 +33,24 @@ import sud_tanj.com.phr_android.R;
  * This class last modified by User
  */
 
-public class HealthDataListActivity extends Fragment {
+public class ActiveHealthDataListActivity extends Fragment {
 
     private static String LOG_TAG = "CardViewActivity";
     private RecyclerView mRecyclerView;
-    private HealthDataListListener healthDataList;
-    private HealthDataListRecyclerViewAdapter mAdapter;
+    private ActiveHealthDataListListener healthDataList;
+    private ActiveHealthDataListRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private HandlerLoop handlerLoop;
     private Boolean dataReady;
     private ProgressBar progressBar;
 
-    public HealthDataListActivity() {
-        this.healthDataList = new HealthDataListListener(this);
+    public ActiveHealthDataListActivity() {
+        this.healthDataList = new ActiveHealthDataListListener(this);
         this.handlerLoop = new HandlerLoop(5, this.healthDataList);
         this.dataReady = Boolean.FALSE;
     }
 
-    public HealthDataListRecyclerViewAdapter getmAdapter() {
+    public ActiveHealthDataListRecyclerViewAdapter getmAdapter() {
         return mAdapter;
     }
 
@@ -88,6 +88,8 @@ public class HealthDataListActivity extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        // if (this.getmAdapter() != null)
+        //   ((ActiveHealthDataListRecyclerViewAdapter)mAdapter).stopHandler();
         if (this.healthDataList != null)
             this.handlerLoop.removeCallbacks(this.healthDataList);
     }
@@ -105,10 +107,10 @@ public class HealthDataListActivity extends Fragment {
         mRecyclerView.setLayoutAnimation(animation);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new HealthDataListRecyclerViewAdapter(this);
+        mAdapter = new ActiveHealthDataListRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        this.getActivity().setTitle(R.string.health_data_list_title);
+        this.getActivity().setTitle(R.string.current_active_sensor_activity_title);
 
 
     }

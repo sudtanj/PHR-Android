@@ -47,5 +47,7 @@
     <string name="sort_by_day">Show by day</string>
     <string name="health_data_analyst">Analysis</string>
     <string name="health_data_choose_date">Choose Health Data Date</string>
+    <string name="active_health_data_list_menu">Currently Active Sensor</string>
+    <string name="current_active_sensor_activity_title">Currently Active Sensor</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

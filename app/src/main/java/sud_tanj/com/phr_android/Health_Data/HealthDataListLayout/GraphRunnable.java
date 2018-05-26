@@ -24,7 +24,6 @@ import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 public class GraphRunnable implements Runnable {
     private int delay = -1;
     private SensorData mDataset;
-    //private HealthDataListRecyclerViewAdapter.DataObjectHolder holder;
     private Handler sensorHandler;
 
     public GraphRunnable(Handler sensorHandler, int delay, SensorData mDataset) {
