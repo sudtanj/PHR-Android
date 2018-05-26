@@ -12,6 +12,8 @@ sud_tanj.com.phr_android.FragmentHandler.Interface
 sud_tanj.com.phr_android.Handler
 sud_tanj.com.phr_android.Handler.Interface
 sud_tanj.com.phr_android.Health_Data
+sud_tanj.com.phr_android.Health_Data.ActiveHealthDataListLayout
+sud_tanj.com.phr_android.Health_Data.ActiveHealthDataListLayout.Interface
 sud_tanj.com.phr_android.Health_Data.HealthDataListLayout
 sud_tanj.com.phr_android.Health_Data.HealthDataListLayout.Interface
 sud_tanj.com.phr_android.Health_Data.Interface
