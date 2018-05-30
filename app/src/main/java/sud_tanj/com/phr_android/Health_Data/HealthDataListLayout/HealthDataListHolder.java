@@ -24,13 +24,14 @@ import sud_tanj.com.phr_android.R;
  * This class last modified by User
  */
 public class HealthDataListHolder extends RecyclerView.ViewHolder {
-    private TextView title, value;
+    private TextView title, value,unit;
     private HealthDataListRecyclerViewListener healthDataListRecyclerViewListener;
 
     public HealthDataListHolder(View itemView) {
         super(itemView);
         title = (TextView) itemView.findViewById(R.id.health_sensor_title);
         value = (TextView) itemView.findViewById(R.id.health_sensor_value);
+        unit = (TextView) itemView.findViewById(R.id.health_sensor_unit);
         healthDataListRecyclerViewListener = new HealthDataListRecyclerViewListener(getAdapterPosition());
 
         itemView.setOnClickListener(this.healthDataListRecyclerViewListener);
@@ -47,5 +48,9 @@ public class HealthDataListHolder extends RecyclerView.ViewHolder {
     public void updateOnClick() {
         if (getAdapterPosition() > -1)
             this.healthDataListRecyclerViewListener.setSensorPosition(getAdapterPosition());
+    }
+
+    public TextView getUnit() {
+        return unit;
     }
 }

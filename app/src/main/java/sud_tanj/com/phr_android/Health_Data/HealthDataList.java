@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
@@ -29,6 +31,7 @@ import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,9 +84,12 @@ public class HealthDataList extends AppCompatActivity {
 
         Intent intent = getIntent();
         Integer sensorPosition = intent.getIntExtra("sensorposition", 0);
-
-        this.sensorData = Global.getSensorGateway().getSensorObject().get(sensorPosition);
-
+        try {
+            this.sensorData = Global.getSensorGateway().getSensorObject().get(sensorPosition);
+        } catch(Exception e){
+            Toast.makeText(getApplicationContext(),R.string.error_health_list_data,Toast.LENGTH_SHORT);
+            finish();
+        }
         setTitle(this.sensorData.getSensorInformation().getSensorName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(Boolean.TRUE);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.appHeader)));
@@ -94,11 +100,6 @@ public class HealthDataList extends AppCompatActivity {
         this.sensorAnalysis = (TextView) findViewById(R.id.health_data_analysist);
 
         DatePicker datePicker = (DatePicker) findViewById(R.id.date_picker);
-        Calendar calendar= Calendar.getInstance();
-        Integer year=calendar.get(Calendar.YEAR);
-        Integer monthOfYear=calendar.get(Calendar.MONTH);
-        Integer dayOfMonth=calendar.get(Calendar.DATE);
-        datePicker.init(year, monthOfYear, dayOfMonth, new DatePickerDataChangeListener(this));
 
         Button sortByYear=(Button) findViewById(R.id.sort_by_year);
         sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph));
@@ -121,9 +122,18 @@ public class HealthDataList extends AppCompatActivity {
         //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
         //datePickerListener.getDateSetListener().setButton(date);
         //date.setOnClickListener(datePickerListener);
+        Calendar calendar= Calendar.getInstance();
 
-        Date dateNow = new Date();
-        ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
+        ArrayList<HealthData> healthData=null;
+        Date dateNow= new Date();
+        while ((healthData=this.sensorData.getHealthDataOn(dateNow)).size()==0){
+            calendar.add(Calendar.DATE,-1);
+            dateNow=calendar.getTime();
+        }
+        Integer year=calendar.get(Calendar.YEAR);
+        Integer monthOfYear=calendar.get(Calendar.MONTH);
+        Integer dayOfMonth=calendar.get(Calendar.DATE);
+        datePicker.init(year, monthOfYear, dayOfMonth, new DatePickerDataChangeListener(this));
         ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //date.setText(simpleDateFormat.format(dateNow));
