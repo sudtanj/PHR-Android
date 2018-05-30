@@ -80,8 +80,12 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
                     } catch (Exception e){
                         healthDataPoint.add(new ArrayList<DataPoint>());
                     }
-                    DataPoint newData=new DataPoint(Integer.parseInt(this.hourData.get(i)), Double.parseDouble(healthDataList.get(j)));
-                    healthDataPoint.get(j).add(newData);
+                    try {
+                        DataPoint newData = new DataPoint(Integer.parseInt(this.hourData.get(i)), Double.parseDouble(healthDataList.get(j)));
+                        healthDataPoint.get(j).add(newData);
+                    } catch (Exception e){
+
+                    }
                     //ArrayList<DataPoint> dataPointsHealth = new ArrayList<>();
                     //dataPointsHealth.add(new DataPoint(Integer.parseInt(this.hourData.get(i)), Double.parseDouble(healthDataList.get(j))));
                 }

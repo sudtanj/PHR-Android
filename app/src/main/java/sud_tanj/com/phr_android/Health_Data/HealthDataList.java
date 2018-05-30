@@ -60,6 +60,16 @@ public class HealthDataList extends AppCompatActivity {
     private HealthDataListGraphListener healthDataListGraphListener;
     private HandlerLoop handlerLoop;
 
+    public Integer getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(Integer sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    private Integer sortBy=0;
+
     public SensorData getSensorData() {
         return sensorData;
     }
@@ -102,11 +112,11 @@ public class HealthDataList extends AppCompatActivity {
         DatePicker datePicker = (DatePicker) findViewById(R.id.date_picker);
 
         Button sortByYear=(Button) findViewById(R.id.sort_by_year);
-        sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph));
+        sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph,this));
         Button sortByMonth=(Button) findViewById(R.id.sort_by_month);
-        sortByMonth.setOnClickListener(new SortByMonthListener(datePicker,graph));
+        sortByMonth.setOnClickListener(new SortByMonthListener(datePicker,graph,this));
         Button sortByDay=(Button) findViewById(R.id.sort_by_day);
-        sortByDay.setOnClickListener(new SortByDayListener(datePicker,graph));
+        sortByDay.setOnClickListener(new SortByDayListener(datePicker,graph,this));
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);

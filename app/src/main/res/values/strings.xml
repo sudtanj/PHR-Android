@@ -48,7 +48,8 @@
     <string name="health_data_analyst">Analysis</string>
     <string name="health_data_choose_date">Choose Health Data Date</string>
     <string name="active_health_data_list_menu">Currently Active Sensor</string>
-    <string name="current_active_sensor_activity_title">Currently Active Sensor</string>0
+    <string name="current_active_sensor_activity_title">Currently Active Sensor</string>
+    <string name="analyst_default_text">No Analysis Available</string>
     <string name="error_health_list_data">Sorry, cannot load the summary right now, please try again later!</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

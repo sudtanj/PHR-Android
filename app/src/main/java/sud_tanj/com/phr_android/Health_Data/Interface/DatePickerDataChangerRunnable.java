@@ -49,8 +49,18 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
                 datePicker.getDayOfMonth());
 
         //dateTextView.setText(simpleDateFormat.format(calendar.getTime()));
-        ArrayList<HealthData> healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOn(calendar.getTime());
-        ArrayList<String> hourData=this.datePickerDataChangeListener.getSensorData().getAvailableTimeOn(calendar.getTime());
+        ArrayList<HealthData> healthData=new ArrayList<>();
+        ArrayList<String> hourData=new ArrayList<>();
+        if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(0)) {
+            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOn(calendar.getTime());
+            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableTimeOn(calendar.getTime());
+        } else if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(1)){
+            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnMonth(calendar.getTime());
+            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableDayOn(calendar.getTime());
+        } else {
+            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnYear(calendar.getTime());
+            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableMonthOn(calendar.getTime());
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //this.button.setText(simpleDateFormat.format(calendar.getTime()));
         ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(healthData,hourData);

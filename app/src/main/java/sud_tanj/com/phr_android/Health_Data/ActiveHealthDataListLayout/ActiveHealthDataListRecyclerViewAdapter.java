@@ -123,11 +123,8 @@ public class ActiveHealthDataListRecyclerViewAdapter extends RecyclerView
                         }
                         putToGui+="\n";
                     }
-                    System.out.println(putToGui);
-                    System.out.println(lastValue);
-                    System.out.println(putToGui.equals(lastValue));
                     if (!putToGui.equals(lastValue)) {
-                        if(!this.lastValue.equals("0")) {
+                        if(!this.lastValue.equals("-1")) {
                             if(!this.sensorData.contains(this.mDataset.get(i))){
                                 if(!firstTimeRun) {
                                     this.valueGui.clear();
@@ -135,7 +132,6 @@ public class ActiveHealthDataListRecyclerViewAdapter extends RecyclerView
                                     firstTimeRun=Boolean.TRUE;
                                 }
                                 this.valueGui.add(putToGui);
-                                System.out.println(this.mDataset.get(i).getSensorInformation().getSensorName());
                                 this.sensorData.add(this.mDataset.get(i));
                             }
                         }

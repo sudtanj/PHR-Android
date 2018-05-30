@@ -123,6 +123,78 @@ public class SensorData {
         return availableTimeTemp;
     }
 
+    public ArrayList<String> getAvailableDayOn(Date date) {
+        ArrayList<String> availableTimeTemp = new ArrayList<String>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US),
+                hourDateFormat = new SimpleDateFormat("dd", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        Date tempDate;
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                availableTimeTemp.add(hourDateFormat.format(tempDate));
+            }
+        }
+        return availableTimeTemp;
+    }
+
+    public ArrayList<String> getAvailableMonthOn(Date date) {
+        ArrayList<String> availableTimeTemp = new ArrayList<String>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US),
+                hourDateFormat = new SimpleDateFormat("MM", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        Date tempDate;
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                availableTimeTemp.add(hourDateFormat.format(tempDate));
+            }
+        }
+        return availableTimeTemp;
+    }
+
+    public ArrayList<HealthData> getHealthDataOnYear(Date date){
+        ArrayList<HealthData> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
+            }
+        }
+        return healthDataTemp;
+    }
+
+    public ArrayList<HealthData> getHealthDataOnMonth(Date date){
+        ArrayList<HealthData> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
+            }
+        }
+        return healthDataTemp;
+    }
+
     public ArrayList<HealthData> getHealthDataOn(Date date) {
         ArrayList<HealthData> healthDataTemp = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);

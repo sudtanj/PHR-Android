@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 
 import com.jjoe64.graphview.GraphView;
 
+import sud_tanj.com.phr_android.Health_Data.HealthDataList;
+
 /**
  * This class is part of PHRAndroid Project
  * Any modified within this class without reading the
@@ -23,8 +25,10 @@ import com.jjoe64.graphview.GraphView;
  * This class last modified by User
  */
 public class SortByDayListener extends SortingListener {
-    public SortByDayListener(DatePicker datePicker, GraphView graphView) {
+    private HealthDataList healthDataList;
+    public SortByDayListener(DatePicker datePicker, GraphView graphView, HealthDataList healthDataList) {
         super(datePicker, graphView);
+        this.healthDataList=healthDataList;
     }
 
     @Override
@@ -38,5 +42,6 @@ public class SortByDayListener extends SortingListener {
         getGraphView().getViewport().setMinX(0);
         getGraphView().getViewport().setMaxX(24);
         getGraphView().refreshDrawableState();
+        this.healthDataList.setSortBy(0);
     }
 }
