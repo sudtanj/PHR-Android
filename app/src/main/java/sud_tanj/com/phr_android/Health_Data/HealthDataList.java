@@ -134,11 +134,15 @@ public class HealthDataList extends AppCompatActivity {
         //date.setOnClickListener(datePickerListener);
         Calendar calendar= Calendar.getInstance();
 
-        ArrayList<HealthData> healthData=null;
         Date dateNow= new Date();
-        while ((healthData=this.sensorData.getHealthDataOn(dateNow)).size()==0){
-            calendar.add(Calendar.DATE,-1);
-            dateNow=calendar.getTime();
+        ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
+        if(this.sensorData.getSensorData().size()>0) {
+            if(healthData.size()==0) {
+                while ((healthData = this.sensorData.getHealthDataOn(dateNow)).size() == 0) {
+                    calendar.add(Calendar.DATE, -1);
+                    dateNow = calendar.getTime();
+                }
+            }
         }
         Integer year=calendar.get(Calendar.YEAR);
         Integer monthOfYear=calendar.get(Calendar.MONTH);
