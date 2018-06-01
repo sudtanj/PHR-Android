@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -69,6 +70,7 @@ public class HealthDataList extends AppCompatActivity {
     }
 
     private Integer sortBy=0;
+    private DatePicker datePicker;
 
     public SensorData getSensorData() {
         return sensorData;
@@ -106,10 +108,10 @@ public class HealthDataList extends AppCompatActivity {
 
         this.sensorName = (TextView) findViewById(R.id.health_data_title);
         this.sensorName.setText(this.sensorData.getSensorInformation().getSensorName());
-        graph = (GraphView) findViewById(R.id.health_data_graph);
+        this.graph = (GraphView) findViewById(R.id.health_data_graph);
         this.sensorAnalysis = (TextView) findViewById(R.id.health_data_analysist);
 
-        DatePicker datePicker = (DatePicker) findViewById(R.id.date_picker);
+        this.datePicker = (DatePicker) findViewById(R.id.date_picker);
 
         Button sortByYear=(Button) findViewById(R.id.sort_by_year);
         sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph,this));
@@ -118,6 +120,13 @@ public class HealthDataList extends AppCompatActivity {
         Button sortByDay=(Button) findViewById(R.id.sort_by_day);
         sortByDay.setOnClickListener(new SortByDayListener(datePicker,graph,this));
 
+        sortByDay.performClick();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(24);
@@ -127,31 +136,44 @@ public class HealthDataList extends AppCompatActivity {
 
         graph.getViewport().setScrollable(true);
 
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Value");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Day");
+
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
         //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
         //datePickerListener.getDateSetListener().setButton(date);
         //date.setOnClickListener(datePickerListener);
         Calendar calendar= Calendar.getInstance();
-
-        Date dateNow= new Date();
-        ArrayList<HealthData> healthData=this.sensorData.getHealthDataOn(dateNow);
+        //ArrayList<HealthData> healthData=new ArrayList<>();
+        Date dateNow=new Date();
+        if(this.sensorData.getSensorData().size()>0) {
+            dateNow = this.sensorData.getLatestData().getTimeStamp();
+            calendar.setTime(dateNow);
+        }
+        /**
         if(this.sensorData.getSensorData().size()>0) {
             if(healthData.size()==0) {
-                while ((healthData = this.sensorData.getHealthDataOn(dateNow)).size() == 0) {
-                    calendar.add(Calendar.DATE, -1);
-                    dateNow = calendar.getTime();
-                }
+                dateNow=this.sensorData.getLatestData().getTimeStamp();
+                healthData=this.sensorData.getHealthDataOn(dateNow);
+                calendar.setTime(dateNow);
+                 while ((healthData = this.sensorData.getHealthDataOn(dateNow)).size() == 0) {
+                 calendar.add(Calendar.DATE, -1);
+                 dateNow = calendar.getTime();
+                 }
             }
         }
+        */
         Integer year=calendar.get(Calendar.YEAR);
         Integer monthOfYear=calendar.get(Calendar.MONTH);
         Integer dayOfMonth=calendar.get(Calendar.DATE);
         datePicker.init(year, monthOfYear, dayOfMonth, new DatePickerDataChangeListener(this));
-        ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
+        datePicker.updateDate(year,monthOfYear,dayOfMonth);
+        //ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
         //date.setText(simpleDateFormat.format(dateNow));
-        this.setHandlerLoop(healthData,hourData);
+
+        //this.setHandlerLoop(healthData,hourData);
+
     }
 
     @Override

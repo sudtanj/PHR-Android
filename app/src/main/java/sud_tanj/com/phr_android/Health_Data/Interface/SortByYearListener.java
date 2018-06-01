@@ -42,6 +42,8 @@ public class SortByYearListener extends SortingListener {
         getGraphView().getViewport().setMinX(1);
         getGraphView().getViewport().setMaxX(12);
         getGraphView().refreshDrawableState();
+        getGraphView().getGridLabelRenderer().setHorizontalAxisTitle("Month");
+        getDatePicker().updateDate(getDatePicker().getYear(),getDatePicker().getMonth(),getDatePicker().getDayOfMonth());
         this.healthDataList.setSortBy(2);
     }
 }
