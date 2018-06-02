@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private HandlerLoop sensorBackgroundHandler;
     private SensorRunnable sensorRunnable;
     private IntentFilter intentFilter;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,18 +115,9 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         Global.setNavigationView(navigationView);
         navigationView.setNavigationItemSelectedListener(this);
-        /**
-        Glide.with(this).asGif().apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE)).load(R.drawable.nav_bar_background).into(new SimpleTarget<GifDrawable>() {
-            @Override
-            public void onResourceReady(GifDrawable resource, Transition<? super GifDrawable> transition) {
-                LinearLayout linearLayout=(LinearLayout) findViewById(R.id.nav_bar_layout);
-                linearLayout.setBackground(resource);
-            }
-        });
-         */
 
         //init navigation drawer
 
