@@ -41,6 +41,7 @@ import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
@@ -71,6 +72,7 @@ public class HealthDataList extends AppCompatActivity {
 
     private Integer sortBy=0;
     private DatePicker datePicker;
+    private TextView analysis;
 
     public SensorData getSensorData() {
         return sensorData;
@@ -80,12 +82,12 @@ public class HealthDataList extends AppCompatActivity {
         return graph;
     }
 
-    public void setHandlerLoop(ArrayList<HealthData> healthData,ArrayList<String> hourData) {
+    public void setHandlerLoop(ArrayList<HealthData> healthData, ArrayList<String> hourData, ArrayList<HealthDataAnalysis> analysis) {
         if(this.handlerLoop!=null){
             this.handlerLoop.removeCallbacks(healthDataListGraphListener);
             this.handlerLoop.removeCallbacksAndMessages(null);
         }
-        healthDataListGraphListener=new HealthDataListGraphListener(graph,healthData,hourData,sensorData);
+        healthDataListGraphListener=new HealthDataListGraphListener(this,healthData,hourData,sensorData,analysis);
         this.handlerLoop = new HandlerLoop(5, healthDataListGraphListener);
     }
 
@@ -112,6 +114,7 @@ public class HealthDataList extends AppCompatActivity {
         this.sensorAnalysis = (TextView) findViewById(R.id.health_data_analysist);
 
         this.datePicker = (DatePicker) findViewById(R.id.date_picker);
+        this.analysis=(TextView) findViewById(R.id.analysis_summary);
 
         Button sortByYear=(Button) findViewById(R.id.sort_by_year);
         sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph,this));
@@ -137,7 +140,7 @@ public class HealthDataList extends AppCompatActivity {
         graph.getViewport().setScrollable(true);
 
         graph.getGridLabelRenderer().setVerticalAxisTitle("Value");
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Day");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Hour");
 
 
         //ArrayList<String> healthDataListDate=this.sensorData.getAvailableTimestamp();
@@ -174,6 +177,7 @@ public class HealthDataList extends AppCompatActivity {
 
         //this.setHandlerLoop(healthData,hourData);
 
+
     }
 
     @Override
@@ -200,4 +204,7 @@ public class HealthDataList extends AppCompatActivity {
 
     }
 
+    public TextView getAnalysis() {
+        return analysis;
+    }
 }

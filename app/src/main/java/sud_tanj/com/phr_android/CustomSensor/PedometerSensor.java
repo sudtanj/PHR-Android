@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Sensor.SensorListener;
 
@@ -36,35 +37,31 @@ public class PedometerSensor extends SensorListener {
     private SensorEvent sensorEventPedometer=null;
 
     @Override
-    public void run() {
-            if(this.packageManager==null) {
-                this.packageManager = Global.getContext().getPackageManager();
-                if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
-                    SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
-                    Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-                    if (countSensor != null) {
-                        sensorManager.registerListener(new SensorEventListener() {
-                            @Override
-                            public void onSensorChanged(SensorEvent sensorEvent) {
-                                sensorEventPedometer=sensorEvent;
-                                syncData();
-                            }
-
-                            @Override
-                            public void onAccuracyChanged(Sensor sensor, int i) {
-
-                            }
-                        }, countSensor, SensorManager.SENSOR_DELAY_UI);
-                    }
-                }
-            }
-    }
-
-    @Override
     protected void syncData() {
         super.syncData();
-        HealthData healthData = new HealthData(getSensorData());
-        healthData.addValues(String.valueOf(this.sensorEventPedometer.values[0]));
+        if(this.packageManager==null) {
+            this.packageManager = Global.getContext().getPackageManager();
+            if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)) {
+                SensorManager sensorManager = (SensorManager) Global.getContext().getSystemService(Context.SENSOR_SERVICE);
+                Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+                if (countSensor != null) {
+                    sensorManager.registerListener(new SensorEventListener() {
+                        @Override
+                        public void onSensorChanged(SensorEvent sensorEvent) {
+                            sensorEventPedometer=sensorEvent;
+
+                            HealthData healthData = new HealthData(getSensorData());
+                            healthData.addValues(String.valueOf(sensorEventPedometer.values[0]));
+                        }
+
+                        @Override
+                        public void onAccuracyChanged(Sensor sensor, int i) {
+
+                        }
+                    }, countSensor, SensorManager.SENSOR_DELAY_UI);
+                }
+            }
+        }
     }
 
     @Override
@@ -73,7 +70,8 @@ public class PedometerSensor extends SensorListener {
     }
 
     @Override
-    public String analyzeData(ArrayList<String> healthData) {
-        return null;
+    public void analyzeData(ArrayList<String> healthData) {
+        //HealthDataAnalysis temp=new HealthDataAnalysis(getSensorData());
+        //temp.setAnalysis("This is a test analysis");
     }
 }

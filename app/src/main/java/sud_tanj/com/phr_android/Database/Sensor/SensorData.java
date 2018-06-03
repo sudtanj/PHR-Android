@@ -9,11 +9,14 @@ package sud_tanj.com.phr_android.Database.Sensor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataAnalysisListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 
@@ -32,15 +35,26 @@ public class SensorData {
     private ArrayList<String> sensorData = null;
     private SensorEmbeddedScript backgroundJob = null;
     private HealthData latestData = null;
+    private ArrayList<String> healthDataAnalysis=null;
 
     public SensorData(String sensorId) {
         this.sensorInformation = new SensorInformation(sensorId, this);
         this.sensorData = new ArrayList<>();
+        this.healthDataAnalysis=new ArrayList<>();
         this.backgroundJob = new SensorEmbeddedScript(new String(), this);
 
         //firebase sync
         SensorSynchronizer healthDataManager = new SensorSynchronizer(Global.getUserDatabase(), this);
         healthDataManager.add(new HealthDataListener(), "Health_Data");
+        healthDataManager.add(new HealthDataAnalysisListener(),"Health_Data_Analysis");
+    }
+
+    public void addHealthDataAnalysis(String value){
+        healthDataAnalysis.add(value);
+    }
+
+    public Boolean isHealthDataAnalysisExist(String value){
+        return healthDataAnalysis.contains(value);
     }
 
     public Boolean isHealthIdExist(String healthId) {
@@ -97,7 +111,18 @@ public class SensorData {
 
     public ArrayList<String> getAvailableTimestamp() {
         ArrayList<String> temp = new ArrayList<>();
+        Collections.sort(this.sensorData);
         for (String healthId : this.sensorData) {
+            String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
+            temp.add(tempHealthId);
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getAvailableAnalysisTimestamp() {
+        ArrayList<String> temp = new ArrayList<>();
+        for (String healthId : this.healthDataAnalysis) {
+            System.out.println(healthId);
             String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
             temp.add(tempHealthId);
         }
@@ -122,6 +147,7 @@ public class SensorData {
         }
         return availableTimeTemp;
     }
+
 
     public ArrayList<String> getAvailableDayOn(Date date) {
         ArrayList<String> availableTimeTemp = new ArrayList<String>();
@@ -207,6 +233,23 @@ public class SensorData {
             targetDate = simpleDateFormat.format(date);
             if (targetDate.equals(healthIdDate)) {
                 healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
+            }
+        }
+        return healthDataTemp;
+    }
+
+    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOn(Date date) {
+        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
             }
         }
         return healthDataTemp;

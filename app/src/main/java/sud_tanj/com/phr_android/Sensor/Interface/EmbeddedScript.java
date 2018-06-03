@@ -25,7 +25,7 @@ public interface EmbeddedScript extends Runnable{
 
     Boolean isScriptRunOnce();
 
-    String analyzeData(ArrayList<String> healthData);
+    void analyzeData(ArrayList<String> healthData);
 
 
 

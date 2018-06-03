@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
+import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 
@@ -51,9 +52,12 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
         //dateTextView.setText(simpleDateFormat.format(calendar.getTime()));
         ArrayList<HealthData> healthData=new ArrayList<>();
         ArrayList<String> hourData=new ArrayList<>();
+        ArrayList<HealthDataAnalysis> analysis=new ArrayList<>();
+
         if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(0)) {
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOn(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableTimeOn(calendar.getTime());
+            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOn(calendar.getTime());
         } else if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(1)){
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnMonth(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableDayOn(calendar.getTime());
@@ -61,8 +65,16 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnYear(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableMonthOn(calendar.getTime());
         }
+        //write to display
+        String analysisTextView=new String();
+        for(HealthDataAnalysis temp:analysis){
+            analysisTextView+="- "+temp.getAnalysis()+". \n";
+        }
+
+        this.datePickerDataChangeListener.getHealthDataList().getAnalysis().setText(analysisTextView);
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //this.button.setText(simpleDateFormat.format(calendar.getTime()));
-        ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(healthData,hourData);
+        ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(healthData,hourData,analysis);
     }
 }
