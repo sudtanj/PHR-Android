@@ -12,6 +12,11 @@
         <item>All Data</item>
     </string-array>
 
+    <string-array name="role_comment">
+        <item>Doctor</item>
+        <item>Individual</item>
+    </string-array>
+
     <string-array name="listValues">
         <item>1</item>
         <item>2</item>

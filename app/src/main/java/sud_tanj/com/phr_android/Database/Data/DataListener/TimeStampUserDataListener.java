@@ -31,7 +31,7 @@ public class TimeStampUserDataListener implements UserHealthDataSyncable {
         Date value = new Date();
         value.setTime(DatabaseUtility.convertToLong(dataSnapshot));
         if (!timeStamp.equals(value))
-            userData.setTimeStamp(value);
+            userData.setTimeStampWithoutSync(value);
     }
 
     @Override

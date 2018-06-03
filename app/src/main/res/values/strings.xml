@@ -50,6 +50,10 @@
     <string name="active_health_data_list_menu">Currently Active Sensor</string>
     <string name="current_active_sensor_activity_title">Currently Active Sensor</string>
     <string name="analyst_default_text">No Analysis Available</string>
+    <string name="report_error_menu_title">Report Bugs</string>
+    <string name="comment_send_button">Send Comment</string>
+    <string name="no_comment_list">No Comment added today!</string>
+    <string name="comment_hint">Write about today condition here!</string>
     <string name="error_health_list_data">Sorry, cannot load the summary right now, please try again later!</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

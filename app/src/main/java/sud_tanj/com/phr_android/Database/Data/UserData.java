@@ -68,9 +68,12 @@ public abstract class UserData {
         return timeStamp;
     }
 
+    public void setTimeStampWithoutSync(Date timeStamp){
+        this.timeStamp=timeStamp;
+    }
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
-        String timeStampText = String.valueOf(this.timeStamp.getTime());
+        String timeStampText = String.valueOf(timeStamp.getTime());
        this.dataReferenceSynchronizer.changeVariable(timeStampText);
     }
 

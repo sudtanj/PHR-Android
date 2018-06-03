@@ -61,17 +61,14 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
         } else if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(1)){
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnMonth(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableDayOn(calendar.getTime());
+            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOnMonth(calendar.getTime());
         } else {
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnYear(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableMonthOn(calendar.getTime());
-        }
-        //write to display
-        String analysisTextView=new String();
-        for(HealthDataAnalysis temp:analysis){
-            analysisTextView+="- "+temp.getAnalysis()+". \n";
+            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOnYear(calendar.getTime());
         }
 
-        this.datePickerDataChangeListener.getHealthDataList().getAnalysis().setText(analysisTextView);
+        //write to display
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //this.button.setText(simpleDateFormat.format(calendar.getTime()));

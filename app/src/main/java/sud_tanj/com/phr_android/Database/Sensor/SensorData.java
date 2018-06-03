@@ -35,6 +35,7 @@ public class SensorData {
     private ArrayList<String> sensorData = null;
     private SensorEmbeddedScript backgroundJob = null;
     private HealthData latestData = null;
+    private HealthDataAnalysis latestDataAnalysis=null;
     private ArrayList<String> healthDataAnalysis=null;
 
     public SensorData(String sensorId) {
@@ -49,8 +50,48 @@ public class SensorData {
         healthDataManager.add(new HealthDataAnalysisListener(),"Health_Data_Analysis");
     }
 
-    public void addHealthDataAnalysis(String value){
-        healthDataAnalysis.add(value);
+    public void addHealthDataAnalysis(String healthId){
+        healthDataAnalysis.add(healthId);
+    }
+
+    public HealthDataAnalysis getLatestHealthDataAnalysis(){
+        if (this.latestDataAnalysis == null) {
+            if (this.getSensorData().size() > 0) {
+                String healthDataId = this.healthDataAnalysis.get(this.healthDataAnalysis.size() - 1);
+                this.latestDataAnalysis = new HealthDataAnalysis(healthDataId, this);
+            }
+        }
+        return this.latestDataAnalysis;
+    }
+
+    public void setTodayHealthDataAnalysis(String analysis){
+        HealthDataAnalysis healthDataAnalysis=this.getLatestHealthDataAnalysis();
+        if(healthDataAnalysis==null){
+            healthDataAnalysis=new HealthDataAnalysis(this);
+            if(!healthDataAnalysis.getAnalysis().equals(analysis)) {
+                healthDataAnalysis.setAnalysis(analysis);
+            }
+            this.latestDataAnalysis=healthDataAnalysis;
+        } else {
+            Date date=new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+            String healthIdDate, targetDate;
+            Date tempDate = this.getLatestHealthDataAnalysis().getTimeStamp();
+            targetDate=simpleDateFormat.format(date);
+            healthIdDate=simpleDateFormat.format(tempDate);
+            System.out.println("SensorData "+healthIdDate.equals(targetDate));
+            if(healthIdDate.equals(targetDate)){
+                if(!healthDataAnalysis.getAnalysis().equals(analysis))
+                    healthDataAnalysis.setAnalysis(analysis);
+            }
+            else {
+                healthDataAnalysis=new HealthDataAnalysis(this);
+                if(!healthDataAnalysis.getAnalysis().equals(analysis)) {
+                    healthDataAnalysis.setAnalysis(analysis);
+                }
+                this.latestDataAnalysis=healthDataAnalysis;
+            }
+        }
     }
 
     public Boolean isHealthDataAnalysisExist(String value){
@@ -122,7 +163,6 @@ public class SensorData {
     public ArrayList<String> getAvailableAnalysisTimestamp() {
         ArrayList<String> temp = new ArrayList<>();
         for (String healthId : this.healthDataAnalysis) {
-            System.out.println(healthId);
             String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
             temp.add(tempHealthId);
         }
@@ -241,6 +281,41 @@ public class SensorData {
     public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOn(Date date) {
         ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
+            }
+        }
+        return healthDataTemp;
+    }
+
+    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOnMonth(Date date) {
+        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
+            }
+        }
+        return healthDataTemp;
+    }
+
+
+    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOnYear(Date date) {
+        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US);
         simpleDateFormat.format(date);
         String healthIdDate, targetDate;
         for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
