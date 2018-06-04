@@ -17,6 +17,7 @@ import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataAnalysisListener;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.healthDataIndividualCommentListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
 
@@ -37,19 +38,39 @@ public class SensorData {
     private HealthData latestData = null;
     private HealthDataAnalysis latestDataAnalysis=null;
     private ArrayList<String> healthDataAnalysis=null;
+    private ArrayList<String> healthDataIndividualComment=null;
+    private ArrayList<String> healthDataDoctorComment=null;
 
     public SensorData(String sensorId) {
         this.sensorInformation = new SensorInformation(sensorId, this);
         this.sensorData = new ArrayList<>();
         this.healthDataAnalysis=new ArrayList<>();
+        this.healthDataIndividualComment=new ArrayList<>();
+        this.healthDataDoctorComment=new ArrayList<>();
         this.backgroundJob = new SensorEmbeddedScript(new String(), this);
 
         //firebase sync
         SensorSynchronizer healthDataManager = new SensorSynchronizer(Global.getUserDatabase(), this);
         healthDataManager.add(new HealthDataListener(), "Health_Data");
         healthDataManager.add(new HealthDataAnalysisListener(),"Health_Data_Analysis");
+        healthDataManager.add(new healthDataIndividualCommentListener(),"Health_Data_Comment");
+    }
+    public Boolean ishealthDataIndividualComment(String healthCommentId){
+        return this.healthDataIndividualComment.contains(healthCommentId);
     }
 
+    public void addhealthDataIndividualComment(String healthCommentId){
+        this.healthDataIndividualComment.add(healthCommentId);
+    }
+
+
+    public Boolean ishealthDataDoctorComment(String healthCommentId){
+        return this.healthDataDoctorComment.contains(healthCommentId);
+    }
+
+    public void addhealthDataDoctorComment(String healthCommentId){
+        this.healthDataDoctorComment.add(healthCommentId);
+    }
     public void addHealthDataAnalysis(String healthId){
         healthDataAnalysis.add(healthId);
     }
@@ -235,7 +256,7 @@ public class SensorData {
         ArrayList<HealthData> healthDataTemp = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);
         simpleDateFormat.format(date);
-        String healthIdDate, targetDate;
+        String healthIdDate, targetDate,prevDate=new String();
         for (String healthIdTime : this.getAvailableTimestamp()) {
             Date tempDate = new Date();
             tempDate.setTime(Long.parseLong(healthIdTime));
@@ -276,7 +297,6 @@ public class SensorData {
             healthIdDate = simpleDateFormat.format(tempDate);
             targetDate = simpleDateFormat.format(date);
             if (targetDate.equals(healthIdDate)) {
-                System.out.println(new String(this.getSensorInformation().getSensorId() + healthIdTime));
                 healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
             }
         }
@@ -351,4 +371,6 @@ public class SensorData {
         Global.getSensorGateway().deleteSensorObject(this);
         this.getSensorInformation().getDataReference().removeValue();
     }
+
+
 }

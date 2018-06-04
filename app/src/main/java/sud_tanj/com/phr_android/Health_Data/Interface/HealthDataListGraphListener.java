@@ -42,6 +42,7 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     private HealthDataList healthDataList;
     private ArrayList<LineGraphSeries<DataPoint>> seriesTemp;
     private String analysisTextView;
+    private Boolean cancel=Boolean.FALSE;
 
     public HealthDataListGraphListener(HealthDataList healthDataList, ArrayList<HealthData> healthData, ArrayList<String> hourData, SensorData sensorData, ArrayList<HealthDataAnalysis> healthDataAnalyses) {
         this.healthDataList = healthDataList;
@@ -51,6 +52,15 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         this.hourData = hourData;
         this.sensorData = sensorData;
         this.healthDataAnalyses = healthDataAnalyses;
+        for(int i=1;i<this.healthData.size();i++){
+            if(this.healthData.get(i).getValues().equals(this.healthData.get(i-1).getValues())){
+                if(this.hourData.get(i).equals(this.hourData.get(i-1))){
+                    this.healthData.remove(i);
+                    this.hourData.remove(i);
+                    i--;
+                }
+            }
+        }
     }
 
     public void postExecution() {
@@ -79,6 +89,9 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         ArrayList<LineGraphSeries<DataPoint>> healthDataSeries = new ArrayList<LineGraphSeries<DataPoint>>();
         ArrayList<ArrayList<DataPoint>> healthDataPoint = new ArrayList<ArrayList<DataPoint>>();
         for (int i = 0; i < healthData.size(); i++) {
+            if(cancel){
+                return;
+            }
             if(healthData.get(i).isValid()) {
                 ArrayList<String> healthDataList = healthData.get(i).getValues();
                 if (healthDataList.size() > 0) {
@@ -109,8 +122,8 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
                             }
                             DataPoint newData = new DataPoint(Integer.parseInt(this.hourData.get(i)), Integer.parseInt(valueResult));
                             healthDataPoint.get(j).add(newData);
-                            System.out.println(j);
-                            System.out.println(healthDataPoint.get(j));
+                            //System.out.println(j);
+                            //System.out.println(healthDataPoint.get(j));
                         } catch (Exception e) {
 
                         }
@@ -127,6 +140,9 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         }
         seriesTemp=new ArrayList<>();
         for (int i = 0; i < healthDataSeries.size(); i++) {
+            if(cancel){
+                return;
+            }
             ArrayList<DataPoint> healthTemp = healthDataPoint.get(i);
             seriesTemp.add(healthDataSeries.get(i));
             seriesTemp.get(i).resetData(healthTemp.toArray(new DataPoint[healthTemp.size()]));
@@ -158,5 +174,9 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     @Override
     public Boolean isHandlerExpired() {
         return this.handlerExpired;
+    }
+
+    public void setCancel(Boolean cancel) {
+        this.cancel = cancel;
     }
 }

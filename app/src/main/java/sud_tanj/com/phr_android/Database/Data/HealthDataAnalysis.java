@@ -30,7 +30,6 @@ public class HealthDataAnalysis extends UserData{
 
     public HealthDataAnalysis(String dataId, SensorData parentSensor) {
         super(dataId, parentSensor, HEALTH_DATA_ANALYSIS_NAME);
-        System.out.println("new analysis created");
         this.analysis=new String();
         this.add(new AnalysisListener(),HEALTH_DATA_ANALYSIS_DATA_NAME);
         if(dataId.isEmpty())

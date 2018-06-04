@@ -21,6 +21,10 @@ import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListene
  * This class last modified by User
  */
 public class LongOneTimeOperation extends AsyncTask<Void,Void,Void> {
+    public void setHealthDataListGraphListener(HealthDataListGraphListener healthDataListGraphListener) {
+        this.healthDataListGraphListener = healthDataListGraphListener;
+    }
+
     private HealthDataListGraphListener healthDataListGraphListener;
     public LongOneTimeOperation(HealthDataListGraphListener healthDataListGraphListener){
         this.healthDataListGraphListener=healthDataListGraphListener;
@@ -35,5 +39,11 @@ public class LongOneTimeOperation extends AsyncTask<Void,Void,Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         this.healthDataListGraphListener.postExecution();
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        this.healthDataListGraphListener.setCancel(Boolean.TRUE);
     }
 }

@@ -7,52 +7,39 @@
 
 package sud_tanj.com.phr_android.Health_Data;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.helper.StaticLabelsFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Data.DoctorCommentData;
+import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
-import sud_tanj.com.phr_android.Handler.HandlerLoop;
-import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 import sud_tanj.com.phr_android.Handler.LongOneTimeOperation;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
-import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.SortByDayListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.SortByMonthListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.SortByYearListener;
-import sud_tanj.com.phr_android.MainActivity;
 import sud_tanj.com.phr_android.R;
 
 public class HealthDataList extends AppCompatActivity {
@@ -75,7 +62,8 @@ public class HealthDataList extends AppCompatActivity {
     private Integer sortBy=0;
     private DatePicker datePicker;
     private TextView analysis;
-
+    private EditText commentData;
+    private Spinner commentRole;
     public SensorData getSensorData() {
         return sensorData;
     }
@@ -118,6 +106,25 @@ public class HealthDataList extends AppCompatActivity {
 
         this.datePicker = (DatePicker) findViewById(R.id.date_picker);
         this.analysis=(TextView) findViewById(R.id.analysis_summary);
+
+        commentData=(EditText) findViewById(R.id.comment);
+        commentRole=(Spinner) findViewById(R.id.role);
+        Button sendCommentButton=(Button) findViewById(R.id.send_comment);
+
+        sendCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String role=commentRole.getSelectedItem().toString();
+                if(role.equals("Doctor")){
+                    DoctorCommentData comment=new DoctorCommentData(sensorData);
+                    comment.setComment(commentData.getText().toString());
+                } else {
+                    IndividualCommentData comment=new IndividualCommentData(sensorData);
+                    comment.setComment(commentData.getText().toString());
+                }
+                commentData.setText(new String());
+            }
+        });
 
         Button sortByYear=(Button) findViewById(R.id.sort_by_year);
         sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph,this));
