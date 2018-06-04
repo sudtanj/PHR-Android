@@ -68,6 +68,7 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
             analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOnYear(calendar.getTime());
         }
 
+
         //write to display
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);

@@ -151,8 +151,10 @@ public class HealthData {
     }
 
     public Boolean isValid(){
-        if (this.getValue().equals("-1")) {
-            return Boolean.FALSE;
+        for(String temp:this.getValues()){
+            if(temp.equals("-1")){
+                return Boolean.FALSE;
+            }
         }
         return Boolean.TRUE;
     }

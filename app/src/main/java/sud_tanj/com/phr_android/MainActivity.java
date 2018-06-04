@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     private SensorRunnable sensorRunnable;
     private IntentFilter intentFilter;
     private NavigationView navigationView;
+    private ArduinoReceiver arduinoReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +139,8 @@ public class MainActivity extends AppCompatActivity
 
         this.intentFilter = new IntentFilter();
         this.intentFilter.addAction("android.hardware.usb.action.USB_STATE");
+        this.arduinoReceiver = new ArduinoReceiver();
 
-        registerReceiver(new ArduinoReceiver(), this.intentFilter);
 
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#b8e2eb")));
@@ -148,6 +149,12 @@ public class MainActivity extends AppCompatActivity
         initializeZendesk();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(this.arduinoReceiver, this.intentFilter);
     }
 
     private void initializeZendesk() {
@@ -167,6 +174,12 @@ public class MainActivity extends AppCompatActivity
         );
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(this.arduinoReceiver);
+    }
 
     @Override
     protected void onResume() {

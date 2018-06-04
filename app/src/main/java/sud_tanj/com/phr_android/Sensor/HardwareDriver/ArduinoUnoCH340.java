@@ -36,11 +36,7 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
     }
 
     public void setConfig(Integer baudRate,Byte dataBit,Byte stopBit,Byte parity,Byte flowControl) {
-        try {
             Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
-        } catch (Exception e){
-
-        }
     }
 
     public void postDataReceived(ArrayList<String> receivedDataInOneLoop){
@@ -53,18 +49,17 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
     @Override
     public void run() {
         super.run();
-        if(Global.getCH340Driver().isConnected()) {
+        if(Global.getCH340Online()) {
             if (!this.configSet) {
                 this.setAsDefaultConfig();
                 this.configSet = Boolean.TRUE;
             }
             if (Global.getCH340Driver() != null) {
-                if (Global.getCH340Driver().isConnected()) {
                     ArrayList<String> dataReceivedInOneLoop=this.getData();
+                    System.out.println(dataReceivedInOneLoop.size());
                     if(dataReceivedInOneLoop.size()>0) {
                         this.postDataReceived(dataReceivedInOneLoop);
                     }
-                }
             }
         }
     }

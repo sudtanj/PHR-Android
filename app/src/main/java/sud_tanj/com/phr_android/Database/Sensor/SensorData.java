@@ -76,10 +76,14 @@ public class SensorData {
             Date date=new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
             String healthIdDate, targetDate;
-            Date tempDate = this.getLatestHealthDataAnalysis().getTimeStamp();
+            Date tempDate =new Date();
+            ArrayList<String> availableDate=this.getAvailableAnalysisTimestamp();
+            if(availableDate.size()>0) {
+                String latestDate = availableDate.get(availableDate.size() - 1);
+                tempDate.setTime(Long.valueOf(latestDate));
+            }
             targetDate=simpleDateFormat.format(date);
             healthIdDate=simpleDateFormat.format(tempDate);
-            System.out.println("SensorData "+healthIdDate.equals(targetDate));
             if(healthIdDate.equals(targetDate)){
                 if(!healthDataAnalysis.getAnalysis().equals(analysis))
                     healthDataAnalysis.setAnalysis(analysis);
@@ -272,6 +276,7 @@ public class SensorData {
             healthIdDate = simpleDateFormat.format(tempDate);
             targetDate = simpleDateFormat.format(date);
             if (targetDate.equals(healthIdDate)) {
+                System.out.println(new String(this.getSensorInformation().getSensorId() + healthIdTime));
                 healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
             }
         }

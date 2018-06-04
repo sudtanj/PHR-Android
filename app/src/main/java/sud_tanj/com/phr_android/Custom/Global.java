@@ -49,6 +49,7 @@ public class Global {
     private static CH34xUARTDriver driver = null;
     private static Boolean admin=false;
     private static UserDataSynchronizer userDataSynchronizer;
+    private static Boolean CH340Online=Boolean.FALSE;
 
     public static Context getContext() {
         return context;
@@ -158,4 +159,11 @@ public class Global {
         return admin;
     }
 
+    public static Boolean getCH340Online() {
+        return CH340Online;
+    }
+
+    public static void setCH340Online(Boolean CH340Online) {
+        Global.CH340Online = CH340Online;
+    }
 }

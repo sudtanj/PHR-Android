@@ -25,7 +25,6 @@ public class newsensoractivity extends ArduinoUnoCH340 {
 
     @Override
     public void postDataReceived(ArrayList<String> receivedDataInOneLoop) {
-
         if (this.isNumeric(receivedDataInOneLoop.get(0))) {
             HealthData healthData = new HealthData(getSensorData());
             healthData.addValues(receivedDataInOneLoop.get(0));

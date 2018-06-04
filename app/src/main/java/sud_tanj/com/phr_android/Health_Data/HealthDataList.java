@@ -44,6 +44,8 @@ import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
+import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
+import sud_tanj.com.phr_android.Handler.LongOneTimeOperation;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListener;
@@ -60,7 +62,7 @@ public class HealthDataList extends AppCompatActivity {
     private TextView sensorAnalysis;
     private SimpleDateFormat simpleDateFormat;
     private HealthDataListGraphListener healthDataListGraphListener;
-    private HandlerLoop handlerLoop;
+    private LongOneTimeOperation longOneTimeOperation;
 
     public Integer getSortBy() {
         return sortBy;
@@ -83,12 +85,13 @@ public class HealthDataList extends AppCompatActivity {
     }
 
     public void setHandlerLoop(ArrayList<HealthData> healthData, ArrayList<String> hourData, ArrayList<HealthDataAnalysis> analysis) {
-        if(this.handlerLoop!=null){
-            this.handlerLoop.removeCallbacks(healthDataListGraphListener);
-            this.handlerLoop.removeCallbacksAndMessages(null);
+        if(this.longOneTimeOperation!=null){
+            this.healthDataListGraphListener.onStop();
+            this.longOneTimeOperation.cancel(Boolean.TRUE);
         }
         healthDataListGraphListener=new HealthDataListGraphListener(this,healthData,hourData,sensorData,analysis);
-        this.handlerLoop = new HandlerLoop(5, healthDataListGraphListener);
+        this.longOneTimeOperation=new LongOneTimeOperation(healthDataListGraphListener);
+        this.longOneTimeOperation.execute();
     }
 
     @Override
@@ -194,10 +197,9 @@ public class HealthDataList extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(this.handlerLoop!=null){
-            this.handlerLoop.removeCallbacks(healthDataListGraphListener);
-            this.handlerLoop.removeCallbacksAndMessages(null);
-            this.handlerLoop=null;
+        if(this.longOneTimeOperation!=null){
+            healthDataListGraphListener.onStop();
+            this.longOneTimeOperation.cancel(Boolean.TRUE);
         }
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
