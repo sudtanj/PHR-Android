@@ -29,13 +29,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Database.Data.DoctorCommentData;
-import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.LongOneTimeOperation;
 import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangeListener;
+import sud_tanj.com.phr_android.Health_Data.Interface.DatePickerDataChangerRunnable;
 import sud_tanj.com.phr_android.Health_Data.Interface.HealthDataListGraphListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.SortByDayListener;
 import sud_tanj.com.phr_android.Health_Data.Interface.SortByMonthListener;
@@ -50,6 +49,12 @@ public class HealthDataList extends AppCompatActivity {
     private SimpleDateFormat simpleDateFormat;
     private HealthDataListGraphListener healthDataListGraphListener;
     private LongOneTimeOperation longOneTimeOperation;
+    private Integer sortBy = 0;
+    private DatePicker datePicker;
+    private TextView analysis;
+    private TextView commentSummary;
+    private EditText commentData;
+    private Spinner commentRole;
 
     public Integer getSortBy() {
         return sortBy;
@@ -59,11 +64,6 @@ public class HealthDataList extends AppCompatActivity {
         this.sortBy = sortBy;
     }
 
-    private Integer sortBy=0;
-    private DatePicker datePicker;
-    private TextView analysis;
-    private EditText commentData;
-    private Spinner commentRole;
     public SensorData getSensorData() {
         return sensorData;
     }
@@ -72,13 +72,13 @@ public class HealthDataList extends AppCompatActivity {
         return graph;
     }
 
-    public void setHandlerLoop(ArrayList<HealthData> healthData, ArrayList<String> hourData, ArrayList<HealthDataAnalysis> analysis) {
-        if(this.longOneTimeOperation!=null){
+    public void setHandlerLoop(DatePickerDataChangerRunnable datePickerDataChangerRunnable) {
+        if (this.longOneTimeOperation != null) {
             this.healthDataListGraphListener.onStop();
             this.longOneTimeOperation.cancel(Boolean.TRUE);
         }
-        healthDataListGraphListener=new HealthDataListGraphListener(this,healthData,hourData,sensorData,analysis);
-        this.longOneTimeOperation=new LongOneTimeOperation(healthDataListGraphListener);
+        healthDataListGraphListener = new HealthDataListGraphListener(this,datePickerDataChangerRunnable);
+        this.longOneTimeOperation = new LongOneTimeOperation(healthDataListGraphListener);
         this.longOneTimeOperation.execute();
     }
 
@@ -91,8 +91,8 @@ public class HealthDataList extends AppCompatActivity {
         Integer sensorPosition = intent.getIntExtra("sensorposition", 0);
         try {
             this.sensorData = Global.getSensorGateway().getSensorObject().get(sensorPosition);
-        } catch(Exception e){
-            Toast.makeText(getApplicationContext(),R.string.error_health_list_data,Toast.LENGTH_SHORT);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), R.string.error_health_list_data, Toast.LENGTH_SHORT);
             finish();
         }
         setTitle(this.sensorData.getSensorInformation().getSensorName());
@@ -105,33 +105,34 @@ public class HealthDataList extends AppCompatActivity {
         this.sensorAnalysis = (TextView) findViewById(R.id.health_data_analysist);
 
         this.datePicker = (DatePicker) findViewById(R.id.date_picker);
-        this.analysis=(TextView) findViewById(R.id.analysis_summary);
+        this.analysis = (TextView) findViewById(R.id.analysis_summary);
 
-        commentData=(EditText) findViewById(R.id.comment);
-        commentRole=(Spinner) findViewById(R.id.role);
-        Button sendCommentButton=(Button) findViewById(R.id.send_comment);
+        this.commentSummary=(TextView) findViewById(R.id.comment_list);
+
+        commentData = (EditText) findViewById(R.id.comment);
+        commentRole = (Spinner) findViewById(R.id.role);
+        Button sendCommentButton = (Button) findViewById(R.id.send_comment);
 
         sendCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String role=commentRole.getSelectedItem().toString();
-                if(role.equals("Doctor")){
-                    DoctorCommentData comment=new DoctorCommentData(sensorData);
-                    comment.setComment(commentData.getText().toString());
+                String role = commentRole.getSelectedItem().toString();
+                String commentText = commentData.getText().toString();
+                if (role.equals("Doctor")) {
+                    sensorData.setTodayDoctorCommentData(commentText);
                 } else {
-                    IndividualCommentData comment=new IndividualCommentData(sensorData);
-                    comment.setComment(commentData.getText().toString());
+                    sensorData.setTodayIndividualCommentData(commentText);
                 }
                 commentData.setText(new String());
             }
         });
 
-        Button sortByYear=(Button) findViewById(R.id.sort_by_year);
-        sortByYear.setOnClickListener(new SortByYearListener(datePicker,graph,this));
-        Button sortByMonth=(Button) findViewById(R.id.sort_by_month);
-        sortByMonth.setOnClickListener(new SortByMonthListener(datePicker,graph,this));
-        Button sortByDay=(Button) findViewById(R.id.sort_by_day);
-        sortByDay.setOnClickListener(new SortByDayListener(datePicker,graph,this));
+        Button sortByYear = (Button) findViewById(R.id.sort_by_year);
+        sortByYear.setOnClickListener(new SortByYearListener(datePicker, graph, this));
+        Button sortByMonth = (Button) findViewById(R.id.sort_by_month);
+        sortByMonth.setOnClickListener(new SortByMonthListener(datePicker, graph, this));
+        Button sortByDay = (Button) findViewById(R.id.sort_by_day);
+        sortByDay.setOnClickListener(new SortByDayListener(datePicker, graph, this));
 
         sortByDay.performClick();
 
@@ -157,31 +158,31 @@ public class HealthDataList extends AppCompatActivity {
         //DatePickerListener datePickerListener=new DatePickerListener(this,new DatePickerDataChangeListener(this.sensorData,graph));
         //datePickerListener.getDateSetListener().setButton(date);
         //date.setOnClickListener(datePickerListener);
-        Calendar calendar= Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         //ArrayList<HealthData> healthData=new ArrayList<>();
-        Date dateNow=new Date();
-        if(this.sensorData.getSensorData().size()>0) {
+        Date dateNow = new Date();
+        if (this.sensorData.getSensorData().size() > 0) {
             dateNow = this.sensorData.getLatestData().getTimeStamp();
             calendar.setTime(dateNow);
         }
         /**
-        if(this.sensorData.getSensorData().size()>0) {
-            if(healthData.size()==0) {
-                dateNow=this.sensorData.getLatestData().getTimeStamp();
-                healthData=this.sensorData.getHealthDataOn(dateNow);
-                calendar.setTime(dateNow);
-                 while ((healthData = this.sensorData.getHealthDataOn(dateNow)).size() == 0) {
-                 calendar.add(Calendar.DATE, -1);
-                 dateNow = calendar.getTime();
-                 }
-            }
-        }
-        */
-        Integer year=calendar.get(Calendar.YEAR);
-        Integer monthOfYear=calendar.get(Calendar.MONTH);
-        Integer dayOfMonth=calendar.get(Calendar.DATE);
+         if(this.sensorData.getSensorData().size()>0) {
+         if(healthData.size()==0) {
+         dateNow=this.sensorData.getLatestData().getTimeStamp();
+         healthData=this.sensorData.getHealthDataOn(dateNow);
+         calendar.setTime(dateNow);
+         while ((healthData = this.sensorData.getHealthDataOn(dateNow)).size() == 0) {
+         calendar.add(Calendar.DATE, -1);
+         dateNow = calendar.getTime();
+         }
+         }
+         }
+         */
+        Integer year = calendar.get(Calendar.YEAR);
+        Integer monthOfYear = calendar.get(Calendar.MONTH);
+        Integer dayOfMonth = calendar.get(Calendar.DATE);
         datePicker.init(year, monthOfYear, dayOfMonth, new DatePickerDataChangeListener(this));
-        datePicker.updateDate(year,monthOfYear,dayOfMonth);
+        datePicker.updateDate(year, monthOfYear, dayOfMonth);
         //ArrayList<String> hourData=this.sensorData.getAvailableTimeOn(dateNow);
         //date.setText(simpleDateFormat.format(dateNow));
 
@@ -204,7 +205,7 @@ public class HealthDataList extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(this.longOneTimeOperation!=null){
+        if (this.longOneTimeOperation != null) {
             healthDataListGraphListener.onStop();
             this.longOneTimeOperation.cancel(Boolean.TRUE);
         }
@@ -215,5 +216,9 @@ public class HealthDataList extends AppCompatActivity {
 
     public TextView getAnalysis() {
         return analysis;
+    }
+
+    public TextView getCommentSummary() {
+        return commentSummary;
     }
 }

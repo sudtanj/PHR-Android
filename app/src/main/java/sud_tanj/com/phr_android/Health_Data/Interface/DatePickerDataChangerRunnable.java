@@ -32,6 +32,11 @@ import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
     private DatePickerDataChangeListener datePickerDataChangeListener;
     private DatePicker datePicker;
+    private ArrayList<HealthData> healthData=new ArrayList<>();
+    private ArrayList<String> hourData=new ArrayList<>();
+    private ArrayList<HealthDataAnalysis> analysis=new ArrayList<>();
+    private ArrayList<String> individualComment=new ArrayList<>();
+    private ArrayList<String> doctorComment=new ArrayList<>();
 
     public DatePickerDataChangerRunnable(DatePickerDataChangeListener datePickerDataChangeListener, DatePicker datePicker) {
         this.datePickerDataChangeListener = datePickerDataChangeListener;
@@ -50,14 +55,12 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
                 datePicker.getDayOfMonth());
 
         //dateTextView.setText(simpleDateFormat.format(calendar.getTime()));
-        ArrayList<HealthData> healthData=new ArrayList<>();
-        ArrayList<String> hourData=new ArrayList<>();
-        ArrayList<HealthDataAnalysis> analysis=new ArrayList<>();
 
         if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(0)) {
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOn(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableTimeOn(calendar.getTime());
             analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOn(calendar.getTime());
+            individualComment= this.datePickerDataChangeListener.getSensorData().getHealthDataIndividualCommentOn(calendar.getTime());
         } else if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(1)){
             healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnMonth(calendar.getTime());
             hourData = this.datePickerDataChangeListener.getSensorData().getAvailableDayOn(calendar.getTime());
@@ -73,6 +76,22 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //this.button.setText(simpleDateFormat.format(calendar.getTime()));
-        ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(healthData,hourData,analysis);
+        ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(this);
+    }
+
+    public ArrayList<HealthData> getHealthData() {
+        return healthData;
+    }
+
+    public ArrayList<String> getHourData() {
+        return hourData;
+    }
+
+    public ArrayList<HealthDataAnalysis> getAnalysis() {
+        return analysis;
+    }
+
+    public ArrayList<String> getIndividualComment() {
+        return individualComment;
     }
 }

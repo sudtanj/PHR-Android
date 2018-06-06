@@ -49,7 +49,7 @@ public class PedometerSensor extends SensorListener {
                         @Override
                         public void onSensorChanged(SensorEvent sensorEvent) {
                             sensorEventPedometer=sensorEvent;
-                            analyzeData(getSensorData().getSensorData());
+                            analyzeData();
                             HealthData healthData = new HealthData(getSensorData());
                             healthData.addValues(String.valueOf(sensorEventPedometer.values[0]));
                         }
@@ -70,7 +70,7 @@ public class PedometerSensor extends SensorListener {
     }
 
     @Override
-    public void analyzeData(ArrayList<String> healthData) {
+    public void analyzeData() {
         if(getSensorData().getLatestData().isValid()) {
             if (Double.valueOf(getSensorData().getLatestData().getValue()).compareTo(2000.0) > -1) {
                 getSensorData().setTodayHealthDataAnalysis("You're in good shapes. keep it up!");

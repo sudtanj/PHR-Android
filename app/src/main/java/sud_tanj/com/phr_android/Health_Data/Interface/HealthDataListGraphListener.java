@@ -19,6 +19,7 @@ import java.util.Random;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
+import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
@@ -42,16 +43,22 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     private HealthDataList healthDataList;
     private ArrayList<LineGraphSeries<DataPoint>> seriesTemp;
     private String analysisTextView;
+    private ArrayList<String> individualComment;
     private Boolean cancel=Boolean.FALSE;
+    private DatePickerDataChangerRunnable datePickerDataChangerRunnable;
+    private String tempIndividualCommentTextView;
 
-    public HealthDataListGraphListener(HealthDataList healthDataList, ArrayList<HealthData> healthData, ArrayList<String> hourData, SensorData sensorData, ArrayList<HealthDataAnalysis> healthDataAnalyses) {
+
+    public HealthDataListGraphListener(HealthDataList healthDataList, DatePickerDataChangerRunnable datePickerDataChangerRunnable) {
         this.healthDataList = healthDataList;
+        this.datePickerDataChangerRunnable=datePickerDataChangerRunnable;
         this.graphView = healthDataList.getGraph();
-        this.healthData = healthData;
+        this.healthData = datePickerDataChangerRunnable.getHealthData();
         this.handlerExpired = Boolean.FALSE;
-        this.hourData = hourData;
-        this.sensorData = sensorData;
-        this.healthDataAnalyses = healthDataAnalyses;
+        this.hourData = datePickerDataChangerRunnable.getHourData();
+        this.sensorData = healthDataList.getSensorData();
+        this.individualComment=datePickerDataChangerRunnable.getIndividualComment();
+        this.healthDataAnalyses = datePickerDataChangerRunnable.getAnalysis();
         for(int i=1;i<this.healthData.size();i++){
             if(this.healthData.get(i).getValues().equals(this.healthData.get(i-1).getValues())){
                 if(this.hourData.get(i).equals(this.hourData.get(i-1))){
@@ -73,12 +80,21 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         } catch (Exception e) {
 
         }
+        this.healthDataList.getCommentSummary().setText(tempIndividualCommentTextView);
         this.healthDataList.getAnalysis().setText(analysisTextView);
         this.onStop();
     }
 
     @Override
     public void run() {
+        tempIndividualCommentTextView=new String();
+        for(int i=0;i<this.individualComment.size();){
+            IndividualCommentData individualCommentData=new IndividualCommentData(this.individualComment.get(i),sensorData);
+            if(individualCommentData.isValid()){
+               tempIndividualCommentTextView+= "- " + individualCommentData.getComment() + ". \n";
+               i++;
+            }
+        }
         analysisTextView = new String();
         for (int i = 0; i < this.healthDataAnalyses.size(); ) {
             if (!this.healthDataAnalyses.get(i).getAnalysis().isEmpty()) {

@@ -38,6 +38,6 @@ public class newsensoractivity extends ArduinoUnoCH340 {
     }
 
     @Override
-    public void analyzeData(ArrayList<String> healthData) {
+    public void analyzeData() {
     }
 }

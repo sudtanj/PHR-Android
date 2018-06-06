@@ -59,7 +59,7 @@ public abstract class SensorListener implements EmbeddedScript {
             runOnce = Boolean.TRUE;
         }
         this.syncData();
-        this.analyzeData(getSensorData().getSensorData());
+        this.analyzeData();
         this.clearRemainingData();
     }
 

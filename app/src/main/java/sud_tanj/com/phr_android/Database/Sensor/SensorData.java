@@ -14,9 +14,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import sud_tanj.com.phr_android.Custom.Global;
+import sud_tanj.com.phr_android.Database.Data.DoctorCommentData;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
+import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataAnalysisListener;
+import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataDoctorComment;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.healthDataIndividualCommentListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataListener;
 import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.SensorSynchronizer;
@@ -37,6 +40,8 @@ public class SensorData {
     private SensorEmbeddedScript backgroundJob = null;
     private HealthData latestData = null;
     private HealthDataAnalysis latestDataAnalysis=null;
+    private DoctorCommentData doctorCommentData=null;
+    private IndividualCommentData individualCommentData=null;
     private ArrayList<String> healthDataAnalysis=null;
     private ArrayList<String> healthDataIndividualComment=null;
     private ArrayList<String> healthDataDoctorComment=null;
@@ -55,6 +60,13 @@ public class SensorData {
         healthDataManager.add(new HealthDataAnalysisListener(),"Health_Data_Analysis");
         healthDataManager.add(new healthDataIndividualCommentListener(),"Health_Data_Comment");
     }
+
+    public HealthData getHealthData(String healthId){
+        HealthData healthData=new HealthData(healthId,this);
+        while(!healthData.isValid());
+        return healthData;
+    }
+
     public Boolean ishealthDataIndividualComment(String healthCommentId){
         return this.healthDataIndividualComment.contains(healthCommentId);
     }
@@ -77,12 +89,101 @@ public class SensorData {
 
     public HealthDataAnalysis getLatestHealthDataAnalysis(){
         if (this.latestDataAnalysis == null) {
-            if (this.getSensorData().size() > 0) {
+            if (this.healthDataAnalysis.size() > 0) {
                 String healthDataId = this.healthDataAnalysis.get(this.healthDataAnalysis.size() - 1);
                 this.latestDataAnalysis = new HealthDataAnalysis(healthDataId, this);
             }
         }
         return this.latestDataAnalysis;
+    }
+
+
+    public IndividualCommentData getLatestIndividualCommentData(){
+        if (this.individualCommentData == null) {
+            if (this.healthDataIndividualComment.size() > 0) {
+                String healthDataId = this.healthDataIndividualComment.get(this.healthDataIndividualComment.size() - 1);
+                this.individualCommentData = new IndividualCommentData(healthDataId, this);
+            }
+        }
+        return this.individualCommentData;
+    }
+
+    public DoctorCommentData getLatestDoctorCommentData(){
+        if (this.doctorCommentData == null) {
+            if (this.healthDataDoctorComment.size() > 0) {
+                String healthDataId = this.healthDataDoctorComment.get(this.healthDataDoctorComment.size() - 1);
+                this.doctorCommentData = new DoctorCommentData(healthDataId, this);
+            }
+        }
+        return this.doctorCommentData;
+    }
+
+    public void setTodayIndividualCommentData(String analysis){
+        IndividualCommentData healthDataAnalysis=this.getLatestIndividualCommentData();
+        if(healthDataAnalysis==null){
+            healthDataAnalysis=new IndividualCommentData(this);
+            if(!healthDataAnalysis.getComment().equals(analysis)) {
+                healthDataAnalysis.setComment(analysis);
+            }
+            this.individualCommentData=healthDataAnalysis;
+        } else {
+            Date date=new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+            String healthIdDate, targetDate;
+            Date tempDate =new Date();
+            ArrayList<String> availableDate=this.getAvailableIndividualCommentTimestamp();
+            if(availableDate.size()>0) {
+                String latestDate = availableDate.get(availableDate.size() - 1);
+                tempDate.setTime(Long.valueOf(latestDate));
+            }
+            targetDate=simpleDateFormat.format(date);
+            healthIdDate=simpleDateFormat.format(tempDate);
+            if(healthIdDate.equals(targetDate)){
+                if(!healthDataAnalysis.getComment().equals(analysis))
+                    healthDataAnalysis.setComment(analysis);
+            }
+            else {
+                healthDataAnalysis=new IndividualCommentData(this);
+                if(!healthDataAnalysis.getComment().equals(analysis)) {
+                    healthDataAnalysis.setComment(analysis);
+                }
+                this.individualCommentData=healthDataAnalysis;
+            }
+        }
+    }
+
+    public void setTodayDoctorCommentData(String analysis){
+        DoctorCommentData healthDataAnalysis=this.getLatestDoctorCommentData();
+        if(healthDataAnalysis==null){
+            healthDataAnalysis=new DoctorCommentData(this);
+            if(!healthDataAnalysis.getComment().equals(analysis)) {
+                healthDataAnalysis.setComment(analysis);
+            }
+            this.doctorCommentData=healthDataAnalysis;
+        } else {
+            Date date=new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+            String healthIdDate, targetDate;
+            Date tempDate =new Date();
+            ArrayList<String> availableDate=this.getAvailableDoctorCommentTimestamp();
+            if(availableDate.size()>0) {
+                String latestDate = availableDate.get(availableDate.size() - 1);
+                tempDate.setTime(Long.valueOf(latestDate));
+            }
+            targetDate=simpleDateFormat.format(date);
+            healthIdDate=simpleDateFormat.format(tempDate);
+            if(healthIdDate.equals(targetDate)){
+                if(!healthDataAnalysis.getComment().equals(analysis))
+                    healthDataAnalysis.setComment(analysis);
+            }
+            else {
+                healthDataAnalysis=new DoctorCommentData(this);
+                if(!healthDataAnalysis.getComment().equals(analysis)) {
+                    healthDataAnalysis.setComment(analysis);
+                }
+                this.doctorCommentData=healthDataAnalysis;
+            }
+        }
     }
 
     public void setTodayHealthDataAnalysis(String analysis){
@@ -179,6 +280,26 @@ public class SensorData {
         ArrayList<String> temp = new ArrayList<>();
         Collections.sort(this.sensorData);
         for (String healthId : this.sensorData) {
+            String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
+            temp.add(tempHealthId);
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getAvailableIndividualCommentTimestamp() {
+        ArrayList<String> temp = new ArrayList<>();
+        Collections.sort(this.healthDataIndividualComment);
+        for (String healthId : this.healthDataIndividualComment) {
+            String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
+            temp.add(tempHealthId);
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getAvailableDoctorCommentTimestamp() {
+        ArrayList<String> temp = new ArrayList<>();
+        Collections.sort(this.healthDataDoctorComment);
+        for (String healthId : this.healthDataDoctorComment) {
             String tempHealthId = healthId.replace(this.getSensorInformation().getSensorId(), "");
             temp.add(tempHealthId);
         }
@@ -303,6 +424,23 @@ public class SensorData {
         return healthDataTemp;
     }
 
+    public ArrayList<String> getHealthDataIndividualCommentOn(Date date) {
+        ArrayList<String> healthDataTemp = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat.format(date);
+        String healthIdDate, targetDate;
+        for (String healthIdTime : this.getAvailableIndividualCommentTimestamp()) {
+            Date tempDate = new Date();
+            tempDate.setTime(Long.parseLong(healthIdTime));
+            healthIdDate = simpleDateFormat.format(tempDate);
+            targetDate = simpleDateFormat.format(date);
+            if (targetDate.equals(healthIdDate)) {
+                healthDataTemp.add(new String(this.getSensorInformation().getSensorId() + healthIdTime));
+            }
+        }
+        return healthDataTemp;
+    }
+
     public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOn(Date date) {
         ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
@@ -336,7 +474,6 @@ public class SensorData {
         }
         return healthDataTemp;
     }
-
 
     public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOnYear(Date date) {
         ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();

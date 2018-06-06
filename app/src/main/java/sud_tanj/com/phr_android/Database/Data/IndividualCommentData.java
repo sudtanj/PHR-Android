@@ -36,6 +36,10 @@ public class IndividualCommentData extends UserData {
 
     }
 
+    public Boolean isValid(){
+        return !this.comment.isEmpty();
+    }
+
 
     @Override
     protected void syncToFirebase() {
