@@ -77,7 +77,7 @@ public class SensorData {
 
     public HealthDataAnalysis getLatestHealthDataAnalysis(){
         if (this.latestDataAnalysis == null) {
-            if (this.getSensorData().size() > 0) {
+            if (this.healthDataAnalysis.size() > 0) {
                 String healthDataId = this.healthDataAnalysis.get(this.healthDataAnalysis.size() - 1);
                 this.latestDataAnalysis = new HealthDataAnalysis(healthDataId, this);
             }

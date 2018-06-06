@@ -15,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
@@ -35,6 +36,7 @@ import sud_tanj.com.phr_android.Sensor.SensorListener;
 public class PedometerSensor extends SensorListener {
     private PackageManager packageManager=null;
     private SensorEvent sensorEventPedometer=null;
+    private Random random=new Random();
 
     @Override
     protected void syncData() {
@@ -51,7 +53,7 @@ public class PedometerSensor extends SensorListener {
                             sensorEventPedometer=sensorEvent;
                             analyzeData(getSensorData().getSensorData());
                             HealthData healthData = new HealthData(getSensorData());
-                            healthData.addValues(String.valueOf(sensorEventPedometer.values[0]));
+                            healthData.addValues(String.valueOf((int)(sensorEventPedometer.values[0])));
                         }
 
                         @Override
@@ -66,7 +68,7 @@ public class PedometerSensor extends SensorListener {
 
     @Override
     public Boolean isScriptRunOnce() {
-        return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     @Override
