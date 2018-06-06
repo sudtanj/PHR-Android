@@ -53,7 +53,9 @@ public class PedometerSensor extends SensorListener {
                             sensorEventPedometer=sensorEvent;
                             analyzeData();
                             HealthData healthData = new HealthData(getSensorData());
-                            healthData.addValues(String.valueOf((int)(sensorEventPedometer.values[0])));
+                            int pedometerValue=(int)(sensorEventPedometer.values[0]);
+                            if(pedometerValue!=0)
+                                healthData.addValues(String.valueOf(pedometerValue));
                         }
 
                         @Override
