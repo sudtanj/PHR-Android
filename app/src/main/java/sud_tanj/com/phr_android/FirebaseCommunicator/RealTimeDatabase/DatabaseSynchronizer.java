@@ -27,15 +27,10 @@ import sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase.Inteface.D
  * This class last modified by User
  */
 public abstract class DatabaseSynchronizer implements ValueEventListener {
-    public DatabaseReference getDatabase() {
-        return database;
-    }
-
     private DatabaseReference database;
     private ArrayList<String> referenceName;
     private ArrayList<DatabaseSyncable> databaseSyncables;
     private ArrayList<Boolean> syncStatus;
-
     public DatabaseSynchronizer(DatabaseReference database) {
         this.database = database;
         this.database.keepSynced(Boolean.TRUE);
@@ -43,6 +38,10 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
         this.syncStatus = new ArrayList<>();
         this.databaseSyncables = new ArrayList<>();
         this.database.addValueEventListener(this);
+    }
+
+    public DatabaseReference getDatabase() {
+        return database;
     }
 
     public ArrayList<DatabaseSyncable> getDatabaseSyncables() {
@@ -102,13 +101,6 @@ public abstract class DatabaseSynchronizer implements ValueEventListener {
         }
     }
 
-    public Boolean isDataCorrupt() {
-        for (Boolean statusTemp : this.syncStatus) {
-            if (!statusTemp)
-                return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
 
     protected abstract void runDataChange(DataSnapshot dataSnapshot, DatabaseSyncable listener);
 
