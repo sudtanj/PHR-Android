@@ -35,9 +35,14 @@ public class IndividualCommentData extends UserData {
         this.add(new CommentDataListener(),HEALTH_DATA_COMMENT_DATA_NAME);
 
     }
-
-    public Boolean isValid(){
+    @Override
+    protected Boolean isValid(){
         return !this.comment.isEmpty();
+    }
+
+    @Override
+    protected void addNewDataToParentSensor(String healthId) {
+        this.getParentSensor().addhealthDataIndividualComment(healthId);
     }
 
 

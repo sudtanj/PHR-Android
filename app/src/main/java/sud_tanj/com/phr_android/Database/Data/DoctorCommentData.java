@@ -39,6 +39,16 @@ public class DoctorCommentData extends UserData {
 
 
     @Override
+    protected Boolean isValid() {
+        return !this.comment.isEmpty();
+    }
+
+    @Override
+    protected void addNewDataToParentSensor(String healthId) {
+        this.getParentSensor().addhealthDataDoctorComment(healthId);
+    }
+
+    @Override
     protected void syncToFirebase() {
         super.syncToFirebase();
         this.getDataReferenceSynchronizer().changeVariable(this.comment);

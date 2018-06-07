@@ -12,11 +12,15 @@ import android.widget.DatePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
+import sud_tanj.com.phr_android.Database.Sensor.SensorData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorDataTools.Sorted.Sorted;
 import sud_tanj.com.phr_android.Handler.Interface.HandlerLoopRunnable;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
 
@@ -34,7 +38,7 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
     private DatePicker datePicker;
     private ArrayList<HealthData> healthData=new ArrayList<>();
     private ArrayList<String> hourData=new ArrayList<>();
-    private ArrayList<HealthDataAnalysis> analysis=new ArrayList<>();
+    private ArrayList<String> analysis=new ArrayList<>();
     private ArrayList<String> individualComment=new ArrayList<>();
     private ArrayList<String> doctorComment=new ArrayList<>();
 
@@ -55,26 +59,31 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
                 datePicker.getDayOfMonth());
 
         //dateTextView.setText(simpleDateFormat.format(calendar.getTime()));
-
+        SensorData sensorDataTemp=this.datePickerDataChangeListener.getSensorData();
+        Date dateTime=calendar.getTime();
         if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(0)) {
-            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOn(calendar.getTime());
-            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableTimeOn(calendar.getTime());
-            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOn(calendar.getTime());
-            individualComment= this.datePickerDataChangeListener.getSensorData().getHealthDataIndividualCommentOn(calendar.getTime());
+            healthData = sensorDataTemp.getHealthDataOn(dateTime);
+            hourData = sensorDataTemp.getAvailableTimeOn(dateTime);
+            analysis = sensorDataTemp.getHealthDataAnalysisOn(dateTime, Sorted.SORTED_WITH_DAY);
+            individualComment= sensorDataTemp.getHealthDataIndividualCommentOn(dateTime,Sorted.SORTED_WITH_DAY);
+            doctorComment=sensorDataTemp.getHealthDataDoctorCommentOn(dateTime,Sorted.SORTED_WITH_DAY);
         } else if(this.datePickerDataChangeListener.getHealthDataList().getSortBy().equals(1)){
-            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnMonth(calendar.getTime());
-            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableDayOn(calendar.getTime());
-            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOnMonth(calendar.getTime());
+            healthData = sensorDataTemp.getHealthDataOnMonth(dateTime);
+            hourData = sensorDataTemp.getAvailableDayOn(dateTime);
+            analysis = sensorDataTemp.getHealthDataAnalysisOn(dateTime, Sorted.SORTED_WITH_MONTH);
+            individualComment=sensorDataTemp.getHealthDataIndividualCommentOn(dateTime,Sorted.SORTED_WITH_MONTH);
+            doctorComment=sensorDataTemp.getHealthDataDoctorCommentOn(dateTime,Sorted.SORTED_WITH_MONTH);
         } else {
-            healthData = this.datePickerDataChangeListener.getSensorData().getHealthDataOnYear(calendar.getTime());
-            hourData = this.datePickerDataChangeListener.getSensorData().getAvailableMonthOn(calendar.getTime());
-            analysis = this.datePickerDataChangeListener.getSensorData().getHealthDataAnalysisOnYear(calendar.getTime());
+            healthData = sensorDataTemp.getHealthDataOnYear(dateTime);
+            hourData = sensorDataTemp.getAvailableMonthOn(dateTime);
+            analysis = sensorDataTemp.getHealthDataAnalysisOn(dateTime, Sorted.SORTED_WITH_YEAR);
+            individualComment=sensorDataTemp.getHealthDataIndividualCommentOn(dateTime,Sorted.SORTED_WITH_YEAR);
+            doctorComment=sensorDataTemp.getHealthDataDoctorCommentOn(dateTime,Sorted.SORTED_WITH_YEAR);
         }
 
 
         //write to display
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
         //this.button.setText(simpleDateFormat.format(calendar.getTime()));
         ((HealthDataList)this.datePickerDataChangeListener.getHealthDataList()).setHandlerLoop(this);
     }
@@ -87,11 +96,15 @@ public class DatePickerDataChangerRunnable implements HandlerLoopRunnable {
         return hourData;
     }
 
-    public ArrayList<HealthDataAnalysis> getAnalysis() {
+    public ArrayList<String> getAnalysis() {
         return analysis;
     }
 
     public ArrayList<String> getIndividualComment() {
         return individualComment;
+    }
+
+    public ArrayList<String> getDoctorComment() {
+        return doctorComment;
     }
 }

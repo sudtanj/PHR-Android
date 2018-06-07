@@ -14,9 +14,12 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
+import sud_tanj.com.phr_android.Database.Data.DoctorCommentData;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
@@ -39,7 +42,8 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     private SensorData sensorData;
     private Boolean handlerExpired;
     private ArrayList<String> hourData;
-    private ArrayList<HealthDataAnalysis> healthDataAnalyses;
+    private ArrayList<String> healthDataAnalyses;
+    private ArrayList<String> doctorComment;
     private HealthDataList healthDataList;
     private ArrayList<LineGraphSeries<DataPoint>> seriesTemp;
     private String analysisTextView;
@@ -58,6 +62,7 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
         this.hourData = datePickerDataChangerRunnable.getHourData();
         this.sensorData = healthDataList.getSensorData();
         this.individualComment=datePickerDataChangerRunnable.getIndividualComment();
+        this.doctorComment=datePickerDataChangerRunnable.getDoctorComment();
         this.healthDataAnalyses = datePickerDataChangerRunnable.getAnalysis();
         for(int i=1;i<this.healthData.size();i++){
             if(this.healthData.get(i).getValues().equals(this.healthData.get(i-1).getValues())){
@@ -88,18 +93,41 @@ public class HealthDataListGraphListener implements HandlerLoopRunnable {
     @Override
     public void run() {
         tempIndividualCommentTextView=new String();
+        IndividualCommentData individualCommentData=null;
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd MM yyyy", Locale.US);
         for(int i=0;i<this.individualComment.size();){
-            IndividualCommentData individualCommentData=new IndividualCommentData(this.individualComment.get(i),sensorData);
-            if(individualCommentData.isValid()){
-               tempIndividualCommentTextView+= "- " + individualCommentData.getComment() + ". \n";
+            if(individualCommentData==null) {
+                individualCommentData = new IndividualCommentData(this.individualComment.get(i), sensorData);
+            }
+            if(individualCommentData.isReady()){
+                String date=simpleDateFormat.format(individualCommentData.getTimeStamp());
+               tempIndividualCommentTextView+= "- Individual ("+date+") :" + individualCommentData.getComment() + ". \n";
                i++;
+               individualCommentData=null;
+            }
+        }
+        DoctorCommentData doctorCommentData=null;
+        for(int i=0;i<this.doctorComment.size();){
+            if(doctorCommentData==null){
+                doctorCommentData=new DoctorCommentData(this.doctorComment.get(i),sensorData);
+            }
+            if(doctorCommentData.isReady()){
+                String date=simpleDateFormat.format(doctorCommentData.getTimeStamp());
+                tempIndividualCommentTextView+= "- Doctor ("+date+") :" + doctorCommentData.getComment() + ". \n";
+                i++;
+                doctorCommentData=null;
             }
         }
         analysisTextView = new String();
+        HealthDataAnalysis healthDataAnalysis=null;
         for (int i = 0; i < this.healthDataAnalyses.size(); ) {
-            if (!this.healthDataAnalyses.get(i).getAnalysis().isEmpty()) {
-                analysisTextView += "- " + this.healthDataAnalyses.get(i).getAnalysis() + ". \n";
+            if(healthDataAnalysis==null) {
+                healthDataAnalysis = new HealthDataAnalysis(this.healthDataAnalyses.get(i), this.sensorData);
+            }
+            if (healthDataAnalysis.isReady()) {
+                analysisTextView += "- " + healthDataAnalysis.getAnalysis() + ". \n";
                 i++;
+                healthDataAnalysis=null;
             }
         }
         ArrayList<LineGraphSeries<DataPoint>> healthDataSeries = new ArrayList<LineGraphSeries<DataPoint>>();

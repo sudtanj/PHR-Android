@@ -47,6 +47,16 @@ public class HealthDataAnalysis extends UserData{
     }
 
     @Override
+    protected Boolean isValid() {
+        return !this.analysis.isEmpty();
+    }
+
+    @Override
+    protected void addNewDataToParentSensor(String healthId) {
+        this.getParentSensor().addHealthDataAnalysis(healthId);
+    }
+
+    @Override
     protected void syncToFirebase() {
         super.syncToFirebase();
         this.getDataReferenceSynchronizer().changeVariable(analysis);

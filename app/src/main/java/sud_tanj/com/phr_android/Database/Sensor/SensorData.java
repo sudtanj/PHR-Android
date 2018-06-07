@@ -18,6 +18,7 @@ import sud_tanj.com.phr_android.Database.Data.DoctorCommentData;
 import sud_tanj.com.phr_android.Database.Data.HealthData;
 import sud_tanj.com.phr_android.Database.Data.HealthDataAnalysis;
 import sud_tanj.com.phr_android.Database.Data.IndividualCommentData;
+import sud_tanj.com.phr_android.Database.Sensor.SensorDataTools.Sorted.DataSorted;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataAnalysisListener;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.HealthDataDoctorComment;
 import sud_tanj.com.phr_android.Database.Sensor.SensorListener.healthDataIndividualCommentListener;
@@ -45,6 +46,7 @@ public class SensorData {
     private ArrayList<String> healthDataAnalysis=null;
     private ArrayList<String> healthDataIndividualComment=null;
     private ArrayList<String> healthDataDoctorComment=null;
+    private DataSorted dataSorted=null;
 
     public SensorData(String sensorId) {
         this.sensorInformation = new SensorInformation(sensorId, this);
@@ -52,19 +54,15 @@ public class SensorData {
         this.healthDataAnalysis=new ArrayList<>();
         this.healthDataIndividualComment=new ArrayList<>();
         this.healthDataDoctorComment=new ArrayList<>();
+        this.dataSorted=new DataSorted(this);
         this.backgroundJob = new SensorEmbeddedScript(new String(), this);
 
         //firebase sync
         SensorSynchronizer healthDataManager = new SensorSynchronizer(Global.getUserDatabase(), this);
         healthDataManager.add(new HealthDataListener(), "Health_Data");
         healthDataManager.add(new HealthDataAnalysisListener(),"Health_Data_Analysis");
-        healthDataManager.add(new healthDataIndividualCommentListener(),"Health_Data_Comment");
-    }
-
-    public HealthData getHealthData(String healthId){
-        HealthData healthData=new HealthData(healthId,this);
-        while(!healthData.isValid());
-        return healthData;
+        healthDataManager.add(new healthDataIndividualCommentListener(),"Comment_Individual");
+        healthDataManager.add(new HealthDataDoctorComment(),"Comment_Doctor");
     }
 
     public Boolean ishealthDataIndividualComment(String healthCommentId){
@@ -424,84 +422,22 @@ public class SensorData {
         return healthDataTemp;
     }
 
-    public ArrayList<String> getHealthDataIndividualCommentOn(Date date) {
-        ArrayList<String> healthDataTemp = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
-        simpleDateFormat.format(date);
-        String healthIdDate, targetDate;
-        for (String healthIdTime : this.getAvailableIndividualCommentTimestamp()) {
-            Date tempDate = new Date();
-            tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate = simpleDateFormat.format(tempDate);
-            targetDate = simpleDateFormat.format(date);
-            if (targetDate.equals(healthIdDate)) {
-                healthDataTemp.add(new String(this.getSensorInformation().getSensorId() + healthIdTime));
-            }
-        }
-        return healthDataTemp;
+    public ArrayList<String> getHealthDataDoctorCommentOn(Date date,int sortedWith){
+        this.dataSorted.setData(this.healthDataDoctorComment);
+        this.dataSorted.setHealthDataSortedMatch(sortedWith);
+        return this.dataSorted.getDataOn(date);
     }
 
-    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOn(Date date) {
-        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
-        simpleDateFormat.format(date);
-        String healthIdDate, targetDate;
-        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
-            Date tempDate = new Date();
-            tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate = simpleDateFormat.format(tempDate);
-            targetDate = simpleDateFormat.format(date);
-            if (targetDate.equals(healthIdDate)) {
-                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
-            }
-        }
-        return healthDataTemp;
+    public ArrayList<String> getHealthDataIndividualCommentOn(Date date, int sortedWith) {
+        this.dataSorted.setData(this.healthDataIndividualComment);
+        this.dataSorted.setHealthDataSortedMatch(sortedWith);
+        return this.dataSorted.getDataOn(date);
     }
 
-    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOnMonth(Date date) {
-        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US);
-        simpleDateFormat.format(date);
-        String healthIdDate, targetDate;
-        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
-            Date tempDate = new Date();
-            tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate = simpleDateFormat.format(tempDate);
-            targetDate = simpleDateFormat.format(date);
-            if (targetDate.equals(healthIdDate)) {
-                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
-            }
-        }
-        return healthDataTemp;
-    }
-
-    public ArrayList<HealthDataAnalysis> getHealthDataAnalysisOnYear(Date date) {
-        ArrayList<HealthDataAnalysis> healthDataTemp = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM yyyy", Locale.US);
-        simpleDateFormat.format(date);
-        String healthIdDate, targetDate;
-        for (String healthIdTime : this.getAvailableAnalysisTimestamp()) {
-            Date tempDate = new Date();
-            tempDate.setTime(Long.parseLong(healthIdTime));
-            healthIdDate = simpleDateFormat.format(tempDate);
-            targetDate = simpleDateFormat.format(date);
-            if (targetDate.equals(healthIdDate)) {
-                healthDataTemp.add(new HealthDataAnalysis(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
-            }
-        }
-        return healthDataTemp;
-    }
-
-    public ArrayList<HealthData> getHealthDataBetween(Date start, Date end) {
-        ArrayList<HealthData> healthDataTemp = new ArrayList<>();
-        for (String healthIdTime : this.getAvailableTimestamp()) {
-            Date healthDataTimestamp = new Date();
-            healthDataTimestamp.setTime(Long.parseLong(healthIdTime));
-            if (healthDataTimestamp.after(start) && healthDataTimestamp.before(end)) {
-                healthDataTemp.add(new HealthData(new String(this.getSensorInformation().getSensorId() + healthIdTime), this));
-            }
-        }
-        return healthDataTemp;
+    public ArrayList<String> getHealthDataAnalysisOn(Date date,int sortedWith) {
+        this.dataSorted.setData(this.healthDataAnalysis);
+        this.dataSorted.setHealthDataSortedMatch(sortedWith);
+        return this.dataSorted.getDataOn(date);
     }
 
     public void delete() {

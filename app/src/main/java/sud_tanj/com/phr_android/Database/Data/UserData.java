@@ -46,6 +46,7 @@ public abstract class UserData {
         if (dataId.isEmpty()) {
             String newHealthDataId = parentSensor.getSensorInformation().getSensorId() + String.valueOf(this.timeStamp.getTime());
             this.dataId = newHealthDataId;
+            this.addNewDataToParentSensor(newHealthDataId);
         } else {
             this.dataId = dataId;
         }
@@ -91,6 +92,27 @@ public abstract class UserData {
     public void add(DatabaseSyncable databaseSyncable, String key) {
         this.dataReferenceSynchronizer.add(databaseSyncable, key);
     }
+
+    public Boolean isReady() {
+        if(this.dataId.isEmpty()){
+            return Boolean.FALSE;
+        }
+        if (this.getTimeStamp() == null) {
+            return false;
+        }
+        if (this.getParentSensor() == null) {
+            return false;
+        }
+        if (!this.isValid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract Boolean isValid();
+
+    protected abstract void addNewDataToParentSensor(String healthId);
 
     protected void syncToFirebase(){
         this.dataReferenceSynchronizer.changeVariable(this.parentSensor.getSensorInformation().getSensorId());
