@@ -4,6 +4,7 @@ sud_tanj.com.phr_android.CustomSensor
 sud_tanj.com.phr_android.Database.Data
 sud_tanj.com.phr_android.Database.Data.DataListener
 sud_tanj.com.phr_android.Database.Sensor
+sud_tanj.com.phr_android.Database.Sensor.SensorDataTools.Sorted
 sud_tanj.com.phr_android.Database.Sensor.SensorGatewayListener
 sud_tanj.com.phr_android.Database.Sensor.SensorListener
 sud_tanj.com.phr_android.FirebaseCommunicator.RealTimeDatabase
