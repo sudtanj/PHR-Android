@@ -31,7 +31,7 @@ public class DoctorCommentDataListener implements UserHealthDataSyncable {
         String analysis=healthDataAnalysis.getComment();
         String value = DatabaseUtility.convertToString(dataSnapshot);
         if(!analysis.equals(value)){
-            healthDataAnalysis.setComment(value);
+            healthDataAnalysis.setCommentWithoutSync(value);
         }
     }
 

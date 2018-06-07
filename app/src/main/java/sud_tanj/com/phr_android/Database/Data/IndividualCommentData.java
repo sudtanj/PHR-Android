@@ -56,6 +56,9 @@ public class IndividualCommentData extends UserData {
         return comment;
     }
 
+    public void setCommentWithoutSync(String comment){
+        this.comment = comment;
+    }
 
     public void setComment(String comment) {
         this.comment = comment;

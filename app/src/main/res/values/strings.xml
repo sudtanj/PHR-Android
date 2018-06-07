@@ -53,6 +53,7 @@
     <string name="report_error_menu_title">Report Bugs</string>
     <string name="comment_send_button">Send Comment</string>
     <string name="no_comment_list">No Comment added today!</string>
+    <string name="health_data_summary_loading">Please wait! this could take a moment depending on the data.</string>
     <string name="comment_hint">Write about today condition here!</string>
     <string name="error_health_list_data">Sorry, cannot load the summary right now, please try again later!</string>
     <!-- TODO: Remove or change this placeholder text -->

@@ -32,8 +32,6 @@ public class HealthDataAnalysis extends UserData{
         super(dataId, parentSensor, HEALTH_DATA_ANALYSIS_NAME);
         this.analysis=new String();
         this.add(new AnalysisListener(),HEALTH_DATA_ANALYSIS_DATA_NAME);
-        if(dataId.isEmpty())
-            this.getParentSensor().addHealthDataAnalysis(this.getDataId());
 
     }
 
@@ -41,6 +39,9 @@ public class HealthDataAnalysis extends UserData{
         return analysis;
     }
 
+    public void setAnalysisWithoutSync(String analysis){
+        this.analysis=analysis;
+    }
     public void setAnalysis(String analysis) {
         this.analysis = analysis;
         this.syncToFirebase();

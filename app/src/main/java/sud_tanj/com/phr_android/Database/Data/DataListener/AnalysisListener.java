@@ -31,7 +31,7 @@ public class AnalysisListener implements UserHealthDataSyncable {
         String analysis=healthDataAnalysis.getAnalysis();
         String value = DatabaseUtility.convertToString(dataSnapshot);
         if(!analysis.equals(value)){
-            healthDataAnalysis.setAnalysis(value);
+            healthDataAnalysis.setAnalysisWithoutSync(value);
         }
     }
 

@@ -10,12 +10,14 @@ package sud_tanj.com.phr_android.Health_Data.Interface;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Handler.HandlerLoop;
 import sud_tanj.com.phr_android.Health_Data.HealthDataList;
+import sud_tanj.com.phr_android.R;
 
 /**
  * This class is part of PHRAndroid Project
@@ -63,6 +65,7 @@ public class DatePickerDataChangeListener implements DatePicker.OnDateChangedLis
         }
         datePickerDataChangerRunnable = new DatePickerDataChangerRunnable(this, datePicker);
         handlerLoop = new HandlerLoop(5, datePickerDataChangerRunnable);
+        Toast.makeText(healthDataList.getApplicationContext(), R.string.health_data_summary_loading,Toast.LENGTH_LONG).show();
 
         /**
          GregorianCalendar calendar = new GregorianCalendar(datePicker.getYear(),
