@@ -74,12 +74,12 @@ public abstract class SensorListener implements EmbeddedScript {
                 if(this.healthData.get(0).equals(this.sensorData.getSensorInformation().getSensorId())) {
                     this.healthData.remove(0);
                 }
+                while(!this.healthData.get(0).equals(this.getSensorData().getSensorInformation().getSensorId())){
+                    result.add(this.healthData.get(0));
+                    this.healthData.remove(0);
+                }
             } catch (Exception e){
 
-            }
-            while(!this.healthData.get(0).equals(this.getSensorData().getSensorInformation().getSensorId())){
-                result.add(this.healthData.get(0));
-                this.healthData.remove(0);
             }
         }
         return result;

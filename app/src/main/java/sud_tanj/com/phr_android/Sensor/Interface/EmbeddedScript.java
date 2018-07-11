@@ -27,6 +27,4 @@ public interface EmbeddedScript extends Runnable{
 
     void analyzeData();
 
-
-
 }

@@ -14,12 +14,6 @@
         android:key="app_lang_settings"
         android:title="Select Language" />
     <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Edit text preference" />
-    <EditTextPreference
         android:defaultValue="0"
         android:key="age_key"
         android:selectAllOnFocus="true"
