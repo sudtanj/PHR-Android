@@ -129,6 +129,7 @@ dependencies {
         transitive = true;
     }
     implementation 'com.android.support:multidex:1.0.3'
+
 }
 
 apply plugin: "com.vanniktech.android.javadoc"
