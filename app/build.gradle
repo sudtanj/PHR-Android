@@ -129,9 +129,18 @@ dependencies {
         transitive = true;
     }
     implementation 'com.android.support:multidex:1.0.3'
-
+    implementation  'com.emredavarci:noty:1.0.3'
+    implementation 'com.github.100rabhkr:GetJSON:1.0'
+    implementation 'com.github.osama-raddad:FireCrasher:1.5.1'
+    implementation 'com.iamhabib:easy-preference:1.0.1'
+    implementation 'com.github.crysxd:shared-firebase-preferences:1.0.1'
+    //Material Drawer
+    implementation("com.mikepenz:materialdrawer:6.0.8@aar") {
+        transitive = true
+    }
 }
 
 apply plugin: "com.vanniktech.android.javadoc"
 apply plugin: 'maven'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.jfrog.bintray"

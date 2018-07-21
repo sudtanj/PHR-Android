@@ -36,7 +36,11 @@ public abstract class ArduinoUnoCH340 extends SensorListener {
     }
 
     public void setConfig(Integer baudRate,Byte dataBit,Byte stopBit,Byte parity,Byte flowControl) {
+        try {
             Global.getCH340Driver().SetConfig(baudRate, dataBit, stopBit, parity, flowControl);
+        } catch (Exception e){
+
+        }
     }
 
     public void postDataReceived(ArrayList<String> receivedDataInOneLoop){

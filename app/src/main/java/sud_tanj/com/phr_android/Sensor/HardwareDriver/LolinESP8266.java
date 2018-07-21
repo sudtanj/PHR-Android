@@ -11,13 +11,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.json.JSONException;
+import com.dezlum.codelabs.getjson.GetJson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import sud_tanj.com.phr_android.Custom.Global;
-import sud_tanj.com.phr_android.Custom.JSONParser;
 import sud_tanj.com.phr_android.Sensor.SensorListener;
 
 /**
@@ -30,16 +33,10 @@ import sud_tanj.com.phr_android.Sensor.SensorListener;
  * This class last modified by User
  */
 public abstract class LolinESP8266 extends SensorListener {
-    private ConnectivityManager connManager;
-    private NetworkInfo mWifi;
-    private JSONParser jsonParser;
-    private JSONObject jsonObject;
+    private JsonObject jsonObject;
     private Boolean newData=false;
-    private LolinNetworkAsyncTask lolinNetworkAsyncTask=null;
-
-    public NetworkInfo getmWifi() {
-        return mWifi;
-    }
+    private GetJson getJson=null;
+    private JsonParser jsonParser=null;
 
     public void postDataReceived(ArrayList<String> receivedDataInOneLoop){
         if(this.getCountDownTimer()!=0){
@@ -59,37 +56,29 @@ public abstract class LolinESP8266 extends SensorListener {
     @Override
     protected void syncData() {
         super.syncData();
-        connManager = (ConnectivityManager) Global.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (mWifi.isConnected()) {
-            // Do whatever
-           // jsonParser=new JSONParser();
-           // jsonObject=jsonParser.getJSONFromUrl("http://192.168.4.1/getData");
-            if(lolinNetworkAsyncTask==null) {
-                lolinNetworkAsyncTask = new LolinNetworkAsyncTask(this);
-                lolinNetworkAsyncTask.execute();
+        if(getJson==null){
+            getJson=new GetJson();
+        }
+        if(jsonParser==null){
+            jsonParser=new JsonParser();
+        }
+        if (getJson.isConnected(Global.getContext())) {
+            try {
+                jsonObject=jsonParser.parse(getJson.AsString("http://192.168.4.1/getData")).getAsJsonObject();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             try {
-                System.out.println(jsonObject);
                 if(this.newData) {
-                    this.addData(jsonObject.getJSONObject("data").getString("sensorname"));
-                    System.out.println(jsonObject.getJSONObject("data").getString("sensorname"));
-                    this.addData(jsonObject.getJSONObject("data").getString("value"), ",");
+                    this.addData(jsonObject.getAsJsonObject("data").get("sensorname").getAsString());
+                    this.addData(jsonObject.getAsJsonObject("data").get("value").getAsString());
                 }
             } catch (Exception e) {
                 //e.printStackTrace();
             }
             newData=Boolean.FALSE;
         }
-        else {
-            lolinNetworkAsyncTask.cancel(Boolean.TRUE);
-            lolinNetworkAsyncTask=null;
-        }
-    }
-
-    public void setJsonObject(JSONObject jsonObject) {
-        this.jsonObject = jsonObject;
-        this.newData=Boolean.TRUE;
     }
 }

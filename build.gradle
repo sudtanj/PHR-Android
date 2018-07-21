@@ -26,6 +26,7 @@ buildscript {
         classpath 'com.google.firebase:firebase-plugins:1.1.5'
         classpath 'io.fabric.tools:gradle:1.25.1'
         classpath "com.vanniktech:gradle-android-javadoc-plugin:0.3.0-SNAPSHOT"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
     }
 }
 

@@ -11,6 +11,7 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -33,12 +34,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.iamhabib.easy_preference.EasyPreference;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.osama.firecrasher.FireCrasher;
 import com.zendesk.logger.Logger;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
 import com.zendesk.sdk.support.SupportActivity;
 
 import io.fabric.sdk.android.Fabric;
+import sharefirebasepreferences.crysxd.de.lib.SharedFirebasePreferences;
 import sud_tanj.com.phr_android.Custom.Global;
 import sud_tanj.com.phr_android.Database.Sensor.SensorData;
 import sud_tanj.com.phr_android.Database.Sensor.SensorGateway;
@@ -68,13 +74,16 @@ public class MainActivity extends AppCompatActivity
     private IntentFilter intentFilter;
     private NavigationView navigationView;
     private ArduinoReceiver arduinoReceiver;
+    private Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fabric.with(this);
+        //initialized the activity
+        initActivity();
+
         //Init navigation view
         navView = (NavigationView) findViewById(R.id.nav_view);
         //Init
@@ -97,24 +106,6 @@ public class MainActivity extends AppCompatActivity
         //Init navigation drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //         .setAction("Action", null).show();
-                Intent intent = new Intent(getApplicationContext(), ModifySensor.class);
-                intent.putExtra("modifySensor", false);
-                startActivity(intent);
-            }
-        });
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
         Global.setNavigationView(navigationView);
@@ -148,6 +139,28 @@ public class MainActivity extends AppCompatActivity
         Logger.setLoggable(BuildConfig.DEBUG);
         initializeZendesk();
 
+
+    }
+
+    private void initActivity(){
+        //Initialize Fabric
+        Fabric.with(getApplicationContext());
+
+        //Initialize Crash Handler
+        FireCrasher.install(getApplication(), new CrashHandler());
+
+        //Initialize Preferences
+        EasyPreference.with(getApplicationContext());
+
+        //Initialize Preferences - Firebase Synchronizer
+        SharedFirebasePreferences.getInstance(getApplicationContext(),"app_settings", Context.MODE_PRIVATE);
+
+        //Init the drawer
+        drawer = new DrawerBuilder().withActivity(this).build();
+    }
+
+    private void setupActivity(){
+        //Setup Firebase Preferences
 
     }
 
