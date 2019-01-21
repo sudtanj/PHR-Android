@@ -73,6 +73,7 @@ public class PedometerSensor extends SensorListener {
 
     @Override
     public void analyzeData(ArrayList<String> healthData) {
+        /**
         if(getSensorData().getLatestData().isValid()) {
             if (Double.valueOf(getSensorData().getLatestData().getValue()).compareTo(2000.0) > -1) {
                 getSensorData().setTodayHealthDataAnalysis("You're in good shapes. keep it up!");
@@ -80,5 +81,6 @@ public class PedometerSensor extends SensorListener {
                 getSensorData().setTodayHealthDataAnalysis("Get up! start working!");
             }
         }
+         */
     }
 }
